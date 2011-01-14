@@ -2,11 +2,11 @@ import os
 import sys
 import django.core.handlers.wsgi
 
-path = '/home/jonathan/myactivity'
+path = '/home/zsc/myactivity'
 if path not in sys.path:
     sys.path.append(path)
 
-path = '/home/jonathan'
+path = '/home/zsc'
 if path not in sys.path:
     sys.path.append(path)
     

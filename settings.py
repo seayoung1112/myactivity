@@ -1,6 +1,6 @@
 # Django settings for gogogo project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -14,7 +14,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'myactivity',                      # Or path to database file if using sqlite3.
         'USER': 'myactivity',                      # Not used with sqlite3.
-        'PASSWORD': 'myactivity_test',                  # Not used with sqlite3.
+        'PASSWORD': 'myactivity.test',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -45,9 +45,9 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-SITE_ROOT = '/home/jonathan/myactivity/'
+SITE_ROOT = '/home/zsc/myactivity/'
 
-SITE_URL = 'http://10.214.28.112/'
+SITE_URL = 'http://10.214.55.233/'
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/"
@@ -86,7 +86,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     
 )
 
@@ -115,7 +115,7 @@ INSTALLED_APPS = (
     'friends',
     'privacy',
     'south',
-    'debug_toolbar',
+    #'debug_toolbar',
     
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
