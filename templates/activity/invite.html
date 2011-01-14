@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>邀请</title>
+	<meta name="generator" content="Studio 3 http://aptana.com/">
+	<meta name="author" content="seayoung">
+	<script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+  </script>
+
+	<!-- Date: 2011-01-02 -->
+</head>
+<body>
+  <p>邀请你的好友吧！</p>
+  <form action="/activity/invite/{{activity_id}}/" method="post">
+    {% csrf_token %}
+    <div id="tabs" class="float">
+      <ul>
+        <li><a href="#tabs-1">所有人</a></li>
+        <li><a href="#tabs-2">好友</a></li>
+        <li><a href="#tabs-3">上次参加</a></li>
+      </ul>
+      <div id="tabs-1">
+        <P>您可以邀请所有设置为接受陌生人邀请的会员</p>
+        {%for user in all_users%}
+          <p class="thumbs float">
+            <img src="{{user.profile.portrait.url}}" class="portrait"/>
+            <br/>
+            <input type="checkbox" name="user_{{user.id}}" id="{{user.id}}_check"/>
+            {{user.profile.real_name}}
+          </p>
+        {%endfor%}        
+      </div>
+      <div id="tabs-2">
+        {%for user in friends%}
+          <p class="thumbs float">
+            <img src="{{user.profile.portrait.url}}" class="portrait"/>
+            <br/>
+            <input type="checkbox" name="user_{{user.id}}" id="{{user.id}}_check"/>
+            {{user.profile.real_name}}
+          </p>
+        {%endfor%}        
+      </div>
+      <div id="tabs-3">
+        {%for user in last_time_attenders%}
+          <p class="thumbs float">
+            <img src="{{user.profile.portrait.url}}" class="portrait"/>
+            <br/>
+            <input type="checkbox" name="user_{{user.id}}" id="{{user.id}}_check"/>
+            {{user.profile.real_name}}
+          </p>
+        {%endfor%}        
+      </div>
+       <form id="quick-search" method="get" action="index.html" class="float-right">
+          <fieldset class="search">
+             <label for="qsearch">Search:</label>
+             <input class="tbox" id="qsearch" type="text" name="qsearch" value="搜索..." title="Start typing and hit ENTER" />
+             <button class="btn" title="Submit Search">Search</button>
+          </fieldset>
+       </form>
+    </div>
+    <div class="fix"></div>
+    <div>
+      <input type="checkbox" name="email_notify" checked="checked"/>
+      同时用邮件通知
+    </div>
+    <input type="submit" value="邀请"/>
+  </form>
+</body>
+</html>

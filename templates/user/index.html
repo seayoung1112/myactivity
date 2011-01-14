@@ -1,0 +1,106 @@
+{%extends "share/base_login.html"%}
+{%block title%}动起来！{%endblock%}
+
+
+{%block sidebar%}
+  <div>
+    欢迎你，{{user.profile.real_name}}
+    <div>
+      <p class="thumbs float"><img src="{{user.profile.portrait.url}}" class="portrait"/></p>
+      {%for tag in user.profile.tags.all%}
+        <a class="tag" href="/profile/removetag/{{tag.id}}">{{tag.name}}</span></a>
+      {%endfor%}
+      <div class="clearfix"></div>
+    </div>
+ 
+    <div><a href="/profile/edit">修改个人资料</a></div>
+    
+    <div>
+      <form action="/friends/search" method="get">
+        <p>好友</p>
+        <input type="search" name="user_name"/>
+        <input type="submit" value="搜索"/> 
+      </form>   
+    </div>
+    <div>  
+      <form action="/profile/addtag/" method="post">
+        <p>标签</p>
+        {%csrf_token%}
+        <input type="text" name="tag_name"/>
+        <input type="submit" value="添加"/>
+      </form>
+      <div>
+        <p>可能适合你的标签</p>
+        {%for tag in hot_tags%}
+          <a class="tag" href="/profile/addtag/{{tag.id}}">{{tag.name}}</a>
+        {%endfor%}
+      </div>
+    </div>
+  </div>
+{%endblock%}
+{%block main%}
+  <div class="float">
+    <h2>我创建的活动</h2>
+    <a href="/activity/create">发起活动</a>
+    <table>
+      <tr>
+        <th>活动</th>
+        <th>已邀请</th>
+        <th>已接受</th>
+        <th>已拒绝</th>
+        <th>状态</th>
+      </tr>
+      {% for activity in activities_created %}
+        <tr>
+          <td>
+            <a href="/activity/detail/{{activity.id}}">{{activity}}</a>
+          </td>    
+          <td>{{activity.person_invited}}</td>
+          <td>{{activity.person_attended}}</td>
+          <td>{{activity.person_declined}}</td>
+          <td>{{activity.get_state_display}}</td>
+        </tr>
+      {% endfor %}      
+    </table>
+
+    <h2>我参加的活动</h2>
+    <table>
+      <tr>
+        <th>活动</th>
+        <th>创建者</th>
+        <th>已邀请</th>
+        <th>已接受</th>
+        <th>已拒绝</th>
+        <th>状态</th>
+      </tr>
+      {% for activity in activities_invited %}
+        <tr>
+          <td>
+            <a href="/activity/detail/{{activity.id}}">{{activity}}</a>
+          </td>    
+          <td>{{activity.invitor.profile.real_name}}</td>
+          <td>{{activity.person_invited}}</td>
+          <td>{{activity.person_attended}}</td>
+          <td>{{activity.person_declined}}</td>
+          <td>{{activity.get_state_display}}</td>
+        </tr>
+      {% endfor %}      
+    </table>
+  </div>
+  <div class="float-right">
+    <div>
+      <p>您有{{unhandled_invite.count}}个未处理的邀请</p>
+      {%for invite in unhandled_invite%}
+        <p>
+          {{invite.activity.invitor.profile.real_name}}邀请您参加
+          <a href="/activity/reply/{{invite.activity.id}}">
+            {{invite.activity.name}}
+          </a>
+        </p>
+      {%endfor%}
+    </div>
+    <div>
+      <p>您有{{friend_application_count}}个<a href="/friends/application">好友申请</a></p>
+    </div>    
+  </div>
+{%endblock%}

@@ -1,0 +1,18 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<head>
+	<title>登录</title>
+	
+</head>
+
+<body>
+<form action="/accounts/login/" method="post" id="loginForm">
+
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="登录" class="button"/>
+  <input type="hidden" name="next" value="{{ next }}" />   
+</form>
+
+</body>
+</html>

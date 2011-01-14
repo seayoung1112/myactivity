@@ -1,0 +1,15 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}提出建议{%endblock%}
+{%block content%}
+  <form action="/suggest/" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="确认"/> 
+  </form>
+  <a href="/home">返回</a>
+{%endblock%}
+{%block footer%}
+{%endblock%}

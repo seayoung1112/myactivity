@@ -1,0 +1,50 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+  <link rel="stylesheet" href="/media/css/smoothness/jquery-ui-1.8.7.custom.css" type="text/css">
+  <script src="/media/js/jquery-1.4.4.min.js" type="text/javascript"></script>
+  <script src="/media/js/jquery-ui-1.8.7.custom.min.js" type="text/javascript"></script>
+  {{form.media}}
+  <script>
+  $(function(){
+    $("#id_activity_type").change(function(){
+      var type_id= $(this).val();
+      $.getJSON('/activity/ajax/type/'+type_id, function(data){
+        $('#id_name').val(data.name);
+        $('#id_description').val(data.description);
+        $('#id_start_time').val(data.start_time);
+        $('#id_end_time').val(data.end_time);
+        $('#id_assembling_time').val(data.assembling_time);
+        $('#id_activity_place').val(data.activity_place);
+        $('#id_assembling_place').val(data.assembling_place);
+      });
+    });
+    $("#set_default").click(function(){
+      $.post('/activity/setdefault/', $("#create_form").serialize(), function(msg){
+        confirm(msg);
+      });
+    });
+  });
+  </script>
+{%endblock%}
+{%block title%}创建活动{%endblock%}
+{%block sidebar%}{%endblock%}
+{%block content%}
+  <form action="/activity/create/" method="post" id="create_form">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="fieldWrapper">
+            {{ field.errors }}
+            {{ field.label_tag }}: {{ field }}
+            {% if field.label == "类型" %}
+              <a href="/activity/createtype">新建</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <input type="submit" value="创建"/>
+    <input type="button" value="设为默认" id="set_default"/> 
+  </form>
+  <a href="/home">返回</a>
+{%endblock%}
+{%block footer%}
+{%endblock%}

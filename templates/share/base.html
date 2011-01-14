@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{% block title%}动起来！{%endblock%}</title>
+    {%block media%}{%endblock%}
+    <link href="/media/css/base.css" rel="stylesheet" type="text/css" />
+    <link href="/media/CoolBlue/css/screen.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div id="header-wrap">
+
+      <div id="header">
+        <h1 id="logo-text">
+          <a href="/home" title="">
+            <img src="/media/images/logo.png" alt="MyActivity" width="160" height="39" border="0" />
+          </a>
+        </h1>
+        <p id="slogan">让我们赶快开始所有你能想到的活动尽在...</p>
+      
+        <div  id="nav">
+          <ul>
+            {%block menu%}
+            <li><a href="/">主页</a></li>
+            <li><a href="/updates">更新日志</a></li>
+            <li><a href="/contact">联系我们</a></li>
+            <li><a href="/about">关于MyActivity</a></li>
+            {%endblock%}
+          </ul>
+        </div>
+      
+        {%block head%}{%endblock%}
+         <form id="quick-search" method="get" action="index.html">
+            <fieldset class="search">
+               <label for="qsearch">Search:</label>
+               <input class="tbox" id="qsearch" type="text" name="qsearch" value="搜索..." title="Start typing and hit ENTER" />
+               <button class="btn" title="Submit Search">Search</button>
+            </fieldset>
+         </form>
+       </div>
+    </div>
+    <div id="content-wrap" class="clear" >
+
+      <!-- content -->
+      <div id="content">
+        {%block content%}
+        <!-- sidebar -->
+        <div id="sidebar">          
+          {%block sidebar%}  
+          {%endblock%}           
+        </div>
+      
+        <!-- main -->
+        <div id="main">           
+          {%block main%}
+          {%endblock%}    
+        </div>      
+        {%endblock%}
+      <!-- content -->
+      </div>    
+    <!-- /content-out -->
+    </div>
+
+
+    <div id="footer-outer" class="clear">
+      <div id="footer-wrap">
+        {%block footer%}
+        {%endblock%}
+      </div>
+    </div>
+    <div id="footer-bottom">
+      <div id="bottom-left">
+
+        <a href="/">Home</a>| 
+        <a href="/about">About us</a> | 
+        <a href="/suggest">suggest</a>| 
+        <a href="/contact">Contact</a>
+          
+      </div>
+      <p class="bottom-right">�myactivity all right reaserved</p>   
+    </div>
+  </body>
+</html>

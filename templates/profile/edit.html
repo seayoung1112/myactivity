@@ -1,0 +1,15 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}个人设置{%endblock%}
+{%block content%}
+  <form action="/profile/edit/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="确认"/> 
+  </form>
+  <a href="/home">返回</a>
+{%endblock%}
+{%block footer%}
+{%endblock%}

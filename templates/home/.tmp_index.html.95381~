@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>动起来！</title>
+		<link href="/mymedia/css/style.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+	  <div class="main">
+	    <div class="uppart">
+  	    <div class="float leftpart"> </div>
+  	    <div class="float midhpart"> </div>
+  	    <div class="float rightpart">
+  	      {% with log_form as form%}
+            {% include "accounts/login.html" %}
+          {% endwith %}
+  	    </div>
+  	    <div class="clearfix"></div>
+	    </div>
+      <div class="midvpart">
+        <div class="float leftpart"></div>
+        <div class="float midhpart"></div>
+        <div class="float rightpart"></div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="bottompart">
+        <div class="float leftpart">c</div>
+        <div class="float midhpart">d</div>
+        <div class="float rightpart">
+          <p>还没注册？快加入我们吧！</p>
+          {% with reg_form as form %}
+            {% include "accounts/register.html" %}
+          {% endwith %}
+        </div>
+        <div class="clearfix"></div>
+      </div>
+	  </div>
+	  
+	</body>
+</html>

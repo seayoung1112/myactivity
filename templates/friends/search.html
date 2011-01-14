@@ -1,0 +1,22 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}搜索好友{%endblock%}
+{%block content%}
+  <div>
+    <form action="/friens/search" method="get">
+      <label>搜索好友</label><input type="search" name="user_name"/> 
+    </form>   
+  </div>
+  {%for profile in user_profiles%}
+    <p class="thumbs">
+      <img src="{{profile.portrait.url}}" class="portrait"/>
+      <br/>{{profile.real_name}}<br/><a href="/friends/add/{{profile.user.id}}">添加好友</a>
+
+    </p>
+  {%endfor%}
+  <a href="/home">返回</a>
+{%endblock%}
+{%block footer%}
+{%endblock%}

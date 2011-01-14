@@ -1,0 +1,55 @@
+{%extends "share/base.html"%}
+{%block title%}动起来！{%endblock%}
+
+{%block head%}
+  {% with log_form as form%}
+    {% include "share/login.html" %}
+  {% endwith %}
+{%endblock%}
+
+{%block sidebar%}
+
+  <div class="sidemenu">
+    <ul>
+      <li><a href="#">K歌..</a></li>
+      <li><a href="#">腐败..</a></li>
+      <li><a href="#">学术讨论..</a></li>
+      <li><a href="#">旅行..</a></li>
+      <li><a href="#">社团活动..</a></li>
+      <li><a href="#">还有..</a></li>
+    </ul>
+  </div>
+{%endblock%}
+{%block main%}
+  <h2>新用户</h2>
+  <p class="boldtext">还没注册？快加入我们吧！</p>
+  <div id="registerPan">
+    {% with reg_form as form %}
+      {% include "share/register.html" %}
+    {% endwith %}
+  </div>
+  
+  <div class="post">
+    <h4>MyActivity 更新</h4>
+    <div class="right">
+      <h2>MyActivity即将上线</h2>
+      <p>欢迎大家测试</p>
+    </div>
+    <div class="left">
+
+      <p class="dateinfo">JAN<span>11</span></p>
+      <div class="post-meta">
+        <h4>信息</h4>
+          <ul>
+           <li class="user"><a href="#">赵师聪</a></li>
+           <li class="time"><a href="#">12:30 PM</a></li>
+           <li class="comment"><a href="#">0 评论</a></li>
+          </ul>
+      </div>
+    </div>
+  </div>
+
+{%endblock%}
+{%block footer%}
+
+{%endblock%}

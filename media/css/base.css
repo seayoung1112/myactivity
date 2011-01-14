@@ -1,0 +1,12 @@
+.portrait {width:40px; height:40px;}
+.float {float:left;}
+.clearfix {clear:both;}
+
+.detail {width: 400px; float:left}
+.detail form{width: 280px;}
+
+.tag {margin: 3px 5px; padding: 2px 5px; float:left; border:1px solid lightblue;}
+
+
+#leftBlock {width:500px; float:left;}
+.right-content {float:left; width:600px}
