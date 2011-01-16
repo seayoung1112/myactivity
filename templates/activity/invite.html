@@ -17,7 +17,7 @@
 </head>
 <body>
   <p>邀请你的好友吧！</p>
-  <form action="/activity/invite/{{activity_id}}/" method="post" class="float">
+  <form action="{{invite_action}}" method="post" class="float">
     {% csrf_token %}
     <div id="tabs" class="float">
       <ul>

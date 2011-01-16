@@ -71,30 +71,27 @@
     </div>
     <div>
       <h4>我的故事</h4>
-      <a href="/activity/create">记录故事</a>
-      {% for activity in activities_invited %}
+      <a href="/story/create">记录故事</a>
+      {% for story in stories %}
         <div class="act-div">
           <div class="thumbs float">
             <img src="/media/images/logo.png" class="act-thumb"/>
           </div>
           <div class="detail">
             <p>
-              <a href="/activity/detail/{{activity.id}}">{{activity}}</a>
+              <a href="/story/detail/{{story.id}}">{{story}}</a>
             </p> 
-            <p>已邀请{{activity.person_invited}}人</p>
-            <p>{{activity.person_attended}}人已接受</p>
-            <p>{{activity.person_declined}}人已拒绝</p>
-            <p>{{activity.get_state_display}}</p>
+
           </div>
           <div class="invitor">
             <div>创建者</div>
             <div class="thumbs">
-              <img src="{{activity.invitor.profile.portrait.url}}" class="portrait"/>
+              <img src="{{story.creator.profile.portrait.url}}" class="portrait"/>
             </div>
-            <div>{{activity.invitor.profile.real_name}}</div>
+            <div>{{story.creator.profile.real_name}}</div>
           </div>
           <div class="fix"></div>
-          <p class="description">{{activity.description}}</p> 
+          <p class="description">{{story.description}}</p> 
         </div>
       {% endfor %} 
     </div>

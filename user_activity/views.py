@@ -11,6 +11,7 @@ from helper import send_mail
 from settings import SITE_URL
 from friends.models import FriendApplication, friend_set_for
 from profile.models import UserTag
+from story.models import Story
 
 # Create your views here.
 @login_required
@@ -18,6 +19,7 @@ def home(request):
     user = request.user
     activities_invited = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user).exclude(response='U').values_list('activity'))
     activities_created = user.ac_invitor.all()
+    stories = list(user.stories_created.all()) + list(user.stories_participated.all())
     unhandled_invite = Invite.objects.filter(user=user, response='U')
     friend_application_count = FriendApplication.objects.filter(apply_object=user).count()
     hot_tags = UserTag.objects.all()
@@ -25,6 +27,7 @@ def home(request):
                                                   'activities_invited': activities_invited,   
                                                   'unhandled_invite': unhandled_invite,
                                                   'friend_application_count': friend_application_count,
+                                                  'stories': stories,
                                                   'hot_tags': hot_tags,},
                                                   context_instance=RequestContext(request))
     
@@ -43,6 +46,7 @@ def create(request):
         form = ActivityCreateForm(invitor=request.user)
     return render_to_response('activity/create.html', {'form': form,}, 
                               context_instance=RequestContext(request))
+    
 @login_required   
 def detail(request, activity_id):
     user = request.user
@@ -73,7 +77,8 @@ def edit(request, activity_id):#only the invitor can modify it
         invites = Invite.objects.filter(activity__id__exact=activity_id)
         return render_to_response('activity/edit.html', {'form': form, 'activity_id': activity_id, 
                                                          'friends': friends, 'invites': invites,
-                                                         'all_users': all_users},
+                                                         'all_users': all_users,
+                                                         'invite_action': '/activity/invite/'+activity_id+'/'},
                                   context_instance=RequestContext(request))
     else:
         return HttpResponse('you are not the invitor!')
