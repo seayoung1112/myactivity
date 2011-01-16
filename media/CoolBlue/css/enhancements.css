@@ -26,7 +26,7 @@ img {
 #footer-bottom {
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
-p.thumbs img {
+.thumbs img {
    -moz-box-shadow: 1px 1px 3px #184569 ;
 	-webkit-box-shadow: 1px 1px 3px #184569;
 	box-shadow: 1px 1px 3px #184569;

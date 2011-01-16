@@ -40,52 +40,65 @@
 {%endblock%}
 {%block main%}
   <div class="float">
-    <h2>我创建的活动</h2>
-    <a href="/activity/create">发起活动</a>
-    <table>
-      <tr>
-        <th>活动</th>
-        <th>已邀请</th>
-        <th>已接受</th>
-        <th>已拒绝</th>
-        <th>状态</th>
-      </tr>
+    <div>
+      <h4>我的活动</h4>
+      <a href="/activity/create">发起活动</a>
       {% for activity in activities_created %}
-        <tr>
-          <td>
-            <a href="/activity/detail/{{activity.id}}">{{activity}}</a>
-          </td>    
-          <td>{{activity.person_invited}}</td>
-          <td>{{activity.person_attended}}</td>
-          <td>{{activity.person_declined}}</td>
-          <td>{{activity.get_state_display}}</td>
-        </tr>
-      {% endfor %}      
-    </table>
-
-    <h2>我参加的活动</h2>
-    <table>
-      <tr>
-        <th>活动</th>
-        <th>创建者</th>
-        <th>已邀请</th>
-        <th>已接受</th>
-        <th>已拒绝</th>
-        <th>状态</th>
-      </tr>
+        <div class="act-div">
+          <div class="thumbs float">
+            <img src="/media/images/logo.png" class="act-thumb"/>
+          </div>
+          <div class="detail">
+            <p>
+              <a href="/activity/detail/{{activity.id}}">{{activity}}</a>
+            </p> 
+            <p>已邀请{{activity.person_invited}}人</p>
+            <p>{{activity.person_attended}}人已接受</p>
+            <p>{{activity.person_declined}}人已拒绝</p>
+            <p>{{activity.get_state_display}}</p>
+          </div>
+          <div class="invitor">
+            <div>创建者</div>
+            <div class="thumbs">
+              <img src="{{activity.invitor.profile.portrait.url}}" class="portrait"/>
+            </div>
+            <div>{{activity.invitor.profile.real_name}}</div>
+          </div>
+          <div class="fix"></div>
+          <p class="description">{{activity.description}}</p> 
+        </div>
+      {% endfor %} 
+    </div>
+    <div>
+      <h4>我的故事</h4>
+      <a href="/activity/create">记录故事</a>
       {% for activity in activities_invited %}
-        <tr>
-          <td>
-            <a href="/activity/detail/{{activity.id}}">{{activity}}</a>
-          </td>    
-          <td>{{activity.invitor.profile.real_name}}</td>
-          <td>{{activity.person_invited}}</td>
-          <td>{{activity.person_attended}}</td>
-          <td>{{activity.person_declined}}</td>
-          <td>{{activity.get_state_display}}</td>
-        </tr>
-      {% endfor %}      
-    </table>
+        <div class="act-div">
+          <div class="thumbs float">
+            <img src="/media/images/logo.png" class="act-thumb"/>
+          </div>
+          <div class="detail">
+            <p>
+              <a href="/activity/detail/{{activity.id}}">{{activity}}</a>
+            </p> 
+            <p>已邀请{{activity.person_invited}}人</p>
+            <p>{{activity.person_attended}}人已接受</p>
+            <p>{{activity.person_declined}}人已拒绝</p>
+            <p>{{activity.get_state_display}}</p>
+          </div>
+          <div class="invitor">
+            <div>创建者</div>
+            <div class="thumbs">
+              <img src="{{activity.invitor.profile.portrait.url}}" class="portrait"/>
+            </div>
+            <div>{{activity.invitor.profile.real_name}}</div>
+          </div>
+          <div class="fix"></div>
+          <p class="description">{{activity.description}}</p> 
+        </div>
+      {% endfor %} 
+    </div>
+
   </div>
   <div class="float-right">
     <div>

@@ -17,7 +17,7 @@
 </head>
 <body>
   <p>邀请你的好友吧！</p>
-  <form action="/activity/invite/{{activity_id}}/" method="post">
+  <form action="/activity/invite/{{activity_id}}/" method="post" class="float">
     {% csrf_token %}
     <div id="tabs" class="float">
       <ul>
@@ -63,13 +63,14 @@
              <button class="btn" title="Submit Search">Search</button>
           </fieldset>
        </form>
+        <div>
+          <input type="checkbox" name="email_notify" checked="checked"/>
+          同时用邮件通知
+        </div>
+        <input type="submit" value="邀请"/>
     </div>
-    <div class="fix"></div>
-    <div>
-      <input type="checkbox" name="email_notify" checked="checked"/>
-      同时用邮件通知
-    </div>
-    <input type="submit" value="邀请"/>
+    
   </form>
+  <div class="fix"></div>
 </body>
 </html>

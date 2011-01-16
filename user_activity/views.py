@@ -37,6 +37,8 @@ def create(request):
             new_activity.invitor = request.user
             new_activity.save()
             return redirect('/activity/edit/' + str(new_activity.id))
+
+            
     else:
         form = ActivityCreateForm(invitor=request.user)
     return render_to_response('activity/create.html', {'form': form,}, 
@@ -110,7 +112,13 @@ def reply(request, activity_id):
         if request.method == 'POST':
             form = InviteReplyForm(request.POST, instance=invite)
             if form.is_valid():
-                form.save()
+                invite = form.save()
+                if invite.response in ['Y', 'W']:
+                    if ~UserActivityPreference.objects.filter(user=request.user, activity_type=activity.activity_type).exists():
+                        preference = UserActivityPreference.objects.get(user=activity.invitor, activity_type=activity.activity_type)
+                        preference.id = None
+                        preference.user = request.user
+                        preference.save()
                 return redirect('/home/')
             else:
                 return HttpResponse('something wrong!')

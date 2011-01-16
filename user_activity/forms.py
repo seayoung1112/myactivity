@@ -9,8 +9,8 @@ class ActivityCreateForm(ModelForm):
     class Meta:
         model = Activity
         exclude = ('invitor', 'state', 'invitee')
-    def __init__(self, invitor=None, *args, **kwargs):
-        super(ActivityCreateForm, self).__init__(*args, **kwargs)
+    def __init__(self, data=None, invitor=None, *args, **kwargs): #必须加data，不然传post数据的时候第一个参数变成invitor了
+        super(ActivityCreateForm, self).__init__(data, *args, **kwargs)
         self.fields['start_time'].widget = MyDateTimeWidget()
         self.fields['end_time'].widget = MyDateTimeWidget()
         self.fields['assembling_time'].widget = MyDateTimeWidget()
@@ -32,6 +32,9 @@ class InviteReplyForm(ModelForm):
     class Meta:
         model = Invite
         exclude = ('user', 'activity')
+    def __init__(self, *args, **kwargs):  
+        super(InviteReplyForm, self).__init__(*args, **kwargs)
+        self.fields['response'].choices = (('Y', '一定参加'), ('W', '尽量参加'), ('H', '犹豫中'), ('N', '不参加'))        
         
 class ActivityTypeForm(ModelForm):
     type_name = forms.CharField(label='类型名')
