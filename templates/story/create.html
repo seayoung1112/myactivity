@@ -1,0 +1,20 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+  <link rel="stylesheet" href="/media/css/smoothness/jquery-ui-1.8.7.custom.css" type="text/css">
+  <script src="/media/js/jquery-1.4.4.min.js" type="text/javascript"></script>
+  <script src="/media/js/jquery-ui-1.8.7.custom.min.js" type="text/javascript"></script>
+  {{form.media}}
+{%endblock%}
+{%block title%}记录故事{%endblock%}
+{%block sidebar%}{%endblock%}
+{%block content%}
+  <form action="/story/create/" method="post" id="create_form">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="创建"/>
+  </form>
+  <a href="/home">返回</a>
+{%endblock%}
+{%block footer%}
+{%endblock%}
