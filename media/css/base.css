@@ -13,5 +13,7 @@
 .act-div .invitor{float:left; width:100px; margin:0 10px}
 .act-div .description {margin:10px 0 0 0;}
 
+#main .left {width:520px; float:left}
+#main .right {width:200px; float:right}
 #leftBlock {width:500px; float:left;}
 .right-content {float:left; width:600px}

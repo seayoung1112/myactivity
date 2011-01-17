@@ -1,0 +1,21 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}故事邀请{%endblock%}
+{%block content%}
+  {%for invitation in invitations%}
+    <p class="thumbs">
+      <img src="{{invitation.from_user.profile.portrait.url}}" class="portrait"/>
+      <br/>
+      {{invitation.from_user.profile.real_name}}
+      <br/>
+      <a href="/story/agree/{{invitation.id}}">通过</a>
+      <a href="/story/ignore/{{invitation.id}}">忽略</a>
+    </p>
+  {%endfor%}
+  <div class="clearfix"></div>
+  <a href="/home">返回</a>
+{%endblock%}
+{%block footer%}
+{%endblock%}

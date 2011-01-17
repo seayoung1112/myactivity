@@ -1,0 +1,88 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+<script type="text/javascript"
+src="/media/js/swfobject.js">
+</script>
+<style type="text/css">
+  .album {border:1px solid lightblue; width:738px; height:120px; padding:auto; float:left;}
+  .album .thumbs {float:left; margin:auto 5px;}
+  .album img {width:100px; height:75px;}
+  #upload-photo {float:right; margin:0; padding:0; width:auto;}
+  .post {
+   margin: 5px 0 20px 0;
+   padding: 0 0 20px 0;
+   width: 738px;
+   overflow: hidden;
+   border-bottom: 1px solid lightblue;
+  }
+  .post .post-content {margin: 10px 0 0 0;}
+  .post .post-info {float:left; width:738px;}
+  .post .post-info div {float:left;}
+  .post .post-info .margin-top {margin: 40px 0 0 0;}
+  .post .post-info .post-date{float:right;}
+</style>
+{%endblock%}
+{%block title%}故事邀请{%endblock%}
+{%block sidebar%}
+  <div id="video">请下载安装最新版本的flash插件</div>
+  <script type="text/javascript">
+    var flashvars = {file:'/media/video/dcd_football_2010.flv',autostart:'true' };
+    var params = {allowfullscreen:'true', allowscriptaccess:'always' };
+    var attributes = { id:'player1', name:'player1' };
+    
+    swfobject.embedSWF('/media/jwplayer/player.swf','video','240','200','9.0.115','false',    flashvars, params, attributes);
+  </script>
+  <p>{{story.name}}</p>
+  <div class="thumbs"><img src="{{story.creator.profile.portrait.url}}" class="portrait"/></div>
+  <p>{{story.creator.profile.real_name}}</p>
+  <p>开始时间:{{story.start_time}}</p>
+  <p>结束时间:{{story.end_time}}</p>
+  <p>地点:{{story.activity_place}}</p>
+  <p>{{story.descritption}}</p>
+  <div>
+  {%for person in story.get_participants%}
+    <div>
+      <div class="thumbs"><img src="{{person.profile.portrait.url}}" class="portrait"/></div>
+      <p>{{person.profile.real_name}}</p>
+    </div>
+  {%endfor%}
+  </div>
+{%endblock%}
+{%block main%}
+  <div class="album-wrapper">
+    <div class="album">
+      {%for photo in story.get_photos%}
+        <div class="thumbs "><img src="{{photo.content.url}}"/></div>
+      {%endfor%}
+    </div>
+    <div class="clearfix"></div>
+    <form method="post" action="/story/uploadphoto/{{story.id}}/" enctype="multipart/form-data" id="upload-photo">
+      {% csrf_token %}
+      <input type="file" name="photo"/>
+      <input type="submit" value="上传"/>
+    </form>
+  </div>
+  <div class="post-list float">
+    {%for post in story.get_posts%}
+      <div class="post">
+        <div class="post-info">
+          <div class="thumbs "><img src="{{post.post_by.profile.portrait.url}}" class="portrait"/></div>
+          <div class="margin-top">{{post.post_by.profile.real_name}}说</div>
+          <div class="post-date margin-top">{{post.post_date}}</div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="post-content">
+          {{post.content}}
+        </div>
+      </div>
+    {%endfor%}
+    <form method="post" action="/story/post/{{story.id}}/">
+      {% csrf_token %}
+      <textarea cols="70" rows="6" name="content"></textarea>
+      <input type="submit" value="发布"/>
+    </form>
+  </div>
+{%endblock%}
+{%block footer%}
+{%endblock%}

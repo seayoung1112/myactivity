@@ -16,15 +16,35 @@ class Story(models.Model):
     is_public = models.BooleanField(verbose_name='公开', default=True)
     def __unicode__(self):
         return self.name
+    def get_participants(self, number=5):
+        return self.participants.all()[:number]
+    def get_photos(self, number=5):
+        return self.album.all()[:number]
+    def get_posts(self):
+        return self.posts.all()
+    
     
 def get_photo_path(instance, filename):
     ext = filename.split('.')[-1]
-    filename = "%s.%s" % (instance.user.id, ext)
+    filename = "photo.%s" % (ext)
     import os
-    return os.path.join('albums/', filename)
+    return os.path.join('albums/' + str(instance.story.id) + '/', filename)    
 
 class StoryPhoto(models.Model):
     story = models.ForeignKey(Story, related_name="album")
     content = models.ImageField(upload_to=get_photo_path, null=True)
     upload_by = models.ForeignKey(User, related_name="photos_upload")
     upload_date = models.DateTimeField(default=datetime.now())
+
+class StoryPost(models.Model):
+    story = models.ForeignKey(Story, related_name="posts")
+    content = models.TextField(verbose_name="内容")
+    post_by = models.ForeignKey(User)
+    post_date = models.DateTimeField(default=datetime.now()) 
+    
+class StoryInvitation(models.Model):
+    to_user = models.ForeignKey(User, related_name='story_Inviting')
+    from_user = models.ForeignKey(User, related_name='story_Invited')
+    story = models.ForeignKey(Story) 
+    class Meta:
+        unique_together = ('to_user', 'from_user')

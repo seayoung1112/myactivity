@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response, redirect
 from profile.models import Profile, User
 from models import FriendApplication, Friendship
 from django.template import RequestContext
+from django.http import HttpResponse
 
 def search(request):
     username = request.GET['user_name']
@@ -24,6 +25,8 @@ def application(request):
 @login_required
 def agree(request, app_id):
     application = FriendApplication.objects.get(id=app_id)
+    if request.user != application.apply_object:
+        return HttpResponse("you are not permitted to do this!")
     friendship = Friendship.objects.get_or_create(to_user=application.applicant, from_user=application.apply_object)
     if friendship is not None:
         application.delete()
@@ -32,5 +35,7 @@ def agree(request, app_id):
 @login_required
 def ignore(request, app_id):
     application = FriendApplication.objects.get(id=app_id)
+    if request.user != application.apply_object:
+        return HttpResponse("you are not permitted to do this!")
     application.delete()
     return redirect('/friends/application')

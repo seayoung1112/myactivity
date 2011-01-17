@@ -39,14 +39,14 @@
   </div>
 {%endblock%}
 {%block main%}
-  <div class="float">
+  <div class="left">
     <div>
       <h4>我的活动</h4>
       <a href="/activity/create">发起活动</a>
       {% for activity in activities_created %}
         <div class="act-div">
           <div class="thumbs float">
-            <img src="/media/images/logo.png" class="act-thumb"/>
+            <img src="/media/images/default_album.png" class="act-thumb"/>
           </div>
           <div class="detail">
             <p>
@@ -75,7 +75,7 @@
       {% for story in stories %}
         <div class="act-div">
           <div class="thumbs float">
-            <img src="/media/images/logo.png" class="act-thumb"/>
+            <img src="/media/images/default_album.png" class="act-thumb"/>
           </div>
           <div class="detail">
             <p>
@@ -97,14 +97,25 @@
     </div>
 
   </div>
-  <div class="float-right">
+  <div class="right">
     <div>
-      <p>您有{{unhandled_invite.count}}个未处理的邀请</p>
-      {%for invite in unhandled_invite%}
+      <p>您有{{activity_invitation.count}}个未处理的活动邀请</p>
+      {%for invite in activity_invitation%}
         <p>
           {{invite.activity.invitor.profile.real_name}}邀请您参加
           <a href="/activity/reply/{{invite.activity.id}}">
             {{invite.activity.name}}
+          </a>
+        </p>
+      {%endfor%}
+    </div>
+    <div>
+      <p>您有{{story_invitation.count}}个未处理的故事邀请</p>
+      {%for invite in story_invitation%}
+        <p>
+          {{invite.from_user.profile.real_name}}邀请您参加
+          <a href="/story/invite/{{invite.story.id}}">
+            {{invite.story.name}}
           </a>
         </p>
       {%endfor%}
