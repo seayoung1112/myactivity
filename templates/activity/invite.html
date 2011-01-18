@@ -12,65 +12,66 @@
     $( "#tabs" ).tabs();
   });
   </script>
-
+  <style type="text/css">
+  </style>
 	<!-- Date: 2011-01-02 -->
 </head>
 <body>
-  <p>邀请你的好友吧！</p>
-  <form action="{{invite_action}}" method="post" class="float">
-    {% csrf_token %}
-    <div id="tabs" class="float">
-      <ul>
-        <li><a href="#tabs-1">所有人</a></li>
-        <li><a href="#tabs-2">好友</a></li>
-        <li><a href="#tabs-3">上次参加</a></li>
-      </ul>
-      <div id="tabs-1">
-        <P>您可以邀请所有设置为接受陌生人邀请的会员</p>
-        {%for user in all_users%}
-          <p class="thumbs float">
-            <img src="{{user.profile.portrait.url}}" class="portrait"/>
-            <br/>
-            <input type="checkbox" name="user_{{user.id}}" id="{{user.id}}_check"/>
-            {{user.profile.real_name}}
-          </p>
-        {%endfor%}        
-      </div>
-      <div id="tabs-2">
-        {%for user in friends%}
-          <p class="thumbs float">
-            <img src="{{user.profile.portrait.url}}" class="portrait"/>
-            <br/>
-            <input type="checkbox" name="user_{{user.id}}" id="{{user.id}}_check"/>
-            {{user.profile.real_name}}
-          </p>
-        {%endfor%}        
-      </div>
-      <div id="tabs-3">
-        {%for user in last_time_attenders%}
-          <p class="thumbs float">
-            <img src="{{user.profile.portrait.url}}" class="portrait"/>
-            <br/>
-            <input type="checkbox" name="user_{{user.id}}" id="{{user.id}}_check"/>
-            {{user.profile.real_name}}
-          </p>
-        {%endfor%}        
-      </div>
-       <form id="quick-search" method="get" action="index.html" class="float-right">
+  <div>
+    <p>邀请你的好友吧！</p>
+    <hr/>
+    <form action="{{invite_action}}" method="post">
+      {% csrf_token %}
+      <div id="tabs">
+        <ul>
+          <li><a href="#tabs-1">所有人</a></li>
+          <li><a href="#tabs-2">好友</a></li>
+          <li><a href="#tabs-3">上次参加</a></li>
+        </ul>
+        <form id="quick-search" method="get" action="index.html" class="prepend-1">
           <fieldset class="search">
-             <label for="qsearch">Search:</label>
-             <input class="tbox" id="qsearch" type="text" name="qsearch" value="搜索..." title="Start typing and hit ENTER" />
-             <button class="btn" title="Submit Search">Search</button>
+            <label for="qsearch">Search:</label>
+            <input class="tbox" id="qsearch" type="text" name="qsearch" value="搜索..." title="Start typing and hit ENTER" />
+            <button class="btn" title="Submit Search">Search</button>
           </fieldset>
-       </form>
-        <div>
-          <input type="checkbox" name="email_notify" checked="checked"/>
-          同时用邮件通知
+        </form>
+        <div id="tabs-1">
+          <P>您可以邀请所有设置为接受陌生人邀请的会员</p>
+          {%for user in all_users%}
+            <div class="person-thumb-wrapper">      
+              {%with user as person%}
+                {%include "share/portrait.html"%}
+              {%endwith%}
+              <input type="checkbox" name="user_{{user.id}}" id="{{user.id}}_check"/>
+            </div>
+          {%endfor%}        
         </div>
-        <input type="submit" value="邀请"/>
-    </div>
-    
-  </form>
-  <div class="fix"></div>
+        <div id="tabs-2">
+          {%for user in friends%}
+            <div class="person-thumb-wrapper">      
+              {%with user as person%}
+                {%include "share/portrait.html"%}
+              {%endwith%}
+              <input type="checkbox" name="user_{{user.id}}" id="{{user.id}}_check"/>
+            </div>
+          {%endfor%}        
+        </div>
+        <div id="tabs-3">
+          {%for user in last_time_attenders%}
+            <div class="person-thumb-wrapper">      
+              {%with user as person%}
+                {%include "share/portrait.html"%}
+              {%endwith%}
+              <input type="checkbox" name="user_{{user.id}}" id="{{user.id}}_check"/>
+            </div>
+          {%endfor%}        
+        </div>
+        <hr class="space">
+        <p><input type="checkbox" name="email_notify" checked="checked" class=""/>同时用邮件通知</p>
+  
+        <p><input type="submit" value="邀请" class=""/></p>
+      </div>    
+    </form>
+  </div>
 </body>
 </html>

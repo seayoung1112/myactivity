@@ -1,19 +1,20 @@
-.portrait {width:40px; height:40px;}
-.float {float:left;}
-.clearfix {clear:both;}
-
-.detail {width: 400px; float:left}
-.detail form{width: 280px;}
-
+.portrait {width:48px; height:48px;}
 .tag {margin: 3px 5px; padding: 2px 5px; float:left; border:1px solid lightblue;}
+.act-thumb {width:120px; height:90px;}
 
-.act-div {width: 520px; padding: 10px; height:300px;border-bottom: 1px solid #326B8D;}
-.act-thumb {width:200px;height:150px;}
-.act-div .detail{float:left; width:135px;height:190px; margin:0 10px;}
-.act-div .invitor{float:left; width:100px; margin:0 10px}
-.act-div .description {margin:10px 0 0 0;}
+.person-thumb-wrapper {float:left;}
+.person-thumb-wrapper p, .person-thumb-wrapper input {
+  clear:both; 
+  width:58px; 
+  text-align:center;
+  margin:5px auto;
+  display:block; 
+}
+.person-thumb {width:58px; float:left; margin-right:10px;}
+.person-thumb img {  
+  padding: 3px;
+  background: #FAFAFA;
+  border: 1px solid #EDEDED;
+}
 
-#main .left {width:520px; float:left}
-#main .right {width:200px; float:right}
-#leftBlock {width:500px; float:left;}
-.right-content {float:left; width:600px}
+.person-thumb p {text-align:center; margin:5px auto;}

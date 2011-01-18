@@ -2,102 +2,64 @@
 {%block title%}动起来！{%endblock%}
 
 
-{%block sidebar%}
-  <div>
-    欢迎你，{{user.profile.real_name}}
+{%block content%}
+  <div class="span-6 border" id="sidebar">
+    <p>欢迎你，{{user.profile.real_name}}</p>
     <div>
-      <p class="thumbs float"><img src="{{user.profile.portrait.url}}" class="portrait"/></p>
-      {%for tag in user.profile.tags.all%}
-        <a class="tag" href="/profile/removetag/{{tag.id}}">{{tag.name}}</span></a>
-      {%endfor%}
-      <div class="clearfix"></div>
-    </div>
- 
-    <div><a href="/profile/edit">修改个人资料</a></div>
-    
-    <div>
-      <form action="/friends/search" method="get">
-        <p>好友</p>
-        <input type="search" name="user_name"/>
-        <input type="submit" value="搜索"/> 
-      </form>   
-    </div>
-    <div>  
-      <form action="/profile/addtag/" method="post">
-        <p>标签</p>
-        {%csrf_token%}
-        <input type="text" name="tag_name"/>
-        <input type="submit" value="添加"/>
-      </form>
-      <div>
-        <p>可能适合你的标签</p>
-        {%for tag in hot_tags%}
-          <a class="tag" href="/profile/addtag/{{tag.id}}">{{tag.name}}</a>
+      {%with user as person%}
+        {%include "share/portrait.html"%}
+      {%endwith%}
+      <div class="last">
+        {%for tag in user.profile.tags.all%}
+          <a class="tag" href="/profile/removetag/{{tag.id}}">{{tag.name}}</span></a>
         {%endfor%}
       </div>
     </div>
-  </div>
-{%endblock%}
-{%block main%}
-  <div class="left">
+    <hr class="space">
+    <p>可能适合你的标签</p>
     <div>
+        {%for tag in hot_tags%}
+          <a class="tag" href="/profile/addtag/{{tag.id}}">{{tag.name}}</a>
+        {%endfor%}
+    </div>
+    <hr class="space">
+    <div><a href="/profile/edit">修改个人资料</a></div>
+    <hr class="space">
+    <form action="/friends/search" method="get">
+      <p>好友</p>
+      <input type="search" name="user_name"/>
+      <input type="submit" value="搜索"/> 
+    </form>   
+    <hr class="space">
+    <form action="/profile/addtag/" method="post">
+      <p>标签</p>
+      {%csrf_token%}
+      <input type="text" name="tag_name"/>
+      <input type="submit" value="添加"/>
+    </form>
+    <hr class="space">
+
+  </div>
+
+  <div class="prepend-2 span-10">
+    <div class="span-10 last">
       <h4>我的活动</h4>
       <a href="/activity/create">发起活动</a>
+      <hr/>
       {% for activity in activities_created %}
-        <div class="act-div">
-          <div class="thumbs float">
-            <img src="/media/images/default_album.png" class="act-thumb"/>
-          </div>
-          <div class="detail">
-            <p>
-              <a href="/activity/detail/{{activity.id}}">{{activity}}</a>
-            </p> 
-            <p>已邀请{{activity.person_invited}}人</p>
-            <p>{{activity.person_attended}}人已接受</p>
-            <p>{{activity.person_declined}}人已拒绝</p>
-            <p>{{activity.get_state_display}}</p>
-          </div>
-          <div class="invitor">
-            <div>创建者</div>
-            <div class="thumbs">
-              <img src="{{activity.invitor.profile.portrait.url}}" class="portrait"/>
-            </div>
-            <div>{{activity.invitor.profile.real_name}}</div>
-          </div>
-          <div class="fix"></div>
-          <p class="description">{{activity.description}}</p> 
-        </div>
+        {%include "share/activity_unit.html"%}
       {% endfor %} 
     </div>
-    <div>
+    <div class="span-10 last">
       <h4>我的故事</h4>
       <a href="/story/create">记录故事</a>
       {% for story in stories %}
-        <div class="act-div">
-          <div class="thumbs float">
-            <img src="/media/images/default_album.png" class="act-thumb"/>
-          </div>
-          <div class="detail">
-            <p>
-              <a href="/story/detail/{{story.id}}">{{story}}</a>
-            </p> 
-
-          </div>
-          <div class="invitor">
-            <div>创建者</div>
-            <div class="thumbs">
-              <img src="{{story.creator.profile.portrait.url}}" class="portrait"/>
-            </div>
-            <div>{{story.creator.profile.real_name}}</div>
-          </div>
-          <div class="fix"></div>
-          <p class="description">{{story.description}}</p> 
-        </div>
+        {%include "share/story_unit.html"%}
       {% endfor %} 
     </div>
 
   </div>
-  <div class="right">
+  <div class="prepend-2 span-4 last border">
     <div>
       <p>您有{{activity_invitation.count}}个未处理的活动邀请</p>
       {%for invite in activity_invitation%}
@@ -109,6 +71,7 @@
         </p>
       {%endfor%}
     </div>
+    <hr/>
     <div>
       <p>您有{{story_invitation.count}}个未处理的故事邀请</p>
       {%for invite in story_invitation%}
@@ -120,6 +83,7 @@
         </p>
       {%endfor%}
     </div>
+    <hr/>
     <div>
       <p>您有{{friend_application_count}}个<a href="/friends/application">好友申请</a></p>
     </div>    

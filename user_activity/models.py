@@ -45,6 +45,10 @@ class Activity(models.Model):
     def person_declined(self):
         return self.invite_set.filter(response = 'N').count()
 
+from django.db.models import Q
+def get_user_activity(user):
+    #此处查询需要加上distinct，因为or是用left outer join处理，一个acitivity会对应多个invitee，从而有多条符合invitor的结果，导致重复
+    return Activity.objects.filter((Q(invitee=user) | Q(invitor=user)) & Q(is_public=True)).distinct().order_by('start_time')
     
 class Invite(models.Model):
     RESPONSE_TYPES = (('Y', '一定参加'), ('W', '尽量参加'), ('H', '犹豫中'), ('N', '不参加'), ('U', '未阅读'))

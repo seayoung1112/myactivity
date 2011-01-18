@@ -4,6 +4,8 @@ from profile.models import Profile, User
 from models import FriendApplication, Friendship
 from django.template import RequestContext
 from django.http import HttpResponse
+from story.models import get_user_stories
+from user_activity.models import get_user_activity
 
 def search(request):
     username = request.GET['user_name']
@@ -39,3 +41,9 @@ def ignore(request, app_id):
         return HttpResponse("you are not permitted to do this!")
     application.delete()
     return redirect('/friends/application')
+
+def user_info(request, user_id):
+    user = User.objects.get(id=user_id)
+    activities = get_user_activity(user)
+    stories = get_user_stories(user)
+    return render_to_response('user/user_info.html', {'user': user, "activities": activities, 'stories': stories,})

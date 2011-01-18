@@ -1,6 +1,7 @@
 #!/usr/bin/pdefaultython
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import User
 from datetime import datetime
 
@@ -23,6 +24,9 @@ class Story(models.Model):
     def get_posts(self):
         return self.posts.all()
     
+def get_user_stories(user):
+    return Story.objects.filter((Q(creator=user) | Q(participants=user)) & Q(is_public=True)).distinct().order_by('end_time')
+
     
 def get_photo_path(instance, filename):
     ext = filename.split('.')[-1]

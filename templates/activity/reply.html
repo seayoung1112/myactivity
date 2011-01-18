@@ -4,14 +4,16 @@
   {%with invite.activity as activity%}
     {%include "activity/detail.html"%}
   {%endwith%}
-  <br/>
-  <form action="/activity/reply/{{invite.activity.id}}/" method="post" class="float">
-    {% csrf_token %}
+  <div class="span-12 last">
+    <form action="/activity/reply/{{invite.activity.id}}/" method="post" class="float">
+      {% csrf_token %}
+      
+      {{form.as_p}}
+      <input type="submit" value="回复"/> 
+    </form>
+    <p><a href="/home">返回</p>     
+  </div>
 
-    {{form.as_p}}
-    <input type="submit" value="回复"/> 
-    <a href="/home">返回</a>
-  </form>
 {%endblock%}
 
 

@@ -10,26 +10,27 @@
 	<!-- Date: 2011-01-02 -->
 </head>
 <body>
-  <div class="float">
-  <p><label for="id_invitor">创建者:</label>{{activity.invitor.profile.real_name}}</p>
-  <p><label for="id_activity_type">类型:</label> {{activity.activity_type}}</p>
-  <p><label for="id_name">名称:</label> {{activity.name}}</p>
-  
-  <p><label for="id_description">描述:</label> {{activity.description}}</p>
-  <p><label for="id_start_time">预计开始时间:</label> {{activity.start_time}}</p>
-  <p><label for="id_end_time">预计结束时间:</label> {{activity.edntime}}</p>
-  <p><label for="id_assembling_time">集合时间:</label> {{activity.assembling_time}}</p>
-  <p><label for="id_assembling_place">集合地点:</label> {{activity.assembling_place}}</p>
-  <p><label for="id_activity_place">活动地点:</label> {{activity.activity_place}}</p>
+  <div class="span-12">
+    <p><label for="id_invitor">创建者:</label>{{activity.invitor.profile.real_name}}</p>
+    <p><label for="id_activity_type">类型:</label> {{activity.activity_type}}</p>
+    <p><label for="id_name">名称:</label> {{activity.name}}</p>
+    
+    <p><label for="id_description">描述:</label> {{activity.description}}</p>
+    <p><label for="id_start_time">预计开始时间:</label> {{activity.start_time}}</p>
+    <p><label for="id_end_time">预计结束时间:</label> {{activity.edntime}}</p>
+    <p><label for="id_assembling_time">集合时间:</label> {{activity.assembling_time}}</p>
+    <p><label for="id_assembling_place">集合地点:</label> {{activity.assembling_place}}</p>
+    <p><label for="id_activity_place">活动地点:</label> {{activity.activity_place}}</p>
   </div>
-  <div class="right-content">
+  <div class="span-12 last">
     <h4>参加者:</h4>
+    <hr/>
     {% for invite in activity.invite_set.all %}
-      <p class="thumbs float"> 
-        <img src="{{invite.user.profile.portrait.url}}" class="portrait"/>
-        <br/>{{invite.user.profile.real_name}}<br/>{{invite.get_response_display}}
-      </p>
+      {%with invite.user as person%}
+        {%include "share/portrait.html"%}
+      {%endwith%}
     {%endfor%}
+    <hr/>
   </div>
 </body>
 </html>

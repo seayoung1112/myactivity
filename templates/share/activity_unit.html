@@ -1,0 +1,24 @@
+<div class="span-10 last border">
+  <div class="thumbs span-4">
+    <img src="/media/images/default_album.png" class="act-thumb"/>
+  </div>
+  <div class="span-3">
+    <p>
+      <a href="/activity/detail/{{activity.id}}">{{activity}}</a>
+    </p> 
+    <p>已邀请{{activity.person_invited}}人</p>
+    <p>{{activity.person_attended}}人已接受</p>
+    <p>{{activity.person_declined}}人已拒绝</p>
+    <p>{{activity.get_state_display}}</p>
+  </div>
+  <div class="span-3 last">
+    <div>创建者</div>
+    <hr class="space">
+    {%with activity.invitor as person%}
+      {%include "share/portrait.html"%}
+    {%endwith%}
+  </div>
+  <hr/>
+  <p>{{activity.description}}</p> 
+  <hr/>
+</div>

@@ -1,0 +1,30 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}用户信息{%endblock%}
+{%block content%}
+  <div>
+    {%with user as person%}
+      {%include "share/portrait.html"%}
+    {%endwith%}
+    {%for tag in user.profile.tags.all%}
+      <a class="tag" href="/profile/removetag/{{tag.id}}">{{tag.name}}</span></a>
+    {%endfor%}
+  </div>
+  <hr/>
+  <div class="span-12">
+    <h4>他的活动</h4>
+    {% for activity in activities%}
+      {%include "share/activity_unit.html"%}
+    {% endfor %} 
+  </div>
+  <div class="span-12 last">
+    <h4>他的故事</h4>
+    {% for story in stories %}
+      {%include "share/story_unit.html"%}
+    {% endfor %} 
+  </div>
+{%endblock%}
+{%block footer%}
+{%endblock%}

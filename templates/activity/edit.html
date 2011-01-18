@@ -7,26 +7,31 @@
 {%endblock%}
 {%block title%}编辑活动{%endblock%}
 {%block content%}
-  <div class="detail">
+  <div class="span-12">
     <form action="/activity/edit/{{activity_id}}/" method="post">
       {% csrf_token %}
       {{form.as_p}}
       <input type="submit" value="修改"/> 
     </form>
   </div>
-  <div class="right-content">
+  <div class="span-12 last">
     <p>已邀请</p>
-    <div class="float">
+    <hr/>
+    <div>
       {%for invite in invites%}
-        <p class="thumbs float"> 
-          <img src="{{invite.user.profile.portrait.url}}" class="portrait"/>
-          <br/>{{invite.user.profile.real_name}}<br/>{{invite.get_response_display}}
-        </p>
+        <div class="person-thumb-wrapper">
+        {%with invite.user as person%}
+          {%include "share/portrait.html"%}
+        {%endwith%}
+        <p>{{invite.get_response_display}}</p>
+        </div>
       {%endfor%}
+      <hr/>
     </div>
-    <div class="clearfix"></div>
+
     {%include "activity/invite.html"%}
-    <a href="/home/" >返回</a>
+    <hr/>
+    <p><a href="/home/" >返回</a></p>
   </div>
 
 {%endblock%}
