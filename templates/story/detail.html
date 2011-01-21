@@ -5,21 +5,61 @@
 <script type="text/javascript"
 src="/media/js/swfobject.js">
 </script>
-<script src="/media/js/jquery.jcarousel.js" type="text/javascript"></script>
+<script src="/media/js/jquery.jcarousel.min.js" type="text/javascript"></script>
 <script>
-    $(function(){
-    $('#carousel').jcarousel(
-    );
+  $(function(){
+    $('#carousel').jcarousel();
+    $("#tabs" ).tabs();
+    $('#carousel > li > img').click(function()
+    {
+      $("#big-img").attr("src", $(this).attr("src"));
+    });
+    $('#carousel > li > img:first').click();
   });
 </script>
 <style type="text/css">
+  img {padding:0;}
   #carousel img {width:100px; height:75px;}
+  #big-img-frame {background:black; width:600px;height:450px; margin:auto;}
+  #big-img {max-width:600px; max-height:450px;margin:auto;display:block;}
 </style>
 {%endblock%}
 {%block title%}故事邀请{%endblock%}
 {%block content%}
-<div class="span-16">
-  <div class="album-wrapper span-16 last">
+<div class="span-16" id="tabs">
+  <ul>
+    <li><a href="#tabs-1">心情</a></li>
+    <li><a href="#tabs-2">图片</a></li>
+  </ul>
+  <div class="span-15 last" id="tabs-1">
+    {%for post in story.get_posts%}
+
+      <div class="span-15 last"> 
+        <div class="span-2">
+        {%with post.post_by as person%}
+          {%include "share/portrait.html"%}
+        {%endwith%}
+        </div>
+        <div class="span-13 last">
+          <hr class="space"/>
+          <hr class="space"/>
+          <div>说@{{post.post_date}}</div>
+        </div>
+      </div>
+      <hr/>
+      <div class="span-15 last">
+        <p>{{post.content}}</p>
+      </div>
+      <hr/>
+
+    {%endfor%}
+    <form method="post" action="/story/post/{{story.id}}/" class="span-15 last">
+      {% csrf_token %}
+      <textarea cols="70" rows="6" name="content"></textarea>
+      <input type="submit" value="发布"/>
+    </form>
+  </div>
+  <div class="album-wrapper span-15 last" id="tabs-2">
     <ul class="jcarousel-skin-tango" id="carousel">
       {%for photo in story.get_photos%}
         <li><img src="{{photo.content.url}}"/></li>
@@ -30,35 +70,12 @@ src="/media/js/swfobject.js">
       <input type="file" name="photo"/>
       <input type="submit" value="上传"/>
     </form>
-  </div>
-  <hr class="space"/>
-  <div class="span-16 last">
-    {%for post in story.get_posts%}
-
-      <div class="span-16 last"> 
-        <div class="span-2">
-        {%with post.post_by as person%}
-          {%include "share/portrait.html"%}
-        {%endwith%}
-        </div>
-        <div class="span-14 last">
-          <hr class="space"/>
-          <hr class="space"/>
-          <div>说@{{post.post_date}}</div>
-        </div>
+    <hr class="space"/>
+    <div>
+      <div id="big-img-frame">
+        <img id="big-img"/>
       </div>
-      <hr/>
-      <div class="span-16 last">
-        <p>{{post.content}}</p>
-      </div>
-      <hr/>
-
-    {%endfor%}
-    <form method="post" action="/story/post/{{story.id}}/" class="span-16 last">
-      {% csrf_token %}
-      <textarea cols="70" rows="6" name="content"></textarea>
-      <input type="submit" value="发布"/>
-    </form>
+    </div>    
   </div>
 </div>
 
