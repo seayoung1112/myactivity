@@ -20,7 +20,7 @@ class Story(models.Model):
     def get_participants(self, number=5):
         return self.participants.all()[:number]
     def get_photos(self, number=5):
-        return self.album.all()[:number]
+        return self.album.all()
     def get_posts(self):
         return self.posts.all()
     

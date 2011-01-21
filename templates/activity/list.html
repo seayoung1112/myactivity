@@ -1,0 +1,21 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}我的活动{%endblock%}
+{%block content%}
+  <div class="span-12">
+    <h4>我创建的活动</h4>
+    {% for activity in activities_created%}
+      {%include "share/activity_unit.html"%}
+    {% endfor %} 
+  </div>
+  <div class="span-12 last">
+    <h4>我参加的活动</h4>
+    {% for activity in activities_invited %}
+      {%include "share/activity_unit.html"%}
+    {% endfor %} 
+  </div>
+{%endblock%}
+{%block footer%}
+{%endblock%}

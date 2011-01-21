@@ -12,8 +12,14 @@ from settings import SITE_URL
 from friends.models import FriendApplication, friend_set_for
 from profile.models import UserTag
 
+@login_required
+def home(request):
+    user = request.user
+    activities_invited = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user).exclude(response='U').values_list('activity')).order_by('start_time')
+    activities_created = user.ac_invitor.all().order_by('start_time')
+    return render_to_response('activity/list.html', {'activities_created': activities_created,
+                                                      'activities_invited': activities_invited,})
 
-# Create your views here.
 @login_required
 def create(request):
     if request.method == 'POST':

@@ -1,0 +1,15 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}我的故事{%endblock%}
+{%block content%}
+  <div class="span-12">
+    <h4>我的故事</h4>
+    {% for story in stories %}
+      {%include "share/story_unit.html"%}
+    {% endfor %} 
+  </div>
+{%endblock%}
+{%block footer%}
+{%endblock%}

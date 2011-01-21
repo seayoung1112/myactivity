@@ -10,6 +10,13 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from settings import SITE_URL
 from helper import send_mail
+
+@login_required
+def home(request):
+    user = request.user
+    stories = list(user.stories_created.all()) + list(user.stories_participated.all())
+    return render_to_response('story/list.html', {'stories': stories,})
+
 @login_required
 def create(request):
     if request.method == 'POST':
