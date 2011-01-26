@@ -9,13 +9,16 @@ from user_activity.models import Invite
 from friends.models import FriendApplication
 from profile.models import UserTag
 from story.models import StoryInvitation
+from django.contrib.auth.models import User
 
 def index(request):
     if request.user.is_authenticated():
         return redirect('/home/')
     reg_form = UserRegisterForm()
     log_form = AuthenticationForm()
-    return render_to_response('home/index.html', {'reg_form': reg_form, 'log_form': log_form,}, 
+    recent_join = User.objects.exclude(is_staff=True).order_by('date_joined').reverse()[:5] 
+    return render_to_response('home/index.html', {'reg_form': reg_form, 'log_form': log_form,
+                                                  'recent_join': recent_join,}, 
                               context_instance=RequestContext(request))
     
 @login_required
