@@ -1,0 +1,10 @@
+<script src="/media/js/candidate.js" type="text/javascript">
+</script>
+<div class="unhandle">
+{%for person in users%}
+  <div class="person-thumb-wrapper candidate">      
+    {%include "share/portrait.html"%}
+    <input type="checkbox" name="user_{{person.id}}" id="{{person.id}}_check"/>
+  </div>
+{%endfor%}  
+</div>

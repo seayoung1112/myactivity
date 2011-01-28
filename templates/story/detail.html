@@ -9,7 +9,7 @@ src="/media/js/swfobject.js">
 <script>
   $(function(){
     $('#carousel').jcarousel();
-    $("#tabs" ).tabs();
+    $("#story-info-tabs" ).tabs();
     $('#carousel > li > img').click(function()
     {
       $("#big-img").attr("src", $(this).attr("src"));
@@ -26,12 +26,12 @@ src="/media/js/swfobject.js">
 {%endblock%}
 {%block title%}故事邀请{%endblock%}
 {%block content%}
-<div class="span-16" id="tabs">
+<div class="span-16" id="story-info-tabs">
   <ul>
-    <li><a href="#tabs-1">心情</a></li>
-    <li><a href="#tabs-2">图片</a></li>
+    <li><a href="#story-info-tabs-1">心情</a></li>
+    <li><a href="#story-info-tabs-2">图片</a></li>
   </ul>
-  <div class="span-15 last" id="tabs-1">
+  <div class="span-15 last" id="story-info-tabs-1">
     {%for post in story.get_posts%}
 
       <div class="span-15 last"> 
@@ -55,11 +55,11 @@ src="/media/js/swfobject.js">
     {%endfor%}
     <form method="post" action="/story/post/{{story.id}}/" class="span-15 last">
       {% csrf_token %}
-      <textarea cols="70" rows="6" name="content"></textarea>
-      <input type="submit" value="发布"/>
+      <p><textarea cols="70" rows="6" name="content"></textarea></p>
+      <p><input type="submit" value="发布"/></p>
     </form>
   </div>
-  <div class="album-wrapper span-15 last" id="tabs-2">
+  <div class="album-wrapper span-15 last" id="story-info-tabs-2">
     <ul class="jcarousel-skin-tango" id="carousel">
       {%for photo in story.get_photos%}
         <li><img src="{{photo.content.url}}"/></li>
@@ -98,14 +98,34 @@ src="/media/js/swfobject.js">
   <p>开始时间:{{story.start_time}}</p>
   <p>结束时间:{{story.end_time}}</p>
   <p>地点:{{story.activity_place}}</p>
-  <p>{{story.descritption}}</p> 
+  <p>
+    <script>
+      $(function(){
+        $("#invite-dialog").load("/story/candidate-pan/{{story.id}}/",{'next': '/story/detail/{{story.id}}'},function(){
+          $(this).dialog({
+            autoOpen: false,
+            height: 580,
+            width: 350,
+            modal: true
+          });
+          $("#invite").button().click(function(){
+            $("#invite-dialog").dialog("open");
+          });
+        });
+        $('#participant-pan').load("/story/participants/{{story.id}}/")
+      });
+    </script>
+    <a href="/story/edit/{{story.id}}/">编辑</a>
+  </p>
   <hr/>
   <div>
-  {%for person in story.get_participants%}
-    <div>
-      {%include "share/portrait.html"%}   
-    </div>
-  {%endfor%}
+    <p>故事里的人</p>
+    <p><a id="invite">邀请</a></p>
+    <div id="participant-pan"></div>
+  </div>
+  <hr/>
+  <div id="invite-dialog">
+    
   </div>
 </div>
 

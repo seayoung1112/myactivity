@@ -7,25 +7,31 @@
 {%endblock%}
 {%block title%}编辑活动{%endblock%}
 {%block content%}
-  <div class="detail">
-    <form action="/activity/edit/{{activity_id}}/" method="post">
+  <div class="span-12">
+    <form action="/story/edit/{{story_id}}/" method="post">
       {% csrf_token %}
       {{form.as_p}}
       <input type="submit" value="修改"/> 
     </form>
   </div>
-  <div class="right-content">
+  <div class="span-12 last">
     <p>故事里的人</p>
-    <div class="float">
-      {%for person in participants%}
-        <p class="thumbs float"> 
-          <img src="{{person.profile.portrait.url}}" class="portrait"/>
-          <br/>{{person.profile.real_name}}
-        </p>
-      {%endfor%}
+    <hr/>
+    <div id="participant-pan">
+
     </div>
-    <div class="clearfix"></div>
-    {%include "activity/invite.html"%}
+    <hr/>
+    <script>
+      $(function(){
+        $("#invite-pan").load("/story/candidate-pan/{{story_id}}/",{'next': '/story/edit/{{story_id}}'});
+        $('#participant-pan').load("/story/participants/{{story_id}}/")
+      });
+    </script>
+    <div id="invite-pan">
+      
+    </div>
+
+    <hr/>
     <a href="/home/" >返回</a>
   </div>
 

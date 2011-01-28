@@ -5,12 +5,17 @@
 {%block title%}用户信息{%endblock%}
 {%block content%}
   <div>
+    <div class="person-thumb-wrapper">
     {%with user as person%}
       {%include "share/portrait.html"%}
-    {%endwith%}
+      {%include "friends/invitebox.html"%}
+    {%endwith%}    
+    
+    </div>    
     {%for tag in user.profile.tags.all%}
-      <a class="tag" href="/profile/removetag/{{tag.id}}">{{tag.name}}</span></a>
+      <a class="tag" href="/profile/removetag/{{tag.id}}">{{tag.name}}</a>
     {%endfor%}
+
   </div>
   <hr/>
   <div class="span-12">

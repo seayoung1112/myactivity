@@ -1,0 +1,10 @@
+*.pyc
+.project
+.pydevproject
+.settings/
+django.wsgi
+migrations/
+settings.py
+media/albums/
+testapp/
+template/test/

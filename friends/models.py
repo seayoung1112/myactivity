@@ -24,8 +24,9 @@ class Friendship(models.Model):
 def friend_set_for(user):
     return set([obj["friend"] for obj in Friendship.objects.friends_for_user(user)])
 
-class FriendApplication(models.Model):
-    applicant = models.ForeignKey(User, related_name='friends_applying')
-    apply_object = models.ForeignKey(User, related_name='friends_applied') 
+class FriendInvitation(models.Model):
+    from_user = models.ForeignKey(User, related_name='friends_applying')
+    to_user = models.ForeignKey(User, related_name='friends_applied') 
+    message = models.TextField(null=True, blank=True)
     class Meta:
-        unique_together = ('applicant', 'apply_object')
+        unique_together = ('from_user', 'to_user')

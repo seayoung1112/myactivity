@@ -1,0 +1,20 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}好友申请{%endblock%}
+{%block content%}
+  {%for app in friend_invitations%}
+    <div class="person-thumb-wrapper">
+      {%with app.from_user as person%}
+        {%include "share/portrait.html"%}
+      {%endwith%}  
+      <p><a href="/friends/agree/{{app.id}}">通过</a>
+      <a href="/friends/ignore/{{app.id}}">忽略</a></p>
+    </div>
+  {%endfor%}
+  <div class="clearfix"></div>
+  <a href="/home">返回</a>
+{%endblock%}
+{%block footer%}
+{%endblock%}

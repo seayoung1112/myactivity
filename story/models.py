@@ -17,8 +17,12 @@ class Story(models.Model):
     is_public = models.BooleanField(verbose_name='公开', default=True)
     def __unicode__(self):
         return self.name
-    def get_participants(self, number=5):
-        return self.participants.all()[:number]
+    def get_participants(self):
+        res = []
+        res.append(self.creator)
+        for p in self.participants.all():
+            res.append(p)
+        return res
     def get_photos(self, number=5):
         return self.album.all()
     def get_posts(self):

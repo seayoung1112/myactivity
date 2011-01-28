@@ -25,8 +25,9 @@
     <hr class="space">
     <div><a href="/profile/edit">修改个人资料</a></div>
     <hr class="space">
-    <form action="/friends/search" method="get">
+    <form action="/person/search/" method="get">
       <p>好友</p>
+      <input type="hidden" value="friends/search.html" name="template"/>
       <input type="search" name="user_name"/>
       <input type="submit" value="搜索"/> 
     </form>   
@@ -85,7 +86,7 @@
     </div>
     <hr/>
     <div>
-      <p>您有{{friend_application_count}}个<a href="/friends/application">好友申请</a></p>
+      <p>您有{{friend_application_count}}个<a href="/friends/invitation">好友申请</a></p>
     </div>    
   </div>
 {%endblock%}

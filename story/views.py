@@ -34,7 +34,7 @@ def create(request):
                               context_instance=RequestContext(request))
 
 @login_required   
-def edit(request, story_id):#only the invitor can modify it
+def edit(request, story_id):#only the invitor can modify it    
     user = request.user
     story = Story.objects.get(id=story_id)
     if story.creator == user:
@@ -43,14 +43,8 @@ def edit(request, story_id):#only the invitor can modify it
             if form.is_valid():            
                 form.save()
         else:
-            form = StoryForm(instance=story)
-        participant_set = set(story.participants.all())
-        all_users = set(User.objects.exclude(id=user.id).exclude(is_staff=True).filter(privacy__allow_stranger_invite = True)) - participant_set
-        friends = friend_set_for(user) - participant_set        
-        return render_to_response('story/edit.html', {'form': form, 'story_id': story_id, 
-                                                         'friends': friends, 'participants': story.participants.all(),
-                                                         'all_users': all_users,
-                                                         'invite_action': '/story/invite/'+story_id+'/'},
+            form = StoryForm(instance=story)  
+        return render_to_response('story/edit.html', {'form': form, 'story_id': story_id,},
                                   context_instance=RequestContext(request))
     else:
         return HttpResponse('you are not permit to do this!')
@@ -80,7 +74,7 @@ def invite(request, story_id):
         except:
             return HttpResponse('email server error!')
                 
-    return redirect('/story/edit/' + story_id)
+    return redirect(request.GET['next'])#('/story/edit/' + story_id)
 
 @login_required
 def agree(request, invite_id):
@@ -116,3 +110,21 @@ def post(request, story_id):
         story = Story.objects.get(id=story_id)
         StoryPost.objects.create(story=story, content=request.POST['content'], post_by=request.user)
         return redirect('/story/detail/' + story_id)
+    
+@login_required
+def get_candidate_pan(request, story_id):
+    user = request.user
+    story = Story.objects.get(pk=story_id)
+    participant_set = set(story.participants.all())
+    all_users = set(User.objects.exclude(id=user.id).exclude(is_staff=True).filter(privacy__allow_stranger_invite = True)) - participant_set
+    friends = friend_set_for(user) - participant_set        
+    return render_to_response('share/invite.html', {'friends': friends,
+                                                     'all_users': all_users,
+                                                     'invite_action': '/story/invite/' + story_id + '/?next=' + request.POST['next']},
+                              context_instance=RequestContext(request))
+    
+@login_required
+def get_participants(request, story_id):
+    story = Story.objects.get(id=story_id)
+    users = story.get_participants()
+    return render_to_response('share/user_list.html', {"users": users})

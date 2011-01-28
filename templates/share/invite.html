@@ -1,0 +1,56 @@
+<body>
+  <script>
+  $(function() {
+    var $tabs = $( "#invite-tabs" ).tabs();
+    $('#search-candidate').click(function(){
+      $tabs.tabs('select', 4);
+      $('#invite-tabs-5').load("/person/search/?template=share/candidates.html&user_name=" + $('#qsearch').val());
+    });
+  });
+  </script>
+  <div>
+    <p>邀请你的好友吧！</p>
+    <hr/>
+    <div id="quick-search" method="get" action="index.html" class="prepend-1">
+      <label for="qsearch">Search:</label>
+      <input class="tbox" id="qsearch" type="text" name="qsearch" value="" title="Start typing and hit ENTER" />
+      <button class="btn" id="search-candidate"></button>
+    </div>
+    <hr class="space"/>
+    <form action="{{invite_action}}" method="post">
+      {% csrf_token %}
+      <div id="invite-tabs">
+        <ul>
+          <li><a href="#invite-tabs-1">好友</a></li>
+          <li><a href="#invite-tabs-2">上次参加</a></li>
+          <li><a href="#invite-tabs-3">所有人</a></li>
+          <li><a href="#invite-tabs-4">已选择</a></li>
+          <li><a href="#invite-tabs-5">搜索结果</a></li>
+        </ul>
+        <div id="invite-tabs-3">
+          <P>他们可能感兴趣</p>
+          {%with all_users as users%}
+            {%include "share/candidates.html"%}
+          {%endwith%}     
+        </div>
+        <div id="invite-tabs-1">
+          {%with friends as users%}
+            {%include "share/candidates.html"%}
+          {%endwith%}        
+        </div>
+        <div id="invite-tabs-2">
+          {%with last_time_attenders as users%}
+            {%include "share/candidates.html"%}
+          {%endwith%}        
+        </div>
+        <div id="invite-tabs-4"></div>
+        <div id="invite-tabs-5"></div>
+        <hr class="space">
+        <p><input type="checkbox" name="email_notify" checked="checked" class=""/>同时用邮件通知</p>
+  
+        <p><input type="submit" value="邀请" class=""/></p>
+      </div>    
+    </form>
+  </div>
+</body>
+

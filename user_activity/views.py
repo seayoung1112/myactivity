@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from helper import send_mail
 from settings import SITE_URL
-from friends.models import FriendApplication, friend_set_for
+from friends.models import FriendInvitation, friend_set_for
 from profile.models import UserTag
 
 @login_required

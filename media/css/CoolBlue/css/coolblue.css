@@ -145,9 +145,6 @@ input:focus, select:focus, textarea:focus {
 	color: #19465D;
 	background: #EEF8FB;
 }
-#name, #email, #message, #website {
-	width: 460px;
-}
 input.button {
 	font: bold 12px Arial, Sans-serif;
 	height: 30px;
@@ -233,39 +230,31 @@ input.button {
   color: #fff;
 }
 /* Quick Search */
-form#quick-search {
-  	position: absolute;
-  	top: 95px; right: 12px;
-  	background: transparent;
-  	border: none;
-  	margin: 0; padding: 0;
-  	width: 250px;
-}
-fieldset.search {
+#quick-search {
 	border: none;
    width: 250px; height: 40px;
    padding: 0; margin: 0;
    background: url(../images/search.gif) no-repeat;
 }
-.search input {
+#quick-search input {
   	border: none;
   	float: left;
  	padding: 0; margin: 0;
 }
-.search button {
+#quick-search button {
   	border: none;
   	float: right;
   	padding: 0; margin: 0;
 }
-.search label { display: none; }
-.search input.tbox {
+#quick-search label { display: none; }
+#quick-search input.tbox {
   	color: #7d8285;
   	font-weight: bold;
   	margin: 15px 0 10px 10px;
   	background: transparent;
   	width: 200px;
 }
-.search button.btn {
+#quick-search button.btn {
   	width: 40px;
   	height: 40px;
   	cursor: pointer;
