@@ -28,21 +28,31 @@
 {%block title%}创建活动{%endblock%}
 {%block sidebar%}{%endblock%}
 {%block content%}
+<div class="span-22 last">
   <form action="/activity/create/" method="post" id="create_form">
     {% csrf_token %}
+    <table>
     {% for field in form %}
-        <div class="fieldWrapper">
-            {{ field.errors }}
-            {{ field.label_tag }}: {{ field }}
+        <tr class="fieldWrapper">          
+          <th>
+            {{ field.label_tag }}:
+          </th>
+          <td>
+            {{ field }}
             {% if field.label == "类型" %}
               <a href="/activity/createtype">新建</a>
             {% endif %}
-        </div>
+          </td>      
+          <td>{{ field.errors }}</td>                  
+        </tr>
+        
     {% endfor %}
+    </table>
     <input type="submit" value="创建"/>
     <input type="button" value="设为默认" id="set_default"/> 
   </form>
   <a href="/home">返回</a>
+</div>
 {%endblock%}
 {%block footer%}
 {%endblock%}

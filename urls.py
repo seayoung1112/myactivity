@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     (r'^about/$', 'home.views.about'),
     (r'^updates/$', 'home.views.updates'),
     (r'^contact/$', 'home.views.contact'),
+    (r'^error/$', 'home.views.error'),
     (r'^user/(?P<user_id>\d+)/$', 'friends.views.user_info'),
 
 

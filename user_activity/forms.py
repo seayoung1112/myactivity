@@ -14,6 +14,7 @@ class ActivityCreateForm(ModelForm):
         self.fields['start_time'].widget = MyDateTimeWidget()
         self.fields['end_time'].widget = MyDateTimeWidget()
         self.fields['assembling_time'].widget = MyDateTimeWidget()
+        self.fields['is_public'].widget = forms.RadioSelect(choices = ((True,'公开'), (False,'私有')))
         if invitor is not None:
             self.fields['activity_type'].queryset = ActivityType.objects.filter(useractivitypreference__user=invitor)
         

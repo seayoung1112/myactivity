@@ -1,8 +1,5 @@
 {%extends "share/base_login.html"%}
 {%block media%}
-  <link rel="stylesheet" href="/media/css/smoothness/jquery-ui-1.8.7.custom.css" type="text/css">
-  <script src="/media/js/jquery-1.4.4.min.js" type="text/javascript"></script>
-  <script src="/media/js/jquery-ui-1.8.7.custom.min.js" type="text/javascript"></script>
   {{form.media}}
 {%endblock%}
 {%block title%}编辑活动{%endblock%}
@@ -28,11 +25,10 @@
       });
     </script>
     <div id="invite-pan">
-      
     </div>
 
     <hr/>
-    <a href="/home/" >返回</a>
+    <a href="/story/detail/{{story_id}}" >返回</a>
   </div>
 
 {%endblock%}

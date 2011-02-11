@@ -10,7 +10,9 @@
 {%block content%}
   <form action="/activity/createtype/" method="post">
     {% csrf_token %}
-    {{form.as_p}}
+    <table>
+      {{form.as_table}}
+    </table>
     <input type="submit" value="创建"/> 
   </form>
   <a href="/home">返回</a>

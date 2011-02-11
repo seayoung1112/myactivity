@@ -17,16 +17,17 @@ def register(request):
                     new_user = User.objects.create_user(username=form.cleaned_data['username'], 
                                                         email=form.cleaned_data['username'], 
                                                         password=form.cleaned_data['password'], 
-                                                        is_active=False)
+                                                        )
                     
-                except:
-                    return render_to_response('accounts/register.html', {'form': form,}, 
-                                  context_instance=RequestContext(request))
+                except Exception as e:
+                    return HttpResponse(str(e))
                 Privacy.objects.create(user=new_user)
                 user = authenticate(username=request.POST['username'], password=request.POST['password'])
                 if user is not None:
                     login(request, user)
                 return redirect('/profile/edit')
+            form.errors.add({"password": "password does not match"})
+        form.errors.add({"all": "form not valid"})
     else:
         form = UserRegisterForm()
     return render_to_response('accounts/register.html', {'form': form,}, 

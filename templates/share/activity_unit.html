@@ -1,24 +1,18 @@
-<div class="span-10 last border">
-  <div class="thumbs span-4">
-    <img src="/media/images/default_album.png" class="act-thumb"/>
-  </div>
+<div class="span-6 act-unit">
+  <h4><a href="/activity/detail/{{activity.id}}">{{activity}}</a></h4>
   <div class="span-3">
-    <p>
-      <a href="/activity/detail/{{activity.id}}">{{activity}}</a>
-    </p> 
-    <p>已邀请{{activity.person_invited}}人</p>
-    <p>{{activity.person_attended}}人已接受</p>
-    <p>{{activity.person_declined}}人已拒绝</p>
-    <p>{{activity.get_state_display}}</p>
+    <a href="/activity/detail/{{activity.id}}"><img src="/media/images/default_album.png" class="act-thumb"/></a>
   </div>
   <div class="span-3 last">
-    <div>创建者</div>
-    <hr class="space">
-    {%with activity.invitor as person%}
-      {%include "share/portrait.html"%}
-    {%endwith%}
+   <p>
+     {{activity.start_time}}
+     <br/>
+     {{activity.activity_place}}
+   </p>    
   </div>
-  <hr/>
-  <p>{{activity.description}}</p> 
+  <div class="span-6 last">
+    <p>{{activity.person_joined.count}}人参加&nbsp;{{activity.person_wait.count}}人观望&nbsp;（{{activity.get_state_display}}）</p>
+    <p>{{activity.description}}</p>
+  </div> 
   <hr/>
 </div>

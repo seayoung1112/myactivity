@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render_to_response, redirect
 from forms import ActivityCreateForm, ActivityEditForm, InviteReplyForm, ActivityTypeForm
 from models import Activity, Invite, ActivityType, UserActivityPreference
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 from django.template import RequestContext
 from helper import send_mail
 from settings import SITE_URL
@@ -14,11 +15,20 @@ from profile.models import UserTag
 
 @login_required
 def home(request):
-    user = request.user
-    activities_invited = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user).exclude(response='U').values_list('activity')).order_by('start_time')
+    user = request.user    
+    activities_invited = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='U').values_list('activity')).order_by('start_time')
+    activities_participated = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='Y').values_list('activity')).order_by('start_time')
+    activities_applied = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='C').values_list('activity')).order_by('start_time')
+    activities_wait = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='H').values_list('activity')).order_by('start_time')
+    activities_quit = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='N').values_list('activity')).order_by('start_time')
+
     activities_created = user.ac_invitor.all().order_by('start_time')
     return render_to_response('activity/list.html', {'activities_created': activities_created,
-                                                      'activities_invited': activities_invited,})
+                                                      'activities_invited': activities_invited,
+                                                      'activities_participated': activities_participated,
+                                                      'activities_applied': activities_applied,
+                                                      'activities_wait': activities_wait,
+                                                      'activities_quit': activities_quit,})
 
 @login_required
 def create(request):
@@ -40,12 +50,32 @@ def create(request):
 def detail(request, activity_id):
     user = request.user
     activity = Activity.objects.get(pk=activity_id)
-    if activity.invitor == user:
-        return HttpResponseRedirect('/activity/edit/' + activity_id)
-    elif user in activity.invitee.all():
-        return HttpResponseRedirect('/activity/reply/' + str(activity_id))
-    elif activity.is_public:
-        return redirect('/activity/apply/' + activity_id)        
+    from manager import UserRole
+    role = UserRole(user, activity).get_role()
+    actions = {}
+    if role is 'creator':
+        actions['邀请'] = '/activity/invite/' + activity_id
+        actions['编辑'] = '/activity/edit/' + activity_id
+        applicant = Invite.objects.filter(activity=activity, response='C').count()
+        if applicant > 0:
+            actions['审核申请(' + str(applicant) + ')'] = '/activity/check/' + activity_id
+    elif role is 'participant':
+        actions['退出'] = '/activity/quit/' + activity_id
+    elif role is 'uncheck':
+        actions['撤回申请'] = '/activity/quit/' + activity_id
+    elif role is 'invitee':        
+        actions['不参加'] = '/activity/quit/' + activity_id
+        actions['观望'] = '/activity/wait/' + activity_id
+        actions['参加'] = '/activity/join/' + activity_id
+    elif role is 'hesitant':        
+        actions['不参加'] = '/activity/quit/' + activity_id     
+        actions['参加'] = '/activity/join/' + activity_id   
+    elif role is 'stranger':
+        if activity.is_public:     
+            actions['我要参加'] = '/activity/apply/' + activity_id       
+        else:
+            return HttpResponse('对不起，您无权查看此私有活动')  
+    return render_to_response('activity/detail.html', {'actions':actions, 'activity': activity})
     
 @login_required   
 def edit(request, activity_id):#only the invitor can modify it
@@ -56,18 +86,11 @@ def edit(request, activity_id):#only the invitor can modify it
             form = ActivityCreateForm(request.POST, instance=activity)
             if form.is_valid():            
                 form.save()
+                return redirect('/activity/detail/' + activity_id)
         else:
             form = ActivityCreateForm(instance=activity, invitor=activity.invitor)
-        invitee_set = set(activity.invitee.all())
-        all_users = set(User.objects.exclude(id=user.id).exclude(is_staff=True).filter(privacy__allow_stranger_invite = True)) - invitee_set
-        friends = friend_set_for(user) - invitee_set
         
-        #candidates = set(User.objects.exclude(pk=user.id).exclude(is_staff=True)) - set(activity.invitee.all())#I think this can be improved
-        invites = Invite.objects.filter(activity__id__exact=activity_id)
-        return render_to_response('activity/edit.html', {'form': form, 'activity_id': activity_id, 
-                                                         'friends': friends, 'invites': invites,
-                                                         'all_users': all_users,
-                                                         'invite_action': '/activity/invite/'+activity_id+'/'},
+        return render_to_response('activity/edit.html', {'form': form, 'activity_id': activity_id,},
                                   context_instance=RequestContext(request))
     else:
         return HttpResponse('you are not the invitor!')
@@ -75,7 +98,9 @@ def edit(request, activity_id):#only the invitor can modify it
 @login_required
 def invite(request, activity_id):    
     if request.method == 'GET':
-        return redirect('/activity/edit/' + activity_id)
+        return render_to_response('share/invite.html', { 'id': activity_id,
+                                                 'invite_action': '/activity/invite/' + activity_id + '/'},
+                          context_instance=RequestContext(request))
     recipients_list = []
     activity = Activity.objects.get(pk=activity_id)
     for key in request.POST.keys():
@@ -96,31 +121,78 @@ def invite(request, activity_id):
         except:
             return HttpResponse('email server error!')
                 
-    return HttpResponseRedirect('/activity/edit/' + activity_id)
+    return redirect('/activity/detail/' + activity_id)
 
 @login_required
-def reply(request, activity_id):
-    activity = Activity.objects.get(pk=activity_id)
-    invite = Invite.objects.get(user=request.user, activity=activity)
-    if invite is not None:
-        if request.method == 'POST':
-            form = InviteReplyForm(request.POST, instance=invite)
-            if form.is_valid():
-                invite = form.save()
-                if invite.response in ['Y', 'W']:
-                    if ~UserActivityPreference.objects.filter(user=request.user, activity_type=activity.activity_type).exists():
-                        preference = UserActivityPreference.objects.get(user=activity.invitor, activity_type=activity.activity_type)
-                        preference.id = None
-                        preference.user = request.user
-                        preference.save()
-                return redirect('/home/')
-            else:
-                return HttpResponse('something wrong!')
+def quit(request, activity_id):
+    try:
+        invite = Invite.objects.get(user=request.user, activity__id=activity_id)
+        if invite.response == 'C':
+            invite.delete()
         else:
-            form = InviteReplyForm(instance=invite)
-        return render_to_response('activity/reply.html', {'form': form, 'invite': invite},
-                                  context_instance=RequestContext(request))
-    return HttpResponse('you can not access this page!')
+            invite.response = 'N'
+            invite.save()
+        return redirect('/activity/detail/' + activity_id)
+    except ObjectDoesNotExist:
+        pass
+    return redirect(u'/error?message=您还未加入或申请本活动')
+
+@login_required
+def join(request, activity_id):
+    try:
+        invite = Invite.objects.get(user=request.user, activity__id=activity_id)
+        if invite.response in ('H', 'U', 'N'):
+            invite.join()
+            return redirect('/activity/detail/' + activity_id)
+    except ObjectDoesNotExist:
+        pass
+    return redirect(u'/error?message=您未被邀请或审核')
+
+@login_required
+def wait(request, activity_id):
+    try:
+        invite = Invite.objects.get(user=request.user, activity__id=activity_id)
+        if invite.response in ('U', 'N'):
+            invite.response = 'H'
+            invite.save()
+            return redirect('/activity/detail/' + activity_id)
+    except ObjectDoesNotExist:
+        pass
+    return redirect(u'/error?message=您目前的状态无法变为观望')
+
+@login_required
+def apply(request, activity_id):
+    activity = Activity.objects.get(pk=activity_id)
+    if activity.is_public == True:
+        invite = Invite.objects.create(user=request.user, activity=activity, response='C')
+        if activity.need_approve == False:
+            invite.join()
+    else:
+        return redirect(u'/error?message=非公开活动不能申请')
+    return redirect('/activity/detail/' + activity_id)
+                
+
+@login_required
+def check(request, activity_id):
+    if not Activity.objects.filter(id=activity_id, invitor=request.user).exists():        
+        return redirect(u'/error?message=您不是这个活动的创建者')
+    applicant = request.GET.get('applicant',-1)
+    if applicant != -1:
+        res = request.GET['res']
+        try:
+            invite = Invite.objects.get(activity__id=activity_id, user__id=applicant, response='C')
+        except ObjectDoesNotExist:
+            return redirect(u'/error?message=不存在这个活动申请')
+        if res == 'ac':
+            invite.join()
+        elif res == 'neg':
+            invite.delete()
+        else:
+            return redirect(u'/error?message=对申请的操作有错误')
+        return redirect('/activity/check/' + activity_id)
+            
+    applications = Invite.objects.filter(activity__id=activity_id, response='C')
+    return render_to_response('activity/check.html', {'applications':applications, 'id':activity_id})
             
     
 @login_required
@@ -177,3 +249,30 @@ def set_type_default(request):
             return HttpResponse('已设为默认')
 
     return HttpResponse('error!')
+from django.core.paginator import *
+
+@login_required
+def get_friend_candidates(request, activity_id):
+    user = request.user
+    activity = Activity.objects.get(pk=activity_id)
+    invitee_set = set(activity.invitee.all())
+    friend_list = list(friend_set_for(user) - invitee_set)
+    paginator = Paginator(friend_list, 2)
+    try:
+        page = int(request.GET.get('page', 1))
+    except ValueError:
+        page = 1
+    try:
+        friends = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        friends = paginator.page(paginator.num_pages)
+
+    return render_to_response('share/candidates_page.html', {'users': friends})
+
+@login_required
+def get_potential_candidates(request, activity_id):
+    user = request.user
+    activity = Activity.objects.get(pk=activity_id)
+    invitee_set = set(activity.invitee.all())
+    users = set(User.objects.exclude(id=user.id).exclude(is_staff=True).filter(privacy__allow_stranger_invite = True)) - invitee_set
+    return render_to_response('share/candidates.html', {'users': users})

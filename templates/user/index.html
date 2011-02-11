@@ -3,70 +3,45 @@
 
 
 {%block content%}
-  <div class="span-6 border" id="sidebar">
+  <div class="span-4" id="sidebar">
     <p>欢迎你，{{user.profile.real_name}}</p>
     <div>
       {%with user as person%}
         {%include "share/portrait.html"%}
       {%endwith%}
-      <div class="last">
-        {%for tag in user.profile.tags.all%}
-          <a class="tag" href="/profile/removetag/{{tag.id}}">{{tag.name}}</span></a>
-        {%endfor%}
-      </div>
     </div>
-    <hr class="space">
-    <p>可能适合你的标签</p>
-    <div>
-        {%for tag in hot_tags%}
-          <a class="tag" href="/profile/addtag/{{tag.id}}">{{tag.name}}</a>
-        {%endfor%}
+    <hr class="space"/>
+    <div class="sidemenu">
+      <ul>
+        <li<a href="/activity/home">我的活动</a></li>
+        <li><a href="/activity/create">发起活动</a></li>
+        <li><a href="/story/home">我的故事</a></li>
+        <li><a href="/story/create">记录故事</a></li>
+      </ul>
+    </div
+  </div>
+
+  <div class="span-13">
+    <div class="span-13 last">
+      <h4>公开的活动</h4>
+      {% for activity in public_activities %}
+        {%include "share/activity_unit.html"%}
+      {% endfor %}       
     </div>
-    <hr class="space">
-    <div><a href="/profile/edit">修改个人资料</a></div>
-    <hr class="space">
+  </div>
+  <div class="prepend-1 span-6 last">
     <form action="/person/search/" method="get">
       <p>好友</p>
       <input type="hidden" value="friends/search.html" name="template"/>
       <input type="search" name="user_name"/>
       <input type="submit" value="搜索"/> 
     </form>   
-    <hr class="space">
-    <form action="/profile/addtag/" method="post">
-      <p>标签</p>
-      {%csrf_token%}
-      <input type="text" name="tag_name"/>
-      <input type="submit" value="添加"/>
-    </form>
-    <hr class="space">
-
-  </div>
-
-  <div class="prepend-2 span-10">
-    <div class="span-10 last">
-      <h4>我的活动</h4>
-      <a href="/activity/create">发起活动</a>
-      <hr/>
-      {% for activity in activities_created %}
-        {%include "share/activity_unit.html"%}
-      {% endfor %} 
-    </div>
-    <div class="span-10 last">
-      <h4>我的故事</h4>
-      <a href="/story/create">记录故事</a>
-      {% for story in stories %}
-        {%include "share/story_unit.html"%}
-      {% endfor %} 
-    </div>
-
-  </div>
-  <div class="prepend-2 span-4 last border">
     <div>
       <p>您有{{activity_invitation.count}}个未处理的活动邀请</p>
       {%for invite in activity_invitation%}
         <p>
           {{invite.activity.invitor.profile.real_name}}邀请您参加
-          <a href="/activity/reply/{{invite.activity.id}}">
+          <a href="/activity/detail/{{invite.activity.id}}">
             {{invite.activity.name}}
           </a>
         </p>

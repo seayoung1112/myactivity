@@ -1,15 +1,20 @@
+{%extends "share/base_login.html"%}
+{%block title%}邀请好友{%endblock%}
+{%block content%}
 <body>
   <script>
   $(function() {
+    $('#invite-tabs-1').load('/activity/friend-candidates/{{id}}/?page=1')
+    $('#invite-tabs-3').load('/activity/potential-candidates/{{id}}/?page=1')
     var $tabs = $( "#invite-tabs" ).tabs();
     $('#search-candidate').click(function(){
-      $tabs.tabs('select', 4);
-      $('#invite-tabs-5').load("/person/search/?template=share/candidates.html&user_name=" + $('#qsearch').val());
+      $tabs.tabs('select', 3);
+      $('#invite-tabs-4').load("/person/search/?template=share/candidates.html&user_name=" + $('#qsearch').val());
     });
   });
   </script>
   <div>
-    <p>邀请你的好友吧！</p>
+    <h1>邀请你的朋友吧！</h1>
     <hr/>
     <div id="quick-search" method="get" action="index.html" class="prepend-1">
       <label for="qsearch">Search:</label>
@@ -23,34 +28,43 @@
         <ul>
           <li><a href="#invite-tabs-1">好友</a></li>
           <li><a href="#invite-tabs-2">上次参加</a></li>
-          <li><a href="#invite-tabs-3">所有人</a></li>
-          <li><a href="#invite-tabs-4">已选择</a></li>
-          <li><a href="#invite-tabs-5">搜索结果</a></li>
+          <li><a href="#invite-tabs-3">感兴趣的人</a></li>
+          <li><a href="#invite-tabs-4">搜索结果</a></li>
+          <li><a href="#invite-tabs-5">非本站会员</a></li>
         </ul>
         <div id="invite-tabs-3">
-          <P>他们可能感兴趣</p>
-          {%with all_users as users%}
-            {%include "share/candidates.html"%}
-          {%endwith%}     
+          <P>他们可能感兴趣</p>   
         </div>
-        <div id="invite-tabs-1">
-          {%with friends as users%}
-            {%include "share/candidates.html"%}
-          {%endwith%}        
-        </div>
-        <div id="invite-tabs-2">
-          {%with last_time_attenders as users%}
-            {%include "share/candidates.html"%}
-          {%endwith%}        
-        </div>
+        <div id="invite-tabs-1"></div>
+        <div id="invite-tabs-2"></div>
         <div id="invite-tabs-4"></div>
-        <div id="invite-tabs-5"></div>
+        <div id="invite-tabs-5">
+          <p>您可以复制以下链接在qq、msn等通讯工具上发给你的好友:</p>
+          <textarea class="message"></textarea>
+          <p>或者填写您好友的邮箱，我们发送邮件通知您的好友:</p>
+          <script>
+            $(function(){
+              $('#send-mail').button().click(function(){
+                $('#send-over').removeClass('hide');
+              });
+            });
+          </script>
+          <label>好友姓名</label>
+          <input type="text" style="width: 50px"/>
+          <label>邮箱</label>
+          <input type="email" style="width: 160px"/>
+          <a id="send-mail">确定</a>
+          <p class="hide" id="send-over">邮件已发送，请通知您的好友查收</p>
+ 
+        </div>
         <hr class="space">
         <p><input type="checkbox" name="email_notify" checked="checked" class=""/>同时用邮件通知</p>
   
-        <p><input type="submit" value="邀请" class=""/></p>
+        <p><input type="submit" value="邀请" class=""/>
+          <button href="/activity/detail/{{activity_id}}" class="submit">返回</button>
+        </p>
       </div>    
     </form>
   </div>
 </body>
-
+{%endblock%}

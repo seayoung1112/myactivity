@@ -24,7 +24,6 @@ a:link, a:visited {
 a:hover { color: #147DB6; }
 a:link.more, a:visited.more {
 	float: left;
-	margin-top: 20px;
 	margin-right: 5px;
 	padding: 6px 8px;
 	border: 1px solid #2177A5;
@@ -58,7 +57,7 @@ dd {
 img {
    background: #F3F4F5;
    border: 1px solid #E2E4E7;
-	padding: 10px;
+
 }
 img.float-right {	margin: 5px 0px 10px 10px; }
 img.float-left { margin: 5px 10px 10px 0px; }
@@ -94,24 +93,14 @@ blockquote {
 strong { font-weight: bold; }
 
 /* table */
-table {
-	border-collapse: collapse;
-	margin: 10px 25px;
-}
 tr { background: #FFF; }
 th, td {
 	text-align: left;			
 	border-width: 1px;
   	border-style: solid;
 }
-th {
-  	padding: .8em 1em;
-	background: #2C76A6;
-  	border-color: #308ABA #308ABA #246F97 #308ABA;
-	color: #fff;
-	font-weight: bold;
-}
-td {
+
+td, th{
 	border-color: #E9E9E9;
 	padding: .7em 1em;
 }
@@ -132,7 +121,7 @@ label {
 	font-weight: bold;
 	color: #666666;
 }
-input, select, textarea {
+input, select, textarea, .submit {
 	margin: 5px 0;
 	padding: 7px 6px;
 	color: #6A6969;
@@ -159,6 +148,7 @@ input.button {
 	cursor: pointer;
 }
 
+h4 {color:#0000FF}
 /* ------------------------------------------------------------------------------
     L A Y O U T
 --------------------------------------------------------------------------------- */
@@ -272,13 +262,7 @@ input.button {
    width: 100%;
    float: left;
 }
-#content {
-   width: 1000px;
-   margin: 0 auto;
-   padding: 0 0 20px 0;
-   background: #FFF url(../images/content.gif) repeat-y center top;
-   overflow: hidden;
-}
+
 
 /* columns */
 #main {
@@ -305,7 +289,7 @@ input.button {
 /* sidemenu */
 .sidemenu ul {
 	text-align: left;
-	margin: 10px 15px 10px 8px;
+	margin: 0px 0px 0px 0px;
    padding: 0;
 	border-top: 1px solid #EFEFEF;
 }
@@ -550,32 +534,6 @@ ul.subscribe-stuff li img {
 }
 .right h2 { margin-top: 0; }
 
-/* share */
-.right .share-box {
-   margin: 20px 12px 0 20px;
-	padding: 0 10px 10px 20px;
-   background: #FAFAFA;
-   border: 1px solid #EAECEE;
-	overflow: hidden;
-	width: 494px;
-}
-.right .share-box h4 {
- margin-left: 0;
-}
-.right .share-box ul {
-  list-style: none;
-  margin: 0; padding: 0;
-}
-.right .share-box ul li {
-  float: left;
-  margin-right: 5px;
-}
-.right .share-box ul li a:hover { cursor: pointer; }
-.right .share-box ul li img {
-  margin: 0;
-  padding: 5px;
-  background: #fff;
-}
 
 /* dateinfo */
 .left p.dateinfo {

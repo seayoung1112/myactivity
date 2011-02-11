@@ -1,8 +1,10 @@
 .portrait {width:48px; height:48px; margin:auto;}
 .tag {margin: 3px 5px; padding: 2px 5px; float:left; border:1px solid lightblue;}
-.act-thumb {width:120px; height:90px;}
+.act-unit {height: 200px; overflow:hidden}
+.act-thumb {width:100px; height:75px;}
+.act-img {width:180px;max-height:300px;padding:0;background:none;border:0 none;}
 
-.person-thumb-wrapper {float:left;}
+.person-thumb-wrapper {float:left; margin-right:10px;}
 .person-thumb-wrapper p, .person-thumb-wrapper input {
   clear:both; 
   width:58px; 
@@ -10,7 +12,9 @@
   margin:5px auto;
   display:block; 
 }
+
 .person-thumb {width:58px; float:left; margin-right:10px;}
+.person-thumb-wrapper .person-thumb{margin:0px;}
 .person-thumb img {  
   padding: 3px;
   background: #FAFAFA;
@@ -23,3 +27,9 @@
 .select {
   background:blue;
 }
+.message {width:400px; height:80px;}
+
+.hide {display:none;}
+
+form tbody tr:nth-child(even) th, form tbody tr.even th {background:#e5ecf9;}
+form ul {margin:0; list-style:none;padding:0;}

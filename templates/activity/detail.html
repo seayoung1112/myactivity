@@ -1,36 +1,81 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
-
-<html lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>活动细节</title>
-	<meta name="generator" content="Studio 3 http://aptana.com/">
-	<meta name="author" content="seayoung">
-	<!-- Date: 2011-01-02 -->
-</head>
-<body>
-  <div class="span-12">
-    <p><label for="id_invitor">创建者:</label>{{activity.invitor.profile.real_name}}</p>
-    <p><label for="id_activity_type">类型:</label> {{activity.activity_type}}</p>
-    <p><label for="id_name">名称:</label> {{activity.name}}</p>
-    
-    <p><label for="id_description">描述:</label> {{activity.description}}</p>
-    <p><label for="id_start_time">预计开始时间:</label> {{activity.start_time}}</p>
-    <p><label for="id_end_time">预计结束时间:</label> {{activity.edntime}}</p>
-    <p><label for="id_assembling_time">集合时间:</label> {{activity.assembling_time}}</p>
-    <p><label for="id_assembling_place">集合地点:</label> {{activity.assembling_place}}</p>
-    <p><label for="id_activity_place">活动地点:</label> {{activity.activity_place}}</p>
-  </div>
-  <div class="span-12 last">
-    <h4>参加者:</h4>
-    <hr/>
-    {% for invite in activity.invite_set.all %}
-      {%with invite.user as person%}
+{%extends "share/base_login.html"%}
+{%block media%}
+{%endblock%}
+{%block title%}{{activity.name}}{%endblock%}
+{%block content%}
+  <h1>{{activity}}({{activity.is_public_display}})</h1>
+  <div class="span-16">
+    <div class="span-16">
+       
+      {%for key, value in actions.items%}
+        <a href="{{value}}" class="more">{{key}}</a>
+      {%endfor%}
+    </div>
+    <hr class="space"/>
+    <div class="span-5">
+      <img src="{{activity.image.url}}" class="act-img"/>
+    </div>
+    <div class="prepend-1 span-6">       
+      <p><label for="id_activity_type">类型:</label> {{activity.activity_type}}</p> 
+      <p><label for="id_start_time">开始时间:</label> {{activity.start_time}}</p>
+      <p><label for="id_end_time">结束时间:</label> {{activity.edntime}}</p>
+      <p><label for="id_assembling_time">集合时间:</label> {{activity.assembling_time}}</p>
+      <p><label for="id_assembling_place">集合地点:</label> {{activity.assembling_place}}</p>
+      <p><label for="id_activity_place">活动地点:</label> {{activity.activity_place}}</p>
+    </div>
+    <div class="span-4 last">
+      <label>创建者</label>
+      <hr class="space">
+      {%with activity.invitor as person%}
         {%include "share/portrait.html"%}
       {%endwith%}
-    {%endfor%}
-    <hr/>
+    </div>
+    <hr class="space">
+    <h4>活动介绍</h4>    
+    <p>{{activity.description}}</p>
+
   </div>
-</body>
-</html>
+  <div class="span-8 last">
+    <div>
+      <h4>已经参加:({{activity.person_joined.count}})</h4>
+  
+      {% for person in activity.person_joined.all %}
+        <div class="person-thumb-wrapper">
+          {%include "share/portrait.html"%}
+          <p>{{invite.get_response_display}}</p>
+        </div>
+      {%endfor%}
+    </div>
+    <hr class="space"/>
+    <div>
+      <h4>还在观望:({{activity.person_wait.count}})</h4>
+      {% for person in activity.person_wait.all %}
+        <div class="person-thumb-wrapper">
+          {%include "share/portrait.html"%}
+          <p>{{invite.get_response_display}}</p>
+        </div>
+      {%endfor%}
+    </div>
+    <hr class="space"/>
+    <div>
+      <h4>暂时退出:({{activity.person_declined.count}})</h4>
+      {% for person in activity.person_declined.all %}
+        <div class="person-thumb-wrapper">
+          {%include "share/portrait.html"%}
+          <p>{{invite.get_response_display}}</p>
+        </div>
+      {%endfor%}
+    </div>
+    <hr class="space"/>
+    <div>
+      <h4>尚未表态:({{activity.person_invited.count}})</h4>
+      {% for person in activity.person_invited.all %}
+        <div class="person-thumb-wrapper">
+          {%include "share/portrait.html"%}
+          <p>{{invite.get_response_display}}</p>
+        </div>
+      {%endfor%}
+    </div>
+    <hr class="space"/>
+  </div>
+{%endblock%}

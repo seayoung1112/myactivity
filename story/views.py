@@ -8,6 +8,7 @@ from models import Story, StoryInvitation, StoryPhoto, StoryPost
 from friends.models import friend_set_for
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from settings import SITE_URL
 from helper import send_mail
 
@@ -112,16 +113,35 @@ def post(request, story_id):
         return redirect('/story/detail/' + story_id)
     
 @login_required
-def get_candidate_pan(request, story_id):
+def get_candidate_pan(request, story_id): 
+    return render_to_response('share/invite.html', { 'id': story_id,
+                                                     'invite_action': '/story/invite/' + story_id + '/?next=' + request.POST['next']},
+                              context_instance=RequestContext(request))
+    
+@login_required
+def get_friend_candidates(request, story_id):
     user = request.user
     story = Story.objects.get(pk=story_id)
     participant_set = set(story.participants.all())
-    all_users = set(User.objects.exclude(id=user.id).exclude(is_staff=True).filter(privacy__allow_stranger_invite = True)) - participant_set
-    friends = friend_set_for(user) - participant_set        
-    return render_to_response('share/invite.html', {'friends': friends,
-                                                     'all_users': all_users,
-                                                     'invite_action': '/story/invite/' + story_id + '/?next=' + request.POST['next']},
-                              context_instance=RequestContext(request))
+    friend_list = list(friend_set_for(user) - participant_set)
+    paginator = Paginator(friend_list, 2)
+    try:
+        page = int(request.GET.get('page', 1))
+    except ValueError:
+        page = 1
+    try:
+        friends = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        friends = paginator.page(paginator.num_pages)
+
+    return render_to_response('share/candidates_page.html', {'users': friends})
+
+@login_required
+def get_potential_candidates(request, story_id):
+    story = Story.objects.get(pk=story_id)
+    participant_set = set(story.participants.all())
+    users = set(User.objects.filter(is_staff=False).filter(privacy__allow_stranger_invite=True)) - participant_set
+    return render_to_response('share/candidates.html', {'users': users})
     
 @login_required
 def get_participants(request, story_id):

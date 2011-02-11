@@ -43,3 +43,7 @@ def updates(request):
 
 def about(request):
     return render_to_response('home/about.html')
+
+def error(request):
+    message = request.GET.get('message', 'error')
+    return render_to_response('home/error.html', {'message': message})

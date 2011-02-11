@@ -4,18 +4,57 @@
 {%endblock%}
 {%block title%}我的活动{%endblock%}
 {%block content%}
-  <div class="span-12">
-    <h4>我创建的活动</h4>
+<script>
+  $(function(){
+    $("#act-list-accordion").accordion({
+      collapsible:true
+    });
+  });
+</script>
+<div id="act-list-accordion">
+  <h4><a href="#">我创建的活动&nbsp;({{activities_created.count}})</a></h4>
+  <div>  
     {% for activity in activities_created%}
       {%include "share/activity_unit.html"%}
     {% endfor %} 
+    <hr class="space"/>
   </div>
-  <div class="span-12 last">
-    <h4>我参加的活动</h4>
+
+  <h4><a href="#">我参加的活动&nbsp;({{activities_participated.count}})</a></h4>
+  <div>  
+    {% for activity in activities_participated %}
+      {%include "share/activity_unit.html"%}
+    {% endfor %} 
+    <hr class="space"/>
+  </div>
+    
+  <h4><a href="#">活动邀请&nbsp;({{activities_invited.count}})</a></h4>
+  <div>  
     {% for activity in activities_invited %}
       {%include "share/activity_unit.html"%}
     {% endfor %} 
+    <hr class="space"/>
   </div>
+  <h4><a>我申请的活动&nbsp;({{activities_applied.count}})</a></h4>
+  <div>  
+    {% for activity in activities_applied %}
+      {%include "share/activity_unit.html"%}
+    {% endfor %} 
+    <hr class="space"/>
+  </div>
+  <h4><a>我观望的活动&nbsp;({{activities_wait.count}})</a></h4>
+  <div>  {% for activity in activities_wait %}
+      {%include "share/activity_unit.html"%}
+    {% endfor %} 
+    <hr class="space"/></div>
+  <h4><a>我退出的活动&nbsp;({{activities_quit.count}})</a></h4>
+  <div>  
+    {% for activity in activities_quit %}  
+      {%include "share/activity_unit.html"%}
+    {% endfor %}
+  </div>
+</div>
+<hr class="space"/>
 {%endblock%}
 {%block footer%}
 {%endblock%}

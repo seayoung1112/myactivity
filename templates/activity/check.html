@@ -1,0 +1,20 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}审核活动申请{%endblock%}
+{%block content%}
+  {%for app in applications%}
+    <div class="person-thumb-wrapper">
+      {%with app.user as person%}
+        {%include "share/portrait.html"%}
+      {%endwith%}  
+      <p><a href="/activity/check/{{id}}?applicant={{app.user.id}}&res=ac">通过</a>
+      <a href="/activity/check/{{id}}?applicant={{app.user.id}}&res=neg">拒绝</a></p>
+    </div>
+  {%endfor%}
+  <div class="clearfix"></div>
+  <a href="/activity/detail/{{id}}">返回</a>
+{%endblock%}
+{%block footer%}
+{%endblock%}
