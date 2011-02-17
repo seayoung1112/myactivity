@@ -4,7 +4,7 @@
 {%for person in users%}
   <div class="person-thumb-wrapper candidate">      
     {%include "share/portrait.html"%}
-    <input type="checkbox" name="user_{{person.id}}" id="{{person.id}}_check"/>
+    <input type="checkbox" name="user_{{person.id}}" id="{{person.id}}_check" class="hide"/>
   </div>
 {%endfor%}
 <hr class="space"/>

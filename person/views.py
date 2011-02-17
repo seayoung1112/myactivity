@@ -11,9 +11,8 @@ from django.contrib.auth.models import User
 @login_required
 def home(request):
     user = request.user
-    public_activities = Activity.objects.filter(is_public=True, state='P')
-    #user.ac_invitee.filter(id__in=Invite.objects.filter(user=user).exclude(response='U').values_list('activity')).order_by('start_time')[:1]
-    activities_created = user.ac_invitor.all().order_by('start_time')[:1]
+    public_activities = Activity.objects.filter(is_public=True, state='P').order_by('start_time').reverse()
+    activities_created = user.ac_invitor.all().order_by('start_time')[:1]#需要修改成按创建时间排序
     stories = list(user.stories_created.all()) + list(user.stories_participated.all())
     activity_invitation = Invite.objects.filter(user=user, response='U')
     story_invitation = StoryInvitation.objects.filter(to_user=user)

@@ -10,7 +10,7 @@
   width:58px; 
   text-align:center;
   margin:5px auto;
-  display:block; 
+  border:none;
 }
 
 .person-thumb {width:58px; float:left; margin-right:10px;}
@@ -25,7 +25,7 @@
 
 
 .select {
-  background:blue;
+  border:solid #0000FF;
 }
 .message {width:400px; height:80px;}
 
