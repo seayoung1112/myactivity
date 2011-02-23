@@ -4,32 +4,15 @@
 {%endblock%}
 {%block title%}编辑活动{%endblock%}
 {%block content%}
-  <div class="span-12">
+  <div class="span-24">
     <form action="/story/edit/{{story_id}}/" method="post">
       {% csrf_token %}
-      {{form.as_p}}
-      <input type="submit" value="修改"/> 
+      <table>
+      {{form.as_table}}
+      </table>
+      <input type="submit" value="修改"/>
+      <a href="/story/detail/{{story_id}}" class="submit">返回</a> 
     </form>
   </div>
-  <div class="span-12 last">
-    <p>故事里的人</p>
-    <hr/>
-    <div id="participant-pan">
-
-    </div>
-    <hr/>
-    <script>
-      $(function(){
-        $("#invite-pan").load("/story/candidate-pan/{{story_id}}/",{'next': '/story/edit/{{story_id}}'});
-        $('#participant-pan').load("/story/participants/{{story_id}}/")
-      });
-    </script>
-    <div id="invite-pan">
-    </div>
-
-    <hr/>
-    <a href="/story/detail/{{story_id}}" >返回</a>
-  </div>
-
 {%endblock%}
 

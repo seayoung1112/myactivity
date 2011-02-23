@@ -8,7 +8,7 @@ from widget import MyDateTimeWidget, MyTimeWidget
 class ActivityCreateForm(ModelForm):
     class Meta:
         model = Activity
-        exclude = ('invitor', 'state', 'invitee')
+        exclude = ('invitor', 'state', 'invitee', 'create_time')
     def __init__(self, data=None, invitor=None, *args, **kwargs): #必须加data，不然传post数据的时候第一个参数变成invitor了
         super(ActivityCreateForm, self).__init__(data, *args, **kwargs)
         self.fields['start_time'].widget = MyDateTimeWidget()

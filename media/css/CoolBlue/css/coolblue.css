@@ -130,6 +130,10 @@ input, select, textarea, .submit {
   	border-color: #D4D4D4 #EBEBEB #EBEBEB #D4D4D4; 	
 	font: 11px 'Lucida Grande', Verdana, Helvetica, sans-serif;
 }
+a:link.submit, a:visited.submit{
+  color: #6A6969;
+  background-color:#CDCDCD;
+}
 input:focus, select:focus, textarea:focus {
 	color: #19465D;
 	background: #EEF8FB;

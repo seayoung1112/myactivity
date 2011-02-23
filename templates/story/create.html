@@ -11,10 +11,13 @@
 {%block content%}
   <form action="/story/create/" method="post" id="create_form">
     {% csrf_token %}
-    {{form.as_p}}
+    <table>
+    {{form.as_table}}
+    </table>
     <input type="submit" value="创建"/>
+    <a href="/home" class="submit">返回</a>
   </form>
-  <a href="/home">返回</a>
+  
 {%endblock%}
 {%block footer%}
 {%endblock%}

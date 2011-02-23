@@ -5,10 +5,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from forms import SuggestionForm
 from helper import send_mail
-from user_activity.models import Invite
-from friends.models import FriendInvitation
-from profile.models import UserTag
-from story.models import StoryInvitation
 from django.contrib.auth.models import User
 
 def index(request):

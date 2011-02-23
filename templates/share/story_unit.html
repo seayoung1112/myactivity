@@ -1,20 +1,24 @@
 <div class="span-10 last border">
   <div class="span-4">
-    <img src="/media/images/default_album.png" class="act-thumb"/>
+    <img src="{{activity.image.url}}" class="act-thumb"/>
   </div>
   <div class="span-3">
     <p>
-      <a href="/story/detail/{{story.id}}">{{story}}</a>
+      <a href="/story/detail/{{activity.id}}">{{activity}}</a>
+      <br />
+      {{activity.start_time}}到{{activity.end_time}}
+      <br/>
+      还有{{activity.person_joined.count}}人在其中
     </p> 
 
   </div>
   <div class="span-3 last">
     <div>创建者</div>
-    {%with story.creator as person%}
+    {%with activity.invitor as person%}
       {%include "share/portrait.html"%}
     {%endwith%}            
   </div>
-  <div class="fix"></div>
-  <p class="description">{{story.description}}</p> 
-  <hr/>
+  <hr class="space"/>
+  <p class="description">{{activity.description}}</p> 
+  <p class="clear"/>
 </div>

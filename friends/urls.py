@@ -6,5 +6,6 @@ urlpatterns = patterns('',
     (r'^agree/(?P<app_id>\d+)/$', 'friends.views.agree'),
     (r'^ignore/(?P<app_id>\d+)/$', 'friends.views.ignore'),
     (r'^invitation/$', 'friends.views.invitation'),
+    (r'^list/$', list)
 
 )

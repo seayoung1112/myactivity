@@ -6,25 +6,22 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from user_activity.models import Invite, Activity
 from friends.models import FriendInvitation
+from story.models import get_story_invite
 from profile.models import UserTag
-from story.models import StoryInvitation
 from django.contrib.auth.models import User
 
 @login_required
 def home(request):
     user = request.user
-    public_activities = Activity.objects.filter(is_public=True, state='P').order_by('start_time').reverse()
-    activities_created = user.ac_invitor.all().order_by('start_time')[:1]#需要修改成按创建时间排序
-    stories = list(user.stories_created.all()) + list(user.stories_participated.all())
+    public_activities = Activity.objects.filter(is_public=True, state='P').order_by('create_time').reverse()
     activity_invitation = Invite.objects.filter(user=user, response='U')
-    story_invitation = StoryInvitation.objects.filter(to_user=user)
+    story_invitation = get_story_invite(to_user=user)
     friend_application_count = FriendInvitation.objects.filter(to_user=user).count()
-    return render_to_response('user/index.html', {'user': user, 'activities_created': activities_created,
+    return render_to_response('user/index.html', {'user': user,
                                                   'public_activities': public_activities,   
                                                   'activity_invitation': activity_invitation,
                                                   "story_invitation": story_invitation,
                                                   'friend_application_count': friend_application_count,
-                                                  'stories': stories,
                                                   },
                                                   context_instance=RequestContext(request))
 
@@ -36,3 +33,7 @@ def search(request):
         return HttpResponse("no template!")
     return render_to_response(template, {'users': users,},
                               context_instance=RequestContext(request))
+    
+@login_required
+def settings(request):
+    return render_to_response('user/settings.html')

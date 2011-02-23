@@ -17,12 +17,14 @@
         <li><a href="/activity/create">发起活动</a></li>
         <li><a href="/story/home">我的故事</a></li>
         <li><a href="/story/create">记录故事</a></li>
+        <li><a href="/friends/list">我的好友</a></li>
       </ul>
     </div>
   </div>
 
   <div class="span-13">
     <div class="span-13 last">
+      
       <h4>公开的活动</h4>
       {% for activity in public_activities %}
         {%include "share/activity_unit.html"%}
@@ -49,15 +51,7 @@
     </div>
     <hr/>
     <div>
-      <p>您有{{story_invitation.count}}个未处理的故事邀请</p>
-      {%for invite in story_invitation%}
-        <p>
-          {{invite.from_user.profile.real_name}}邀请您参加
-          <a href="/story/invite/{{invite.story.id}}">
-            {{invite.story.name}}
-          </a>
-        </p>
-      {%endfor%}
+      <p>您有{{story_invitation.count}}个未处理的<a href="/story/invitation">故事邀请</a></p>
     </div>
     <hr/>
     <div>

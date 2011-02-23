@@ -22,9 +22,13 @@ def edit(request):
             return HttpResponseRedirect('/home/')
     else:
         form = ProfileEditForm(instance=profile)
+    return render_to_response('profile/edit.html', {'form': form, },
+                              context_instance=RequestContext(request))
+
+@login_required
+def edit_tags(request):
     hot_tags = UserTag.objects.all()
-    return render_to_response('profile/edit.html', {'form': form, 
-                                                    'hot_tags': hot_tags,},
+    return render_to_response('profile/edit_tags.html', {'hot_tags': hot_tags,},
                               context_instance=RequestContext(request))
 
 @login_required

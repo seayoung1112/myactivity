@@ -19,4 +19,7 @@ urlpatterns = patterns('',
     (r'^ajax/type/(?P<type_id>\d+)/$', get_type_default),
     (r'^friend-candidates/(?P<activity_id>\d+)/$', get_friend_candidates),
     (r'^potential-candidates/(?P<activity_id>\d+)/$', get_potential_candidates),
+    (r'invitebymail/$', invite_by_mail)
+    
+#    (r'change/$', change_state)
 )

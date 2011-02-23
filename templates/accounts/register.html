@@ -1,8 +1,17 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-	<form action="/accounts/register/" method="post">
-	  {% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" value="注册" class="button"/>			
-	</form>
-</html>
+{%extends "share/base.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}登录{%endblock%}
+{%block content%}
+
+  <form action="/accounts/register/" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="hidden" name="next" value="{{ next }}" />
+    <input type="submit" value="注册" class="button"/>      
+  </form>
+
+{%endblock%}
+{%block footer%}
+{%endblock%}

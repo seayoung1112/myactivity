@@ -1,0 +1,21 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}个人设置{%endblock%}
+{%block content%}
+  <script>
+    $(function(){
+      $( "#settings-tabs" ).tabs();
+    });
+  </script>
+  <div id="settings-tabs" class="span-24">
+    <ul>
+      <li><a href="/profile/edit">真实资料</a></li>
+      <li><a href="/accounts/changepassword">安全设置</a></li>
+      <li><a href="/profile/edittags">标签设置</a></li>
+    </ul>
+  </div>
+{%endblock%}
+{%block footer%}
+{%endblock%}

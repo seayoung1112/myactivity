@@ -1,0 +1,21 @@
+<h4>您的个人标签</h4>
+<div class="last">
+  {%for tag in user.profile.tags.all%}
+    <a class="tag" href="/profile/removetag/{{tag.id}}">{{tag.name}}</span></a>
+  {%endfor%}
+</div>
+<hr class="space">
+<p>可能适合你的标签</p>
+<div>
+    {%for tag in hot_tags%}
+      <a class="tag" href="/profile/addtag/{{tag.id}}">{{tag.name}}</a>
+    {%endfor%}
+</div>
+<hr class="space">
+<form action="/profile/addtag/" method="post">
+  <p>标签</p>
+  {%csrf_token%}
+  <input type="text" name="tag_name"/>
+  <input type="submit" value="添加"/>
+</form>
+<hr/>

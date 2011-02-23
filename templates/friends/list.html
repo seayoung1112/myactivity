@@ -1,0 +1,13 @@
+{%extends "share/base_login.html"%}
+
+{%block media%}
+{%endblock%}
+{%block title%}好友列表{%endblock%}
+{%block content%}
+  <h1>我的好友</h1>
+  {%with friends as users%}
+    {%include "share/user_list.html"%}
+  {%endwith%}
+{%endblock%}
+{%block footer%}
+{%endblock%}

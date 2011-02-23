@@ -3,11 +3,17 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, redirect
 from profile.models import Profile, User
-from models import FriendInvitation, Friendship
+from models import FriendInvitation, Friendship, friend_set_for
 from django.template import RequestContext
 from django.http import HttpResponse
 from story.models import get_user_stories
 from user_activity.models import get_user_activity
+
+@login_required
+def list(request):
+    user = request.user
+    friend_list = friend_set_for(user)
+    return render_to_response('friends/list.html',{'friends': friend_list})
     
 @login_required
 def add(request, user_id):
@@ -43,6 +49,8 @@ def ignore(request, app_id):
 
 def user_info(request, user_id):
     user = User.objects.get(id=user_id)
+    if user == request.user:
+        return redirect('/home')
     activities = get_user_activity(user)
     stories = get_user_stories(user)
     return render_to_response('user/user_info.html', {'user': user, "activities": activities, 'stories': stories,})

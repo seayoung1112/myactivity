@@ -22,7 +22,7 @@
       <button class="btn" id="search-candidate"></button>
     </div>
     <hr class="space"/>
-    <form action="{{invite_action}}" method="post">
+    <form action="/{{type}}/invite/{{id}}/" method="post">
       {% csrf_token %}
       <div id="invite-tabs">
         <ul>
@@ -40,19 +40,25 @@
         <div id="invite-tabs-4"></div>
         <div id="invite-tabs-5">
           <p>您可以复制以下链接在qq、msn等通讯工具上发给你的好友:</p>
-          <textarea class="message"></textarea>
+          <textarea class="message" id="invite-link">http://www.myactivity.net/activity/detail/{{id}}</textarea>
           <p>或者填写您好友的邮箱，我们发送邮件通知您的好友:</p>
           <script>
             $(function(){
-              $('#send-mail').button().click(function(){
-                $('#send-over').removeClass('hide');
+              $('#send-mail').button().click(function(){                
+                name = $('#invite-name').val();
+                email = $('#invite-email').val();
+                link = $('#invite-link').val();
+                $.post('/activity/invitebymail/', {'name':name, 'email':email, 'link':link}, function(data){
+                  $('#send-over').html(data);
+                  $('#send-over').removeClass('hide');
+                });
               });
             });
           </script>
           <label>好友姓名</label>
-          <input type="text" style="width: 50px"/>
+          <input type="text" style="width: 50px" id="invite-name"/>
           <label>邮箱</label>
-          <input type="email" style="width: 160px"/>
+          <input type="email" style="width: 160px" id="invite-email"/>
           <a id="send-mail">确定</a>
           <p class="hide" id="send-over">邮件已发送，请通知您的好友查收</p>
  
@@ -61,7 +67,7 @@
         <p><input type="checkbox" name="email_notify" checked="checked" class=""/>同时用邮件通知</p>
   
         <p><input type="submit" value="邀请" class=""/>
-          <button href="/activity/detail/{{activity_id}}" class="submit">返回</button>
+          <a href="/{{type}}/detail/{{id}}" class="submit">返回</a>
         </p>
       </div>    
     </form>

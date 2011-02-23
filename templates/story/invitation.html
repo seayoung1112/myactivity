@@ -5,16 +5,17 @@
 {%block title%}故事邀请{%endblock%}
 {%block content%}
   {%for invitation in invitations%}
-    <p class="thumbs">
-      <img src="{{invitation.from_user.profile.portrait.url}}" class="portrait"/>
-      <br/>
-      {{invitation.from_user.profile.real_name}}
-      <br/>
-      <a href="/story/agree/{{invitation.id}}">通过</a>
-      <a href="/story/ignore/{{invitation.id}}">忽略</a>
-    </p>
+    <div class="span-10">
+      {%with invitation.activity as activity%}
+        {%include "share/story_unit.html"%}
+      {%endwith%}
+      <p>
+        <a href="/story/agree/{{invitation.id}}" class="more">通过</a>
+        <a href="/story/ignore/{{invitation.id}}" class="more">忽略</a>
+      </p>
+    </div>
   {%endfor%}
-  <div class="clearfix"></div>
+  <hr class="space">
   <a href="/home">返回</a>
 {%endblock%}
 {%block footer%}

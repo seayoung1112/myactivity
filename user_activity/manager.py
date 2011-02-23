@@ -1,7 +1,8 @@
 #!/usr/bin/pdefaultython
 # -*- coding: utf-8 -*-
-from models import Invite
+from models import Invite, Activity
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime
 
 class UserRole:
     def __init__(self, user, activity):
@@ -9,6 +10,8 @@ class UserRole:
         self.activity = activity
     
     def get_role(self):
+        if self.user.is_anonymous():
+            return 'stranger'
         if self.activity.invitor == self.user:
             return 'creator'#创建着
         else:
@@ -25,3 +28,16 @@ class UserRole:
             except ObjectDoesNotExist:
                 pass
             return 'stranger'#陌生人
+
+from celery.decorators import task
+
+@task()
+def change_state():
+    activity_finished = Activity.objects.filter(state='I', end_time__lt=datetime.now())
+    for activity in activity_finished:
+        activity.state='O'
+        activity.save()
+    activity_processing = Activity.objects.filter(state='P', start_time__lt=datetime.now())
+    for activity in activity_processing:
+        activity.state='I'
+        activity.save()    

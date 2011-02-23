@@ -82,6 +82,7 @@ src="/media/js/swfobject.js">
 </div>
 
 <div class="prepend-1 span-7 last" id="sidebar">  
+  <h1>{{story.name}}</h1>
   <div id="video">请下载安装最新版本的flash插件</div>
   <hr class="space"/>
   <script type="text/javascript">
@@ -91,8 +92,12 @@ src="/media/js/swfobject.js">
     
     swfobject.embedSWF('/media/js/jwplayer/player.swf','video','270','200','9.0.115','false',    flashvars, params, attributes);
   </script>
-  <h1>{{story.name}}</h1>
-  {%with story.creator as person%}
+  <p>
+    <a href="/story/edit/{{story.id}}/" class="more">编辑</a>
+    <a href="/story/invite/{{story.id}}" class="more">邀请</a>
+  </p>
+  <p class="clear"></p>
+  {%with story.invitor as person%}
     {%include "share/portrait.html"%}
   {%endwith%}
   <p>{{story.description}}</p>
@@ -100,30 +105,12 @@ src="/media/js/swfobject.js">
   <p>开始时间:{{story.start_time}}</p>
   <p>结束时间:{{story.end_time}}</p>
   <p>地点:{{story.activity_place}}</p>
-  <p>
-    <script>
-      $(function(){
-        $("#invite-dialog").load("/story/candidate-pan/{{story.id}}/",{'next': '/story/detail/{{story.id}}'},function(){
-          $(this).dialog({
-            autoOpen: false,
-            height: 680,
-            width: 580,
-            modal: true
-          });
-          $("#invite").button().click(function(){
-            $("#invite-dialog").dialog("open");
-          });
-        });
-        $('#participant-pan').load("/story/participants/{{story.id}}/")
-      });
-    </script>
-    <a href="/story/edit/{{story.id}}/">编辑</a>
-  </p>
   <hr/>
   <div>
-    <p>故事里的人</p>
-    <p><a id="invite">邀请</a></p>
-    <div id="participant-pan"></div>
+    <h4>故事里的人</h4>
+    <div id="participant-pan">
+      {%include "share/user_list.html"%}
+    </div>
   </div>
   <hr/>
   <div id="invite-dialog">

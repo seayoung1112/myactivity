@@ -16,13 +16,13 @@ from profile.models import UserTag
 @login_required
 def home(request):
     user = request.user    
-    activities_invited = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='U').values_list('activity')).order_by('start_time').reverse()
-    activities_participated = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='Y').values_list('activity')).order_by('start_time').reverse()
-    activities_applied = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='C').values_list('activity')).order_by('start_time').reverse()
-    activities_wait = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='H').values_list('activity')).order_by('start_time').reverse()
-    activities_quit = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='N').values_list('activity')).order_by('start_time').reverse()
+    activities_invited = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='U', activity__state__in='P, I').values_list('activity')).order_by('create_time').reverse()
+    activities_participated = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='Y', activity__state__in='P, I').values_list('activity')).order_by('create_time').reverse()
+    activities_applied = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='C', activity__state__in='P, I').values_list('activity')).order_by('create_time').reverse()
+    activities_wait = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='H', activity__state__in='P, I').values_list('activity')).order_by('create_time').reverse()
+    activities_quit = user.ac_invitee.filter(id__in=Invite.objects.filter(user=user, response='N', activity__state__in='P, I').values_list('activity')).order_by('create_time').reverse()
 
-    activities_created = user.ac_invitor.all().order_by('start_time').reverse()
+    activities_created = user.ac_invitor.all().filter(state__in='P, I').order_by('create_time').reverse()
     return render_to_response('activity/list.html', {'activities_created': activities_created,
                                                       'activities_invited': activities_invited,
                                                       'activities_participated': activities_participated,
@@ -45,11 +45,13 @@ def create(request):
         form = ActivityCreateForm(invitor=request.user)
     return render_to_response('activity/create.html', {'form': form,}, 
                               context_instance=RequestContext(request))
-    
-@login_required   
+       
 def detail(request, activity_id):
     user = request.user
-    activity = Activity.objects.get(pk=activity_id)
+    try:
+        activity = Activity.objects.get(pk=activity_id)
+    except:
+        return redirect(u'/error?message=该活动不存在')
     from manager import UserRole
     role = UserRole(user, activity).get_role()
     actions = {}
@@ -101,7 +103,7 @@ def edit(request, activity_id):#only the invitor can modify it
 def invite(request, activity_id):    
     if request.method == 'GET':
         return render_to_response('share/invite.html', { 'id': activity_id,
-                                                 'invite_action': '/activity/invite/' + activity_id + '/'},
+                                                 'type': 'activity'},
                           context_instance=RequestContext(request))
     user_from = request.user
     activity = Activity.objects.get(pk=activity_id)
@@ -111,10 +113,12 @@ def invite(request, activity_id):
     for key in request.POST.keys():
         if key.startswith('user_') and request.POST[key] == 'on':
             user_id = key[5:]
-            user = User.objects.get(pk=user_id)                
-            invite = Invite.objects.create(user=user, activity=activity, response='U')
-            if invite is not None:
+            user = User.objects.get(pk=user_id)     
+            try:           
+                invite = Invite.objects.create(user=user, activity=activity, response='U')
                 recipients_list.append(invite.user.email)
+            except:
+                pass
     if request.POST.get('email_notify', default='off') == 'on':
         title = u'来自' + request.user.profile.real_name + u'的邀请'
         invite_url = SITE_URL + 'activity/reply/' + activity_id
@@ -127,6 +131,26 @@ def invite(request, activity_id):
             return HttpResponse('email server error!')
                 
     return redirect('/activity/detail/' + activity_id)
+
+@login_required
+def invite_by_mail(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        link = request.POST.get('link', '')
+        if name == '':
+            return HttpResponse('请输入好友姓名')
+        if email == '':
+            return HttpResponse('请输入正确邮件地址')
+        if link == '':
+            return HttpResponse('活动链接错误，请联系开发人员')
+        mail_context = name + u', 您的好友' + request.user.profile.real_name + u'邀请你参加活动' + '\n' + link
+        recipients_list = []
+        recipients_list.append(email)
+        send_mail(u'活动邀请', mail_context, request.user.email, recipients_list, html=mail_context)
+        return HttpResponse('邮件已发送，请通知您的好友查收')
+    return redirect(u'/error?message=此方法不支持GET操作')
+        
 
 @login_required
 def quit(request, activity_id):
@@ -168,12 +192,12 @@ def wait(request, activity_id):
 @login_required
 def apply(request, activity_id):
     activity = Activity.objects.get(pk=activity_id)
-    if activity.is_public == True:
+    if activity.is_public == True and (not Invite.objects.filter(user=request.user, activity=activity).exists()):
         invite = Invite.objects.create(user=request.user, activity=activity, response='C')
         if activity.need_approve == False:
             invite.join()
     else:
-        return redirect(u'/error?message=非公开活动不能申请')
+        return redirect(u'/error?message=活动为私有，或您已经加入了')
     return redirect('/activity/detail/' + activity_id)
                 
 
@@ -264,7 +288,7 @@ def get_friend_candidates(request, activity_id):
     friend_set = (friend_set_for(user) - invitee_set)
     friend_set.discard(activity.invitor)
     friend_list = list(friend_set)
-    paginator = Paginator(friend_list, 10)
+    paginator = Paginator(friend_list, 100)
     try:
         page = int(request.GET.get('page', 1))
     except ValueError:
@@ -284,3 +308,19 @@ def get_potential_candidates(request, activity_id):
     users = set(User.objects.exclude(id=user.id).exclude(is_staff=True).filter(privacy__allow_stranger_invite = True)) - invitee_set
     users.discard(activity.invitor)
     return render_to_response('share/candidates.html', {'users': users})
+
+#def change_state(request):
+#    from datetime import datetime
+#    res = ""
+#    activity_finished = Activity.objects.filter(state='I', end_time__lt=datetime.now())
+#    for activity in activity_finished:
+#        activity.state='O'
+#        activity.save()
+#        res += str(activity.id) + " "
+#    activity_processing = Activity.objects.filter(state='P', start_time__lt=datetime.now())
+#    res += "I:"
+#    for activity in activity_processing:
+#        activity.state='I'    
+#        activity.save()    
+#        res += str(activity.id) + " "
+#    return HttpResponse(res)

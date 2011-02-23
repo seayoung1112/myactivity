@@ -3,4 +3,5 @@ from views import *
 
 urlpatterns = patterns('',
     (r'^search/', search),
+    (r'^settings/', settings)
 )

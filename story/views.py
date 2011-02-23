@@ -4,19 +4,20 @@ from django.contrib.auth.decorators import login_required
 from forms import StoryForm
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from models import Story, StoryInvitation, StoryPhoto, StoryPost
 from friends.models import friend_set_for
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
+from user_activity.models import get_user_activity, Activity, ActivityPhoto, ActivityPost, Invite
+from models import get_story_invite
 from settings import SITE_URL
 from helper import send_mail
 
 @login_required
 def home(request):
     user = request.user
-    stories = list(user.stories_created.all()) + list(user.stories_participated.all())
-    return render_to_response('story/list.html', {'stories': stories,})
+    activities = get_user_activity(user).filter(state='O')
+    return render_to_response('story/list.html', {'activities': activities,})
 
 @login_required
 def create(request):
@@ -24,9 +25,10 @@ def create(request):
         form = StoryForm(request.POST)
         if form.is_valid():       
             story = form.save(False)
-            story.creator = request.user
+            story.invitor = request.user
+            story.state = 'O'
             story.save()
-            return redirect('/story/edit/' + str(story.id))
+            return redirect('/story/detail/' + str(story.id))
 
             
     else:
@@ -37,8 +39,8 @@ def create(request):
 @login_required   
 def edit(request, story_id):#only the invitor can modify it    
     user = request.user
-    story = Story.objects.get(id=story_id)
-    if story.creator == user:
+    story = Activity.objects.get(id=story_id)
+    if story.invitor == user:
         if request.method == 'POST':
             form = StoryForm(request.POST, instance=story)
             if form.is_valid():            
@@ -53,17 +55,23 @@ def edit(request, story_id):#only the invitor can modify it
 @login_required
 def invite(request, story_id):    
     if request.method == 'GET':
-        invitations = StoryInvitation.objects.filter(to_user=request.user, story__id=story_id)
-        return render_to_response('story/invitation.html', {'invitations': invitations})
+        tabs = {}
+        tabs['好友'] = '/story/friend-candidates/story_id/?page=1'
+        return render_to_response('share/invite.html', { 'id': story_id,
+                                                 'type': 'story',
+                                                 'tabs': tabs,},
+                          context_instance=RequestContext(request))
     recipients_list = []
-    story = Story.objects.get(pk=story_id)
+    story = Activity.objects.get(pk=story_id)
     for key in request.POST.keys():
         if key.startswith('user_') and request.POST[key] == 'on':
             user_id = key[5:]
-            user = User.objects.get(pk=user_id)                
-            invite, created = StoryInvitation.objects.get_or_create(to_user=user, from_user=request.user, story=story)
-            if created:
+            user = User.objects.get(pk=user_id)   
+            try:
+                invite = Invite.objects.create(user=user, activity=story, response='U')             
                 recipients_list.append(invite.to_user.email)
+            except:
+                pass
     if request.POST.get('email_notify', default='off') == 'on':
         title = u'来自' + request.user.profile.real_name + u'的邀请'
         invite_url = SITE_URL + 'story/invite/' + story_id
@@ -75,76 +83,54 @@ def invite(request, story_id):
         except:
             return HttpResponse('email server error!')
                 
-    return redirect(request.GET['next'])#('/story/edit/' + story_id)
+    return redirect('/story/detail/' + story_id)#('/story/edit/' + story_id)
+
+@login_required
+def invitation(request):
+    invitations = get_story_invite(request.user)
+    return render_to_response('story/invitation.html', {'invitations': invitations})
+
 
 @login_required
 def agree(request, invite_id):
-    invitation = StoryInvitation.objects.get(id=invite_id)
-    if request.user != invitation.to_user:
+    invitation = Invite.objects.get(id=invite_id)
+    if request.user != invitation.user:
         return HttpResponse("you are not permitted to do this!")
-    invitation.story.participants.add(request.user)
-    invitation.delete()
-    return redirect('/home')
+    invitation.response = 'Y'
+    invitation.save()
+    return redirect('/story/detail/' + str(invitation.activity.id))
     
 @login_required
 def ignore(request, invite_id):
-    invitation = StoryInvitation.objects.get(id=invite_id)
-    if request.user != invitation.to_user:
+    invitation = Invite.objects.get(id=invite_id)
+    if request.user != invitation.user:
         return HttpResponse("you are not permitted to do this!")
     invitation.delete()
-    return redirect('/home')
+    return redirect('/story/invitation')
 
 def detail(request, story_id):
-    story = Story.objects.get(id=story_id)
-    return render_to_response('story/detail.html', {'story': story}, context_instance=RequestContext(request))
+    story = Activity.objects.get(id=story_id)
+    users = story.person_joined()
+    return render_to_response('story/detail.html', {'story': story,
+                                                    'users': users,},
+                                                     context_instance=RequestContext(request))
 
 @login_required
 def upload_photo(request, story_id):
     if request.method == "POST":
-        story = Story.objects.get(id=story_id)
-        StoryPhoto.objects.create(story=story, content=request.FILES['photo'], upload_by=request.user)
+        story = Activity.objects.get(id=story_id)
+        ActivityPhoto.objects.create(activity=story, content=request.FILES['photo'], upload_by=request.user)
         return redirect('/story/detail/' + story_id)
     
 @login_required
 def post(request, story_id):
     if request.method == "POST":
-        story = Story.objects.get(id=story_id)
-        StoryPost.objects.create(story=story, content=request.POST['content'], post_by=request.user)
+        story = Activity.objects.get(id=story_id)
+        ActivityPost.objects.create(activity=story, content=request.POST['content'], post_by=request.user)
         return redirect('/story/detail/' + story_id)
     
 @login_required
-def get_candidate_pan(request, story_id): 
-    return render_to_response('share/invite.html', { 'id': story_id,
-                                                     'invite_action': '/story/invite/' + story_id + '/?next=' + request.POST['next']},
-                              context_instance=RequestContext(request))
-    
-@login_required
-def get_friend_candidates(request, story_id):
-    user = request.user
-    story = Story.objects.get(pk=story_id)
-    participant_set = set(story.participants.all())
-    friend_list = list(friend_set_for(user) - participant_set)
-    paginator = Paginator(friend_list, 2)
-    try:
-        page = int(request.GET.get('page', 1))
-    except ValueError:
-        page = 1
-    try:
-        friends = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        friends = paginator.page(paginator.num_pages)
-
-    return render_to_response('share/candidates_page.html', {'users': friends})
-
-@login_required
-def get_potential_candidates(request, story_id):
-    story = Story.objects.get(pk=story_id)
-    participant_set = set(story.participants.all())
-    users = set(User.objects.filter(is_staff=False).filter(privacy__allow_stranger_invite=True)) - participant_set
-    return render_to_response('share/candidates.html', {'users': users})
-    
-@login_required
 def get_participants(request, story_id):
-    story = Story.objects.get(id=story_id)
-    users = story.get_participants()
+    story = Activity.objects.get(id=story_id)
+    users = story.person_joined()
     return render_to_response('share/user_list.html', {"users": users})
