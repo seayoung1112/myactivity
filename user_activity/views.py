@@ -33,7 +33,7 @@ def home(request):
 @login_required
 def create(request):
     if request.method == 'POST':
-        form = ActivityCreateForm(request.POST)
+        form = ActivityCreateForm(request.POST, files=request.FILES)
         if form.is_valid():       
             new_activity = form.save(False)
             new_activity.invitor = request.user
@@ -87,7 +87,7 @@ def edit(request, activity_id):#only the invitor can modify it
     activity = Activity.objects.get(pk=activity_id)
     if activity.invitor == user:
         if request.method == 'POST':
-            form = ActivityCreateForm(request.POST, instance=activity)
+            form = ActivityCreateForm(request.POST, files=request.FILES,                                         instance=activity)
             if form.is_valid():            
                 form.save()
                 return redirect('/activity/detail/' + activity_id)

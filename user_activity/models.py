@@ -27,13 +27,13 @@ def get_photo_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "photo.%s" % (ext)
     import os
-    return os.path.join('albums/' + str(instance.activity.id) + '/', filename)
+    return os.path.join('covers/', filename)
     
 def get_cover_photo_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "photo.%s" % (ext)
     import os
-    return os.path.join('albums/' + str(instance.activity.id) + '/cover/', filename)   
+    return os.path.join('albums/' + str(instance.id) + '/cover/', filename)   
     
 class Activity(models.Model):
     invitor = models.ForeignKey(User, related_name='ac_invitor')

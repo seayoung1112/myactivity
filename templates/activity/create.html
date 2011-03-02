@@ -29,7 +29,7 @@
 {%block sidebar%}{%endblock%}
 {%block content%}
 <div class="span-22 last">
-  <form action="/activity/create/" method="post" id="create_form">
+  <form action="/activity/create/" method="post" id="create_form" enctype="multipart/form-data">
     {% csrf_token %}
     <table>
     {% for field in form %}

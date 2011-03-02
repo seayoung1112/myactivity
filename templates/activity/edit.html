@@ -7,7 +7,7 @@
 {%block title%}编辑活动{%endblock%}
 {%block content%}
   <div class="span-24">
-    <form action="/activity/edit/{{activity_id}}/" method="post">
+    <form action="/activity/edit/{{activity_id}}/" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <table>
         {{form.as_table}}
