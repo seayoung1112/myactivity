@@ -101,10 +101,10 @@ class ActivityPhoto(models.Model):
     activity = models.ForeignKey(Activity, related_name="album")
     content = models.ImageField(upload_to=get_photo_path, null=True)
     upload_by = models.ForeignKey(User, related_name="photos_upload")
-    upload_date = models.DateTimeField(default=datetime.now())
+    upload_date = models.DateTimeField(default=datetime.now)
 
 class ActivityPost(models.Model):
     activity = models.ForeignKey(Activity, related_name="posts")
     content = models.TextField(verbose_name="内容")
     post_by = models.ForeignKey(User)
-    post_date = models.DateTimeField(default=datetime.now()) 
+    post_date = models.DateTimeField(default=datetime.now) 
