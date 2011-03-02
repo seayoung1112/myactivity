@@ -42,7 +42,7 @@ class Activity(models.Model):
     activity_type = models.ForeignKey(ActivityType, verbose_name='类型', null=True)    
     description = models.TextField(verbose_name='活动介绍')
     start_time = models.DateTimeField(verbose_name='开始时间')
-    create_time = models.DateTimeField(verbose_name='创建时间', default=datetime.now())
+    create_time = models.DateTimeField(verbose_name='创建时间', default=datetime.now)
     end_time = models.DateTimeField(verbose_name='结束时间')
     assembling_time = models.DateTimeField(verbose_name='集合时间', blank=True, null=True)
     activity_place = models.CharField(max_length=100, verbose_name='活动地点')
