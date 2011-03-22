@@ -3,6 +3,11 @@
 
 
 {%block content%}
+  <script>
+    $(function(){
+      $('#header-wrap').after('<div id=\"message-bar\">1条未读消息</div>');
+    });
+  </script>
   <div class="span-4" id="sidebar">
     <p>欢迎你，{{user.profile.real_name}}</p>
     <div>
@@ -18,6 +23,7 @@
         <li><a href="/story/home">我的故事</a></li>
         <li><a href="/story/create">记录故事</a></li>
         <li><a href="/friends/list">我的好友</a></li>
+        <li><a href="/message/inbox">我的消息</a></li>
       </ul>
     </div>
   </div>

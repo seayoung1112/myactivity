@@ -28,6 +28,7 @@
   border:solid #0000FF;
 }
 .message {width:400px; height:80px;}
+#message-bar {float:left; width:100%; background:url("../images/message_bar.png") repeat-x scroll 50% 50% #CCCCCC; color:#EA0075; height:28px; text-align:center; padding:auto}
 
 .hide {display:none;}
 

@@ -87,7 +87,7 @@ def edit(request, activity_id):#only the invitor can modify it
     activity = Activity.objects.get(pk=activity_id)
     if activity.invitor == user:
         if request.method == 'POST':
-            form = ActivityCreateForm(request.POST, files=request.FILES,                                         instance=activity)
+            form = ActivityCreateForm(request.POST, files=request.FILES, instance=activity, invitor=activity.invitor)
             if form.is_valid():            
                 form.save()
                 return redirect('/activity/detail/' + activity_id)
