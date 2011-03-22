@@ -12,7 +12,7 @@
   </div>
   <div class="span-6 last">
     <p>{{activity.person_joined.count}}人参加&nbsp;{{activity.person_wait.count}}人观望&nbsp;（<span class=''>{{activity.get_state_display}}</span>）</p>
-    <p>{{activity.description}}</p>
+    <p>{{activity.description|linebreaks}}</p>
   </div> 
   <hr/>
 </div>
