@@ -1,4 +1,5 @@
-# Create your views here.
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
@@ -14,8 +15,8 @@ from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.contrib.sites.models import get_current_site
 from django.conf import settings
 from profile.models import Profile
+from helper import send_mail
 import re
-import uuid
 
 @csrf_protect
 @never_cache
@@ -78,12 +79,12 @@ def register(request):
                 except Exception as e:
                     return HttpResponse(str(e))
                 Privacy.objects.create(user=new_user)
-                Profile.objects.create(user=new_user)
+                Profile.objects.create(user=new_user, real_name=form.cleaned_data['realname'])
                 user = authenticate(username=request.POST['username'], password=request.POST['password'])
                 if user is not None:
                     auth_login(request, user)
                 if not redirect_to or ' ' in redirect_to:
-                    redirect_to = '/profile/edit'
+                    redirect_to = '/person/settings'
                 return redirect(redirect_to)
             form.errors["password"] = "password does not match"
         form.errors["all"] = "form not valid"
@@ -111,3 +112,21 @@ def password_change(request):
     return render_to_response('accounts/change_password.html', {
         'form': form,
     }, context_instance=RequestContext(request))
+    
+def forget_password(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        try:
+            password = User.objects.get(username=email).password
+        except:
+            return redirect(u'/error?message=此账户不存在!')
+        title = u'myactivity密码找回'
+        mail_context = u'您的密码是' + password
+
+        try:
+            send_mail(title, mail_context, email, [email], html=mail_context)
+        except:
+            return HttpResponse('email server error!')
+        return render_to_response('accounts/get_password_ok.html')
+    else:
+        return render_to_response('accounts/get_password.html', context_instance=RequestContext(request))

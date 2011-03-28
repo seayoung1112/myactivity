@@ -51,8 +51,8 @@
     
     $( "#register-dialog" ).dialog({
       autoOpen: false,
-      height: 380,
-      width: 350,
+      height: 400,
+      width: 450,
       modal: true,
       buttons: {
         "创建": function() {
@@ -97,10 +97,11 @@
   <div id="register-dialog" title="创建新用户">
     <p class="validateTips"></p>
     <form action="/accounts/register/" method="post">
-      <fieldset>
-        {% csrf_token %}
-        {{ reg_form.as_p }}
-      </fieldset>
+      {% csrf_token %}
+      <table>
+      {{ reg_form.as_table }}
+      </table>
+
     </form>
   </div>
 </html>

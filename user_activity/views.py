@@ -38,7 +38,7 @@ def create(request):
             new_activity = form.save(False)
             new_activity.invitor = request.user
             new_activity.save()
-            return redirect('/activity/home/')
+            return redirect('/activity/detail/' + str(new_activity.id))
 
             
     else:
@@ -288,7 +288,7 @@ def get_friend_candidates(request, activity_id):
     friend_set = (friend_set_for(user) - invitee_set)
     friend_set.discard(activity.invitor)
     friend_list = list(friend_set)
-    paginator = Paginator(friend_list, 100)
+    paginator = Paginator(friend_list, 1)
     try:
         page = int(request.GET.get('page', 1))
     except ValueError:
@@ -309,18 +309,3 @@ def get_potential_candidates(request, activity_id):
     users.discard(activity.invitor)
     return render_to_response('share/candidates.html', {'users': users})
 
-#def change_state(request):
-#    from datetime import datetime
-#    res = ""
-#    activity_finished = Activity.objects.filter(state='I', end_time__lt=datetime.now())
-#    for activity in activity_finished:
-#        activity.state='O'
-#        activity.save()
-#        res += str(activity.id) + " "
-#    activity_processing = Activity.objects.filter(state='P', start_time__lt=datetime.now())
-#    res += "I:"
-#    for activity in activity_processing:
-#        activity.state='I'    
-#        activity.save()    
-#        res += str(activity.id) + " "
-#    return HttpResponse(res)

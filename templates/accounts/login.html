@@ -5,15 +5,7 @@
 {%block title%}登录{%endblock%}
 {%block content%}
 
-<form action="/accounts/login/" method="post" id="">
-
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="登录" class="button"/>
-  <a href="/accounts/register/?next={{next}}" id="register">10秒钟快速注册</a>
-  <input type="hidden" name="next" value="{{ next }}" />   
-  
-</form>
+{%include "share/login.html"%}
 
 {%endblock%}
 {%block footer%}

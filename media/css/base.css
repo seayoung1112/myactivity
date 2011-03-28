@@ -28,8 +28,11 @@
   border:solid #0000FF;
 }
 .message {width:400px; height:80px;}
-#message-bar {float:left; width:100%; background:url("../images/message_bar.png") repeat-x scroll 50% 50% #CCCCCC; color:#EA0075; height:28px; text-align:center; padding:auto}
-
+#message-bar {float:left; width:100%; background:url("../images/message_bar.png") repeat-x scroll #CCCCCC; color:#EA0075; text-align:center; padding:auto}
+#message-bar p {
+  float:left;
+  margin: 5px 30px;
+}
 .hide {display:none;}
 
 form tbody tr:nth-child(even) th, form tbody tr.even th {background:#e5ecf9;}

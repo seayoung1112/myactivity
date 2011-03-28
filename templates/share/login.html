@@ -11,6 +11,8 @@
   {% csrf_token %}
   {{ form.as_p }}
   <input type="submit" value="登录" class="button"/>
+  <a href="/accounts/register/?next={{next}}">10秒钟快速注册</a>
+  <p><a href="/accounts/forgetPassword">忘记密码</a></p>
   <input type="hidden" name="next" value="{{ next }}" />   
 </form>
 

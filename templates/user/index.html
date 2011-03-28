@@ -5,11 +5,29 @@
 {%block content%}
   <script>
     $(function(){
-      $('#header-wrap').after('<div id="message-bar">1条未读消息</div>');
+      $('#act-invite-button').click(function(){
+        $('#message-detail').toggleClass('hide');
+      });
     });
   </script>
+  <div id="message-bar">
+    <p>1条未读消息</p> 
+    <p><a id="act-invite-button" href="#">{{activity_invitation.count}}个活动邀请</a></p>
+    <p><a href="/story/invitation">{{story_invitation.count}}个故事邀请</a></p>
+    <p><a href="/friends/invitation">{{friend_application_count}}个好友申请</a></p>
+    <div id="message-detail" class="span-24 last hide">
+      {%for invite in activity_invitation%}
+        <p>
+          {{invite.activity.invitor.profile.real_name}}邀请您参加
+          <a href="/activity/detail/{{invite.activity.id}}">
+            {{invite.activity.name}}
+          </a>
+        </p>
+      {%endfor%}      
+    </div>
+  </div>
+  <hr class="space"/>
   <div class="span-4" id="sidebar">
-    <p>欢迎你，{{user.profile.real_name}}</p>
     <div>
       {%with user as person%}
         {%include "share/portrait.html"%}
@@ -44,24 +62,5 @@
       <input type="search" name="user_name"/>
       <input type="submit" value="搜索"/> 
     </form>   
-    <div>
-      <p>您有{{activity_invitation.count}}个未处理的活动邀请</p>
-      {%for invite in activity_invitation%}
-        <p>
-          {{invite.activity.invitor.profile.real_name}}邀请您参加
-          <a href="/activity/detail/{{invite.activity.id}}">
-            {{invite.activity.name}}
-          </a>
-        </p>
-      {%endfor%}
-    </div>
-    <hr/>
-    <div>
-      <p>您有{{story_invitation.count}}个未处理的<a href="/story/invitation">故事邀请</a></p>
-    </div>
-    <hr/>
-    <div>
-      <p>您有{{friend_application_count}}个<a href="/friends/invitation">好友申请</a></p>
-    </div>    
   </div>
 {%endblock%}

@@ -7,7 +7,9 @@
 
   <form action="/accounts/register/" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    <table>
+    {{ form.as_table }}
+    </table>
     <input type="hidden" name="next" value="{{ next }}" />
     <input type="submit" value="注册" class="button"/>      
   </form>
