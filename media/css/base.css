@@ -1,4 +1,29 @@
 .portrait {width:48px; height:48px; margin:auto;}
+/*calendar*/
+.cal-portrait {
+  padding: 2px;
+  width: 88px;
+}
+.cal-portrait img {
+  width: 86px;
+  height: 84px;
+  border: none;
+  margin: 0;
+}
+.cal-caption {
+  font-size: 200%;
+  text-align:center;
+}
+.cal-act {
+  cursor: pointer;
+}
+#cal-act-detail{
+  border: #E9E9E9 solid 1px;
+  padding: 10px 4px;
+}
+
+
+
 .tag {margin: 3px 5px; padding: 2px 5px; float:left; border:1px solid lightblue;}
 .act-unit {height: 200px; overflow:hidden}
 .act-thumb {width:100px; height:75px;}
@@ -28,7 +53,7 @@
   border:solid #0000FF;
 }
 .message {width:400px; height:80px;}
-#message-bar {float:left; width:100%; background:url("../images/message_bar.png") repeat-x scroll #CCCCCC; color:#EA0075; text-align:center; padding:auto}
+
 #message-bar p {
   float:left;
   margin: 5px 30px;
@@ -37,3 +62,135 @@
 
 form tbody tr:nth-child(even) th, form tbody tr.even th {background:#e5ecf9;}
 form ul {margin:0; list-style:none;padding:0;}
+/* ------------------------------------------------------------------------------
+    L A Y O U T
+--------------------------------------------------------------------------------- */
+
+/* header */
+#header{font-size:13px;margin-bottom:15px;}
+#header a,#header a:hover,#header a:visited{text-decoration:none!important;color:#069;}
+#header ul,#header li,#header p,#header fieldset,#section-header ul,#section-header li,#section-header p,#section-header,.global-search fieldset,.global-search select,.global-search input,#footer ul,#footer li,#footer p{margin:0;padding:0;list-style-type:none;border:0;outline:0;background:none;vertical-align:middle;}
+
+
+#header-wrap {
+  margin: 0 auto;
+  width: 980px;
+}
+#header {
+  margin: 0 auto;
+  
+  background: url(../images/linkedin.png) no-repeat scroll 0 -470px transparent;
+}
+#logo img{
+  margin: 5px 2px;
+  border: none;
+  background: transparent;
+}
+#nav {
+  padding: 0 15px;
+  height: 39px;
+  background: url(../images/linkedin.png) no-repeat scroll 0 -510px transparent;
+}
+
+
+/* Quick Search */
+#global-search{float:right;margin:8px 4px 0 0;*margin:7px 4px 0 0;padding:0;}
+#global-search fieldset{float:left;white-space:nowrap;}
+#global-search legend,#global-search legend span,#global-search label{position:absolute;left:-12345px;}
+#global-search select{font-size:11px;font-weight:bold;color:#666;padding:2px;text-align:right;}
+#global-search .search-go{cursor:pointer;border:1px solid #06598B;color:#0076A8;background:#0076A8 url(../images/linkedin.png) -9px -1170px no-repeat;height:22px;width:20px;*width:22px;_width:24px;*margin-left:4px;*font-size:.01em;text-indent:-1234px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;}
+#global-search .search-go:hover{background-position:-9px -1200px;}
+#main-search-box{background:#fff;border:1px solid #7c7c7c;border-color:#7c7c7c #c3c3c3 #ddd;height:16px;width:211px;line-height:12px;padding:4px 2px 0;font-size:12px;}
+#global-search ol{float:left;}
+#global-search ol li{margin:0 3px;float:left;}
+#global-search ol li input{width:200px;font-size:12px;background:#fff;border:1px solid #7c7c7c;border-color:#7c7c7c #c3c3c3 #ddd;height:16px;line-height:12px;padding:4px 2px 0;}
+.search-scope {font-size:11px;float:left;z-index:7;}
+.search-scope label{position:static;left:0;}
+.search-scope .suggestion-toggle{display:none;}
+.search-scope ul{background:#fff;border:1px solid #016799;padding:5px;box-shadow:0 6px 10px #888;-moz-box-shadow:0 6px 10px #888;-webkit-box-shadow:0 6px 10px #888;color:#069;display:none;float:left;min-width:100px;}
+.search-scope ul li{display:block;padding:0;margin:0;line-height:1;cursor:pointer;text-align:right;font-size:12px;}
+.search-scope ul li a,.search-scope ul li div{color:#069;padding:5px;}
+.search-scope ul li.option.first{margin-top:3px;}
+.search-scope ul li.separator{margin-top:4px;padding-top:4px;border-top:1px solid #ccc;}
+.search-scope ul li.highlighted div{color:#fff;background-color:#016799;}
+.search-scope ul li.selected div{background:none;color:#000;font-weight:bold;}
+.search-scope span.label{float:left;background:#dcdcdc url('http://static02.linkedin.com/scds/common/u/img/sprite/sprite_global_v5.png') 0 -1130px repeat-x;margin:0;*margin-top:1px;_vertical-align:-5px;border:1px solid #7c7c7c;border-width:1px 0 1px 1px;border-color:#7c7c7c #999 #c3c3c3;-moz-border-radius:2px 0 0 2px;-webkit-border-top-left-radius:2px;-webkit-border-bottom-left-radius:2px;border-radius:2px 0 0 2px;}
+.search-scope span.label span{float:left;background:url('http://static02.linkedin.com/scds/common/u/img/sprite/sprite_global_v5.png') 101% -2072px no-repeat;color:#666;font-weight:bold;padding:4px 19px 3px 8px;cursor:pointer;}
+.search-scope .suggestion-toggle{display:block;cursor:pointer;}
+.search-scope .state-on .on-toggle,.search-scope .state-off .off-toggle{display:none;}
+.search-scope .state-on .off-toggle,.search-scope .state-off .on-toggle{display:block;}
+/*dropdown navigate*/
+ul.topnav{margin-left:5px;}
+ul.topnav .tab{float:left;margin:1px 0 0 0;line-height:35px;font-size:13px;}
+ul.topnav .tab span{display:block;padding:1px 9px;}
+ul.topnav .tab:hover,#header .topnav .tab.hover{background:#fff!important;border:1px solid #016799;box-shadow:0 3px 10px #888;-moz-box-shadow:0 3px 10px #888;-webkit-box-shadow:0 3px 10px #888;}
+ul.topnav .tab:hover span,#header .topnav .tab.hover span{padding:0 8px;}
+ul.topnav .hover span{background-color:#fff;position:relative;z-index:10;}
+ul.topnav .hover .subnav span{background-color:transparent;position:static;}
+ul.topnav .hover .subnav .title{padding:0 5px 5px;}
+#header .hover{position:relative;z-index:9;}
+#header .hover .subnav{display:block;}
+#header .subnav{display:none;position:absolute;top:34px;left:-1px;z-index:4;background:#fff;border:1px solid #016799;padding:5px 0;box-shadow:0 6px 10px #888;-moz-box-shadow:0 6px 10px #888;-webkit-box-shadow:0 6px 10px #888;}
+#header .subnav li{line-height:1;_width:175px;margin:0 5px;font-size:13px;white-space:nowrap;}
+#header .subnav li a{color:#069!important;white-space:nowrap;display:block;padding:5px;_width:100%;_overflow:hidden;_text-overflow:ellipsis;}
+#header .subnav li a:hover{color:#fff!important;background-color:#016799;text-decoration:none;}
+#header .subnav li a:hover sup{color:#fff;}
+#header .subnav li#nav-my-apps{color:#666;padding-top:10px;}
+#header .subnav li.separator{margin-top:4px;padding-top:4px;border-top:1px solid #ccc;}
+#header .subnav ul{margin:0;padding:0;}
+#header .subnav ul li{margin:0;padding:0;}
+#header .subnav ul li a{padding:5px 10px;}
+ul.topnav li ul.subnav {
+  -moz-box-shadow: 0 6px 10px #888888;
+  background: none repeat scroll 0 0 #FFFFFF;
+  border: 1px solid #016799;
+  display: none;
+  left: -1px;
+  padding: 5px 0;
+  position: absolute;
+  top: 34px;
+  z-index: 4;
+}
+ul.topnav li ul.subnav li{
+  font-size: 13px;
+  line-height: 1;
+  margin: 0 5px;
+  white-space: nowrap;
+}
+html ul.topnav li ul.subnav li a {
+  color: #006699 !important;
+  display: block;
+  padding: 5px;
+  white-space: nowrap;
+}
+html ul.topnav li ul.subnav li a:hover { /*--Hover effect for subnav links--*/
+  background: #222 url(dropdown_linkbg.gif) no-repeat 10px center;
+}
+
+/*ui module*/
+.module .header{
+  -moz-border-radius: 3px 3px 3px 3px;
+  overflow: hidden;
+  
+}
+.module .header, .module .header h1, .module .header h2, .module .header h3, .module .header h4 {
+  background: url(../images/linkedin.png) no-repeat scroll 0 -180px #E8E8E8;
+  color:#666666;
+
+  font-weight: bold;
+}
+.module .header h1, .module .header h2, .module .header h3, .module .header h4 {
+  padding: 5px 10px;
+  line-height: 1;
+  margin: 0;
+}
+.module .content {
+    float:left;
+    -moz-border-radius-bottomleft: 6px;
+    -moz-border-radius-bottomright: 6px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: #DDDDDD;
+    border-style: solid;
+    border-width: 0 1px 1px;
+    padding: 6px 10px 8px;
+}

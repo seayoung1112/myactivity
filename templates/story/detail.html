@@ -2,9 +2,6 @@
 
 {%block media%}
 <link href="/media/css/carousel/skin.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript"
-src="/media/js/swfobject.js">
-</script>
 <script src="/media/js/jquery.jcarousel.min.js" type="text/javascript"></script>
 <script>
   $(function(){
@@ -83,15 +80,9 @@ src="/media/js/swfobject.js">
 
 <div class="prepend-1 span-7 last" id="sidebar">  
   <h1>{{story.name}}</h1>
-  <div id="video">请下载安装最新版本的flash插件</div>
-  <hr class="space"/>
-  <script type="text/javascript">
-    var flashvars = {file:'/media/video/dcd_football_2010.flv',autostart:'true' };
-    var params = {allowfullscreen:'true', allowscriptaccess:'always' };
-    var attributes = { id:'player1', name:'player1' };
-    
-    swfobject.embedSWF('/media/js/jwplayer/player.swf','video','270','200','9.0.115','false',    flashvars, params, attributes);
-  </script>
+
+
+
   <p>
     <a href="/story/edit/{{story.id}}/" class="more">编辑</a>
     <a href="/story/invite/{{story.id}}" class="more">邀请</a>

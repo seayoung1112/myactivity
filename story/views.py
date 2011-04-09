@@ -119,7 +119,10 @@ def detail(request, story_id):
 def upload_photo(request, story_id):
     if request.method == "POST":
         story = Activity.objects.get(id=story_id)
-        ActivityPhoto.objects.create(activity=story, content=request.FILES['photo'], upload_by=request.user)
+        try:
+            ActivityPhoto.objects.create(activity=story, content=request.FILES['photo'], upload_by=request.user)
+        except:
+            pass
         return redirect('/story/detail/' + story_id)
     
 @login_required

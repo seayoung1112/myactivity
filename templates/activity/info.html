@@ -1,0 +1,21 @@
+<div class="span-5">
+  <a href="/activity/detail/{{activity.id}}"><img src="{{activity.image.url}}" class="act-img"/></a>
+</div>
+<div class="span-6">       
+  <p><label for="id_activity_type">类型:</label> {{activity.activity_type}}</p> 
+  <p><label for="id_start_time">开始时间:</label> {{activity.start_time}}</p>
+  <p><label for="id_end_time">结束时间:</label> {{activity.end_time}}</p>
+  <p><label for="id_activity_place">活动地点:</label> {{activity.activity_place}}</p>
+</div>
+<div class="span-4 last">
+  <label>创建者</label>
+  <hr class="space">
+  {%with activity.invitor as person%}
+    {%include "share/portrait.html"%}
+  {%endwith%}
+</div>
+
+<div class="prepend-1 span-13">
+  <p>{{activity.description|linebreaks}}</p>
+</div>
+<hr class="space"/>

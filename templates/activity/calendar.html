@@ -1,0 +1,51 @@
+<script>
+$(function(){
+  $('#pre-month').click(function(){
+    $("#calendar").load('/activity/calendar/?year={{cal.prev.0}}&month={{ cal.prev.1 }}');
+  });
+  $('#next-month').click(function(){
+    $("#calendar").load('/activity/calendar/?year={{cal.next.0}}&month={{ cal.next.1 }}');
+  });
+  $('.cal-act').click(function(){
+    id = $(this).attr('id');
+    $('#cal-act-detail').load('/activity/info/' + id + '/');
+  });
+});
+  
+</script>
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th class="cal-portrait"><img src="{{portrait}}"/></th>
+        <th><a href="#" id="pre-month">&laquo;</a></th>
+        <th colspan="4" class="cal-caption">{{cal.year}}年{{cal.month}}月</th>
+        <th><a href="#" id="next-month">&raquo;</a></th>
+      </tr>
+      <tr>
+        {%for title in cal.week_titles%}
+          <th>
+            {{title}}
+          </th>
+        {%endfor%}
+      </tr>
+    </thead>
+    <tbody>
+      {%for line in cal.weeks%}
+        <tr>
+          {%for unit in line%}
+            <td>
+              {{unit.day}}
+              {%for act in unit.activities%}
+                <p><a id="{{act.id}}" class="cal-act">{{act.name}}</a></p>
+              {%endfor%}
+            </td>
+          {%endfor%}
+        </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+  <div id="cal-act-detail">
+  </div>
+</div>
+

@@ -11,15 +11,14 @@
     G E N E R A L
 --------------------------------------------------------------------------------- */
 body {
-	font: 12px/170% 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
 	color: #777;
 	margin: 0; padding: 0;
-	background: url(../images/bg.jpg);
+	line-height: 1;
 }
 /* links */
 a:visited {
 	text-decoration: none;
-	color: #FF409F;
+	color: #006699;
 }
 a:hover { color: #147DB6; }
 a {
@@ -157,108 +156,7 @@ input.button {
 }
 
 h4 {color:#0000FF}
-/* ------------------------------------------------------------------------------
-    L A Y O U T
---------------------------------------------------------------------------------- */
 
-/* header */
-#header-wrap {
-  float: left;
-  height: 65px;
-  width: 100%;
-  background: url(../images/header-bg.jpg) repeat-x;
-}
-#header {
-  position: relative;
-  margin: 0 auto;
-}
-
-
-
-#header p#slogan {
-	position: absolute;
-	margin: 0; padding:  0 5px 0 0;
-	font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
-	font-weight: bold;
-	font-size: 11px;
-	line-height: 1.8em;
-	font-style: normal;
-	letter-spacing: -.5px;
-	color: #0d6684;
-
-	/* change the values of top and left to adjust the position */
-	top: 132px; left: 25px;
-}
-
-
-#logo img{
-  width: 150px;
-  height: 38px;
-  background:none;
-  border:none;
-}
-/*  navigation  */
-#header #nav {
-  margin: 0; padding: 0;
-}
-#header #nav ul {
-  float: left;  
-  list-style: none;
-  margin: 20px 0 0 0 ; padding: 0;
-  height: 44px;
-}
-#header #nav ul li {
-  float: left;
-  margin: 0; padding: 0;      
-}
-#header #nav ul li a {
-  float:left;
-  margin: 0;
-  padding: 0 15px 29px 15px;
-  color: #baa7a7;
-  font: bold 12px 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
-}
-#header #nav ul li a:hover, 
-#header #nav ul li a:active {
-  border: none;
-  color: #fff;
-}
-#header #nav ul li#current a {
-  background: transparent url(../images/current.jpg) no-repeat center bottom;
-  color: #fff;
-}
-/* Quick Search */
-#quick-search {
-	border: none;
-   width: 250px; height: 40px;
-   padding: 0; margin: 0;
-   background: url(../images/search.gif) no-repeat;
-}
-#quick-search input {
-  	border: none;
-  	float: left;
- 	padding: 0; margin: 0;
-}
-#quick-search button {
-  	border: none;
-  	float: right;
-  	padding: 0; margin: 0;
-}
-#quick-search label { display: none; }
-#quick-search input.tbox {
-  	color: #7d8285;
-  	font-weight: bold;
-  	margin: 15px 0 10px 10px;
-  	background: transparent;
-  	width: 200px;
-}
-#quick-search button.btn {
-  	width: 40px;
-  	height: 40px;
-  	cursor: pointer;
-  	text-indent: -9999px;
-  	background: #fbc900 url(../images/search.gif) no-repeat top right;
-}
 
 
 
@@ -363,6 +261,11 @@ h4 {color:#0000FF}
 .popular ul li a:hover { color: #000; }
 
 /* footer */
+#footer {
+    clear: both;
+    color: #666666;
+}
+
 #footer-outer {
 	clear: both;
 	text-align: left;
@@ -386,29 +289,6 @@ h4 {color:#0000FF}
 	color: #fff;
 }
 
-/* gallery */
-#footer-wrap #gallery {
-	padding: 0 0 10px 0;
-   margin: 0;
-   width: 100%;
-	background: url(../images/footer-line.gif) repeat-x left bottom;
-
-	/* border-bottom: 1px solid #326B8D;  */
-}
-#footer-wrap #gallery h3 {
-  float: left;
-  display: inline;
-  width: 200px;
-  margin: 30px 0 0 20px;
-  padding: 0;
-}
-#footer-wrap #gallery p.thumbs {
-  float: right;
-  display: inline;
-  width: 730px;
-  margin: 20px 0 0 0;
-  padding: 0;
-}
 
 
 /* footer columns */
@@ -421,27 +301,6 @@ h4 {color:#0000FF}
 	float: right;
 }
 
-/* recent comments */
-.recent-comments ul {
-	text-align: left;
-	margin-left: 20px;
-   padding: 0;
-	background: url(../images/footer-line.gif) repeat-x left top;
-}
-.recent-comments ul li {
-	list-style: none;
-	font-size: 12px;
-	line-height: 1.5em;
-	padding: 7px 5px 7px 20px;
-	background: url(../images/speech_bubble.gif) no-repeat 3px 11px;
-}
-* html body .recent-comments ul li { height: 1%; }
-.recent-comments ul li a:link,
-.recent-comments ul li a:visited { padding-left: 0; }
-.recent-comments ul li cite {
-	font-size: .9em;
-	font-style: normal;
-}
 
 /* footer-list */
 .footer-list ul {
@@ -486,12 +345,11 @@ ul.subscribe-stuff li img {
    padding-top: 10px;
    font-family: 'Trebuchet MS', 'Helvetica Neue', Arial, sans-serif;
 	font-size: .9em;
-	color: #C2DBE7;
+	color: #666666;
    overflow: hidden;
    background: url(../images/footer-line.gif) repeat-x left top;
 }
-#footer-bottom a { color: #fff; }
-#footer-bottom a:hover { color: #99CCFF; }
+
 
 #footer-bottom p.bottom-left {
 	float: left;

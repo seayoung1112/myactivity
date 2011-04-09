@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render_to_response, redirect
-from forms import ActivityCreateForm, ActivityEditForm, InviteReplyForm, ActivityTypeForm
-from models import Activity, Invite, ActivityType, UserActivityPreference
+from forms import ActivityCreateForm, InviteReplyForm, ActivityTypeForm
+from models import Activity, Invite, ActivityType, UserActivityPreference, ActivityCalendar
 from django.http import HttpResponse
 from django.template import RequestContext
 from helper import send_mail
@@ -80,6 +80,13 @@ def detail(request, activity_id):
         else:
             return HttpResponse('对不起，您无权查看此私有活动')  
     return render_to_response('activity/detail.html', {'actions':actions, 'activity': activity})
+
+def info(request, activity_id):
+    try:
+        activity = Activity.objects.get(pk=activity_id)
+    except:
+        return redirect(u'/error?message=该活动不存在')
+    return render_to_response('activity/info.html', {'activity': activity})
     
 @login_required   
 def edit(request, activity_id):#only the invitor can modify it
@@ -250,14 +257,14 @@ def get_type_default(request, type_id):
     except:
         return HttpResponse(None)
     start_time = datetime.datetime.combine(datetime.date.today(), preference.default_start_time)
-    assembling_time = start_time - datetime.timedelta(minutes=preference.default_assembling_time)
+    #assembling_time = start_time - datetime.timedelta(minutes=preference.default_assembling_time)
     end_time = start_time + datetime.timedelta(minutes=int(preference.default_duration * 60))
     data = {'name': preference.default_name, 'description': preference.default_description,
             'start_time': str(start_time),
-            'assembling_time': str(assembling_time), 
+            
             'end_time': str(end_time), 
             'activity_place': preference.default_activity_place, 
-            'assembling_place':preference.default_assembling_place}
+            }
     res = simplejson.dumps(data)
     return HttpResponse(res)
     
@@ -270,10 +277,10 @@ def set_type_default(request):
             preference.default_name = form.cleaned_data['name']
             preference.default_description = form.cleaned_data['description']
             preference.default_start_time = form.cleaned_data['start_time'].time()
-            preference.default_assembling_time = (form.cleaned_data['start_time'] - form.cleaned_data['assembling_time']).seconds / 60
+            #preference.default_assembling_time = (form.cleaned_data['start_time'] - form.cleaned_data['assembling_time']).seconds / 60
             preference.default_duration = str((form.cleaned_data['end_time'] - form.cleaned_data['start_time']).seconds / float(3600))
             preference.default_activity_place = form.cleaned_data['activity_place']
-            preference.default_assembling_place = form.cleaned_data['assembling_place']
+            #preference.default_assembling_place = form.cleaned_data['assembling_place']
             preference.save()
             return HttpResponse('已设为默认')
 
@@ -309,3 +316,11 @@ def get_potential_candidates(request, activity_id):
     users.discard(activity.invitor)
     return render_to_response('share/candidates.html', {'users': users})
 
+@login_required
+def get_calendar(request):
+    year = int(request.GET['year'])
+    month = int(request.GET['month'])
+    cal = ActivityCalendar(year, month)
+    portrait = request.user.profile.portrait.url
+    return render_to_response('activity/calendar.html', {'cal': cal, 'portrait': portrait})
+    

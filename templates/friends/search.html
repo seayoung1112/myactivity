@@ -4,13 +4,7 @@
 {%endblock%}
 {%block title%}搜索好友{%endblock%}
 {%block content%}
-  <div>
-    <form action="/person/search" method="get">
-      <input type="hidden" value="friends/search.html" name="template"/>
-      <label>搜索好友</label><input type="search" name="user_name"/> 
-    </form>   
-  </div>
-  <hr/>
+  
   {%for person in users%}
     <div class="person-thumb-wrapper">
       {%include "share/portrait.html"%}

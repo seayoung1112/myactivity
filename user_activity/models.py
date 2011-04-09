@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
 # Create your models here.
 class ActivityType(models.Model):
@@ -16,10 +16,10 @@ class UserActivityPreference(models.Model):
     default_name = models.CharField(max_length=50, verbose_name='默认活动名')
     default_description = models.TextField(verbose_name='活动介绍')
     default_start_time = models.TimeField(verbose_name='默认开始时间')
-    default_assembling_time = models.IntegerField(verbose_name=r'默认多少时间前集合（分钟）')
+    #default_assembling_time = models.IntegerField(verbose_name=r'默认多少时间前集合（分钟）')
     default_duration = models.DecimalField(verbose_name=r'默认持续时间(小时)', max_digits=4, decimal_places=1)    
     default_activity_place = models.CharField(max_length=100, verbose_name='默认活动地点')
-    default_assembling_place = models.CharField(max_length=100, verbose_name='默认集合地点')
+    #default_assembling_place = models.CharField(max_length=100, verbose_name='默认集合地点')
     class Meta:
         unique_together = ('user', 'activity_type')
     
@@ -44,9 +44,9 @@ class Activity(models.Model):
     start_time = models.DateTimeField(verbose_name='开始时间')
     create_time = models.DateTimeField(verbose_name='创建时间', default=datetime.now)
     end_time = models.DateTimeField(verbose_name='结束时间')
-    assembling_time = models.DateTimeField(verbose_name='集合时间', blank=True, null=True)
+    #assembling_time = models.DateTimeField(verbose_name='集合时间', blank=True, null=True)
     activity_place = models.CharField(max_length=100, verbose_name='活动地点')
-    assembling_place = models.CharField(max_length=100, verbose_name='集合地点', blank=True, null=True)
+    #assembling_place = models.CharField(max_length=100, verbose_name='集合地点', blank=True, null=True)
     invitee = models.ManyToManyField(User, through='Invite', related_name='ac_invitee', blank=True, null=True)
     ACTIVITY_STATE_CHOICES = (('P','筹备'), ('I','进行中'), ('O', '已结束'), ('C', '已取消'))
     is_public = models.BooleanField(verbose_name='公开性', default=True)
@@ -108,3 +108,69 @@ class ActivityPost(models.Model):
     content = models.TextField(verbose_name="内容")
     post_by = models.ForeignKey(User)
     post_date = models.DateTimeField(default=datetime.now) 
+    
+class ActivityCalendar():
+    def __init__(self, year, month):
+        self.week_titles = ('周一', '周二', '周三', '周四', '周五', '周六', '周日')
+        month_first_date = date(year=year, month=month, day=1)
+        weekday = month_first_date.weekday()
+        self.year = year
+        self.month = month
+        self.first_date = month_first_date - timedelta(days=weekday)
+        self.weeks = []
+        self.get_weeks()
+        
+    def get_weeks(self):
+        date = self.first_date
+        week = 0
+        line = []
+        month = self.month % 12 + 1
+        while(date.month != month or week != 0):            
+            unit = DateUnit(date, self.month)
+            line.append(unit)
+            if week == 6:
+                self.weeks.append(line)
+                line = []
+            date = date + timedelta(days=1)
+#            print month
+#            print str(date)
+#            print week
+            week = (week + 1) % 7
+        #find activities in this calendar
+#        start_date = datetime(self.first_date.year, self.first_date.month, self.first_date.day)
+#        end_date = datetime()
+        activities = Activity.objects.filter(start_time__range=(self.first_date, date))
+        for act in activities:
+            days = (act.start_time.date() - self.first_date).days
+            week_num = days / 7
+            day_num = days % 7
+            self.weeks[week_num][day_num].activities.append(act)
+            
+    def next(self):
+        """return a tuple that contains next year and month"""
+        y = self.year
+        m = self.month
+        if m == 12:
+            m = 1
+            y += 1
+        else:
+            m += 1
+        return (y,m)
+        
+    def prev(self):
+        """return a tuple that contains previous year and month"""
+        y = self.year
+        m = self.month
+        if m == 1:
+            m = 12
+            y -= 1
+        else:
+            m -= 1
+        return (y,m)
+        
+            
+class DateUnit():
+    def __init__(self, date, month):
+        self.day = date.day
+        self.is_this_month = (date.month == month)
+        self.activities = []

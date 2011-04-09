@@ -2,13 +2,45 @@
 {%block title%}动起来！{%endblock%}
 
 {%block menu%}
-  <li><a href="/">主页</a></li>
-  <li><a href="/activity/home">我的活动</a></li>
-  <li><a href="/story/home">我的故事</a></li>  
-  <li><a href="/person/settings">个人设置</a></li>
-  <li><a href="/privacy">隐私设置</a></li>
-  <li><a href="/suggest">提出建议</a></li>
-  <li><a href="/updates">更新日志</a></li>
-  <li><a href="/contact">联系我们</a></li>
-  <li class="float-right"><a href="/accounts/logout">退出</a></li>
+  <li class="tab"><a href="/"><span>主页</span></a></li>
+  <li class="tab">
+    <a href="#"><span>活动</span></a>
+    <ul class="subnav">
+      <li><a href="/activity/create"><span>发起活动</span></a></li>
+      <li><a href="/activity/home"><span>我的活动</span></a></li>
+    </ul>
+  </li>
+  <li class="tab">
+    <a href="#"><span>故事</span></a>
+    <ul class="subnav">
+      <li><a href="/story/create"><span>记录故事</span></a></li>
+      <li><a href="/story/home"><span>我的故事</span></a></li>
+    </ul>    
+  </li>
+  <li class="tab">
+    <a href="/friends/list"><span>好友</span></a>
+  </li>
+  <li class="tab">
+    <a href="/message/inbox"><span>消息</span></a>
+    <ul class="subnav">
+      <li><a href="/message/inbox"><span>收件箱</span></a></li>
+      <li><a href="/message/send"><span>发送消息</span></a></li>
+    </ul>    
+  </li>      
+  <li class="tab">
+    <a href="#"><span>其他</span></a>
+    <ul class="subnav">
+      <li><a href="/suggest"><span>提出建议</span></a></li>
+      <li><a href="/updates"><span>更新日志</span></a></li>
+      <li><a href="/contact"><span>联系我们</span></a></li>
+    </ul>
+  </li>
+  <li class="tab">
+    <a href="#"><span>{{user.profile.real_name}}</span></a>
+    <ul class="subnav">
+      <li><a href="/person/settings"><span>个人设置</span></a></li>
+      <li><a href="/privacy"><span>隐私设置</span></a></li>
+      <li><a href="/accounts/logout"><span>退出</span></a></li>
+    </ul>
+  </li>
 {%endblock%}
