@@ -12,6 +12,7 @@ from user_activity.models import get_user_activity, Activity, ActivityPhoto, Act
 from models import get_story_invite
 from settings import SITE_URL
 from helper import send_mail
+import datetime
 
 @login_required
 def home(request):
@@ -28,11 +29,16 @@ def create(request):
             story.invitor = request.user
             story.state = 'O'
             story.save()
-            return redirect('/story/detail/' + str(story.id))
-
-            
+            return redirect('/story/detail/' + str(story.id))            
     else:
-        form = StoryForm()
+        try:
+            year = int(request.GET['year'])
+            month = int(request.GET['month'])
+            day = int(request.GET['day'])
+            start_time = datetime.datetime(year, month, day)
+            form = StoryForm(initial={'start_time':start_time})
+        except:            
+            form = StoryForm()
     return render_to_response('story/create.html', {'form': form,}, 
                               context_instance=RequestContext(request))
 

@@ -10,6 +10,13 @@ $(function(){
     id = $(this).attr('id');
     $('#cal-act-detail').load('/activity/info/' + id + '/');
   });
+  $('.cal-day').hover(function(){
+    $(this).find('.button').show();
+    $(this).find('.day-num').hide();
+  }, function(){
+    $(this).find('.button').hide();
+    $(this).find('.day-num').show();
+  });
 });
   
 </script>
@@ -34,10 +41,15 @@ $(function(){
       {%for line in cal.weeks%}
         <tr>
           {%for unit in line%}
-            <td>
-              {{unit.day}}
+            <td class="this-month-{{unit.is_this_month}} cal-day {%if unit.is_today == 'today'%}today{%endif%}">
+              <p class="day-num">{{unit.day}}</p>
+              {%if unit.is_today == 'before'%}
+                <p class="button"> <a href="story/create/?year={{cal.year}}&month={{cal.month}}&day={{unit.day}}">记录故事</a></p>
+              {%else%}
+                <p class="button"> <a href="/activity/create/?year={{cal.year}}&month={{cal.month}}&day={{unit.day}}">创建活动</a></p>
+              {%endif%}
               {%for act in unit.activities%}
-                <p><a id="{{act.id}}" class="cal-act">{{act.name}}</a></p>
+                <p id="{{act.id}}" class="cal-act state-{{act.state}}">{{act.name}}</p>
               {%endfor%}
             </td>
           {%endfor%}

@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from helper import send_mail
 from settings import SITE_URL
+import datetime
 from friends.models import FriendInvitation, friend_set_for
 from profile.models import UserTag
 
@@ -38,11 +39,16 @@ def create(request):
             new_activity = form.save(False)
             new_activity.invitor = request.user
             new_activity.save()
-            return redirect('/activity/detail/' + str(new_activity.id))
-
-            
+            return redirect('/activity/detail/' + str(new_activity.id))            
     else:
-        form = ActivityCreateForm(invitor=request.user)
+        try:
+            year = int(request.GET['year'])
+            month = int(request.GET['month'])
+            day = int(request.GET['day'])
+            start_time = datetime.datetime(year, month, day)
+            form = ActivityCreateForm(invitor=request.user, initial={'start_time':start_time})
+        except:            
+            form = ActivityCreateForm(invitor=request.user)
     return render_to_response('activity/create.html', {'form': form,}, 
                               context_instance=RequestContext(request))
        
@@ -249,7 +255,6 @@ def create_type(request):
                               context_instance=RequestContext(request))
 
 import simplejson
-import datetime
 @login_required
 def get_type_default(request, type_id):
     try:

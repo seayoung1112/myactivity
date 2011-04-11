@@ -1,5 +1,5 @@
 <div class="span-5">
-  <a href="/activity/detail/{{activity.id}}"><img src="{{activity.image.url}}" class="act-img"/></a>
+  <a href="/{%if activity.state == 'O'%}story{%else%}activity{%endif%}/detail/{{activity.id}}"><img src="{{activity.image.url}}" class="act-img"/></a>
 </div>
 <div class="span-6">       
   <p><label for="id_activity_type">类型:</label> {{activity.activity_type}}</p> 

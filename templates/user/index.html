@@ -38,7 +38,7 @@
     {{calendar_html|safe}}
   </div>
   <div class="span-8 last">
-    <div class="module span-8 last">
+    <div class="module common-ui">
       <div class="header">
         <h4>您可能敢兴趣的活动</h4>
       </div>
@@ -46,6 +46,7 @@
       {% for activity in public_activities %}
         {%include "share/activity_unit.html"%}
       {% endfor %}       
+      <div class="clear"><a class="float-right">更多</a></div>
       </div>
     </div>
   </div>

@@ -76,7 +76,7 @@ class Activity(models.Model):
 from django.db.models import Q
 def get_user_activity(user):
     #此处查询需要加上distinct，因为or是用left outer join处理，一个acitivity会对应多个invitee，从而有多条符合invitor的结果，导致重复
-    return Activity.objects.filter(Q(invitee=user) | Q(invitor=user)).distinct().order_by('create_time')
+    return Activity.objects.filter(Q(invitee=user) | Q(invitor=user)).filter(state__in=('P', 'I')).distinct().order_by('create_time')
     
 class Invite(models.Model):
     RESPONSE_TYPES = (('Y', '参加'), ('H', '观望'), ('N', '不参加'), ('U', '未阅读'), ('C', '待审核'))
@@ -137,8 +137,6 @@ class ActivityCalendar():
 #            print week
             week = (week + 1) % 7
         #find activities in this calendar
-#        start_date = datetime(self.first_date.year, self.first_date.month, self.first_date.day)
-#        end_date = datetime()
         activities = Activity.objects.filter(start_time__range=(self.first_date, date))
         for act in activities:
             days = (act.start_time.date() - self.first_date).days
@@ -171,6 +169,13 @@ class ActivityCalendar():
             
 class DateUnit():
     def __init__(self, date, month):
+        today = date.today()
+        if date < today:
+            self.is_today = 'before'
+        elif date > today:
+            self.is_today = 'after'
+        else:
+            self.is_today = 'today'
         self.day = date.day
         self.is_this_month = (date.month == month)
         self.activities = []
