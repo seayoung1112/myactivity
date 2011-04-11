@@ -11,6 +11,7 @@ from story.models import get_story_invite
 from profile.models import UserTag
 from django.contrib.auth.models import User
 from datetime import date
+from message.models import Message
 
 @login_required
 def home(request):
@@ -19,12 +20,14 @@ def home(request):
     activity_invitation = Invite.objects.filter(user=user, response='U')
     story_invitation = get_story_invite(to_user=user)
     friend_application_count = FriendInvitation.objects.filter(to_user=user).count()
+    messages =  Message.objects.filter(to_user=request.user)
     cal = ActivityCalendar(date.today().year, date.today().month)
     t = get_template('activity/calendar.html')
     c = Context(dict(cal=cal, portrait=user.profile.portrait.url))
     html = t.render(c)
     return render_to_response('user/index.html', {'user': user,
                                                   'public_activities': public_activities[:2],   
+                                                  'messages': messages,
                                                   'activity_invitation': activity_invitation,
                                                   "story_invitation": story_invitation,
                                                   'friend_application_count': friend_application_count,

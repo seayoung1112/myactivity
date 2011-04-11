@@ -1,3 +1,7 @@
+body {
+  font-family:Helvetica,Georgia,Arial,sans-serif,宋体;
+}
+
 .portrait {width:48px; height:48px; margin:auto;}
 /*activity calendar*/
 .cal-portrait {
@@ -28,7 +32,7 @@
   height: 100px;
   vertical-align:top;
   background:#FFFFFF;
-  font-size:13px;
+  font-size:12px;
 }
 #calendar .today{
   width: 84px;
@@ -40,12 +44,19 @@
 }
 #calendar td p{
   width:84px;
-  overflow:hidden;
+  height:12px;
   padding: 2px;
   margin: 0 0 2px;  
   -moz-border-radius: 2px;
   background:#E5ECF9;
-
+}
+#calendar td p span{
+  display:block;
+  height:12px;
+  width:84px;
+  margin:0;
+  padding:0;
+  overflow:hidden;
 }
 #calendar .this-month-True .day-num{
   background:#308ABA;
@@ -176,8 +187,8 @@ form ul {margin:0; list-style:none;padding:0;}
 .search-scope ul li.separator{margin-top:4px;padding-top:4px;border-top:1px solid #ccc;}
 .search-scope ul li.highlighted div{color:#fff;background-color:#016799;}
 .search-scope ul li.selected div{background:none;color:#000;font-weight:bold;}
-.search-scope span.label{float:left;background:#dcdcdc url('http://static02.linkedin.com/scds/common/u/img/sprite/sprite_global_v5.png') 0 -1130px repeat-x;margin:0;*margin-top:1px;_vertical-align:-5px;border:1px solid #7c7c7c;border-width:1px 0 1px 1px;border-color:#7c7c7c #999 #c3c3c3;-moz-border-radius:2px 0 0 2px;-webkit-border-top-left-radius:2px;-webkit-border-bottom-left-radius:2px;border-radius:2px 0 0 2px;}
-.search-scope span.label span{float:left;background:url('http://static02.linkedin.com/scds/common/u/img/sprite/sprite_global_v5.png') 101% -2072px no-repeat;color:#666;font-weight:bold;padding:4px 19px 3px 8px;cursor:pointer;}
+.search-scope span.label{float:left;background:#dcdcdc url(../images/linkedin.png) 0 -1130px repeat-x;margin:0;*margin-top:1px;_vertical-align:-5px;border:1px solid #7c7c7c;border-width:1px 0 1px 1px;border-color:#7c7c7c #999 #c3c3c3;-moz-border-radius:2px 0 0 2px;-webkit-border-top-left-radius:2px;-webkit-border-bottom-left-radius:2px;border-radius:2px 0 0 2px;}
+.search-scope span.label span{float:left;background:url(../images/linkedin.png) 101% -2072px no-repeat;color:#666;font-weight:bold;padding:4px 19px 3px 8px;cursor:pointer;}
 .search-scope .suggestion-toggle{display:block;cursor:pointer;}
 .search-scope .state-on .on-toggle,.search-scope .state-off .off-toggle{display:none;}
 .search-scope .state-on .off-toggle,.search-scope .state-off .on-toggle{display:block;}

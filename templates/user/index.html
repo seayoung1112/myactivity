@@ -1,6 +1,19 @@
 {%extends "share/base_login.html"%}
 {%block title%}动起来！{%endblock%}
 {%block media%}
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<!-- <script>
+  function initializeGoogleMap(){
+    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    var myOptions = {
+      zoom: 8,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  }
+</script> -->
 {%endblock%}
 
 {%block content%}
@@ -9,15 +22,24 @@
       $('#act-invite-button').click(function(){
         $('#message-detail').parent().toggleClass('hide');
       });
-      
+      // initializeGoogleMap();
     });
   </script>
-  <div id="message-bar" class="module">
+  {%if activity_invitation.count > 0 or story_invitation.count > 0 or friend_application_count.count > 0 or messages.count > 0%}
+  <div id="message-bar" class="module">    
     <div class="header">
-      <p>1条未读消息</p> 
-      <p><a id="act-invite-button" href="#">{{activity_invitation.count}}个活动邀请</a></p>
-      <p><a href="/story/invitation">{{story_invitation.count}}个故事邀请</a></p>
-      <p><a href="/friends/invitation">{{friend_application_count}}个好友申请</a></p>
+      {%if messages.count > 0%}
+        <p>{{messages.count}}条未读消息</p>
+      {%endif%} 
+      {%if activity_invitation.count > 0%}
+        <p><a id="act-invite-button" href="#">{{activity_invitation.count}}个活动邀请</a></p>
+      {%endif%}
+      {%if story_invitation.count > 0%}
+        <p><a href="/story/invitation">{{story_invitation.count}}个故事邀请</a></p>
+      {%endif%}
+      {%if friend_application_count.count > 0%}
+        <p><a href="/friends/invitation">{{friend_application_count}}个好友申请</a></p>
+      {%endif%}
     </div>
     <div class="content hide">
       <div id="message-detail" class="span-24 last hide">
@@ -33,6 +55,7 @@
     </div>
   </div>
   <hr class="space"/>
+  {%endif%}
 
   <div class="span-16" id="calendar">
     {{calendar_html|safe}}
@@ -50,4 +73,6 @@
       </div>
     </div>
   </div>
+  <!-- <div id="map_canvas" style="width:800px; height:500px"></div> -->
+
 {%endblock%}

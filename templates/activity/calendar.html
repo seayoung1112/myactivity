@@ -49,7 +49,7 @@ $(function(){
                 <p class="button"> <a href="/activity/create/?year={{cal.year}}&month={{cal.month}}&day={{unit.day}}">创建活动</a></p>
               {%endif%}
               {%for act in unit.activities%}
-                <p id="{{act.id}}" class="cal-act state-{{act.state}}">{{act.name}}</p>
+                <p id="{{act.id}}" class="cal-act state-{{act.state}}"><span>{{act.name}}</span></p>
               {%endfor%}
             </td>
           {%endfor%}
