@@ -1,0 +1,39 @@
+{%extends "share/base_login.html"%}
+{%block title%}选择活动时间{%endblock%}
+{%block sidebar%}{%endblock%}
+{%block content%}
+<h4><a href="/activity/detail/{{poll_model.activity.id}}">{{poll_model.activity}}</a></h4>
+
+<form action="/activity/poll/{{poll_model.activity.id}}/" method="post">
+  {% csrf_token %}
+  <table>
+    <thead>
+      <tr>
+        {%for time in poll_model.candidate_times%}
+          <th>{{time}}</th>
+        {%endfor%}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        {%for time in poll_model.candidate_times%}
+          <td><input type="checkbox" name="can-{{time}}" {%if time.polled%}checked="checked"{%endif%}/></td>
+        {%endfor%}
+      </tr>
+      <tr>
+        {%for time in poll_model.candidate_times%}
+          <td>{{time.poll_num}}票</td>
+        {%endfor%}
+      </tr>
+      {%if poll_model.is_creator%}
+        <tr>
+          {%for time in poll_model.candidate_times%}
+            <td><a href="/activity/chooseTime/?time={{time}}">选为正式时间</a></td>
+          {%endfor%}
+        </tr>
+      {%endif%}
+    </tbody>
+  </table>
+  <input type="submit" value="保存"/>
+</form>
+{%endblock%}

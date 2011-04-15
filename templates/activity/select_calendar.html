@@ -1,0 +1,53 @@
+<div class="span-10 calendar">
+  <script>
+  $(function(){
+    $('#pre-month').click(function(){
+      $("#select-cal").load('/activity/calendar/?year={{cal.prev.0}}&month={{ cal.prev.1 }}&template=activity/select_calendar.html');
+    });
+    $('#next-month').click(function(){
+      $("#select-cal").load('/activity/calendar/?year={{cal.next.0}}&month={{ cal.next.1 }}&template=activity/select_calendar.html');
+    });
+    markSelectedDate();
+    $('.available').click(function(){
+      $(this).removeClass('available');
+      $(this).addClass('selected');
+      $(this).unbind();
+      date = $(this).attr('id');
+      addDate(date);
+    });
+  });
+  </script>
+  <table>
+    <thead>
+      <tr>
+        <th><a id="pre-month">&laquo;</a></th>
+        <th colspan="5" class="cal-caption">{{cal.year}}年{{cal.month}}月</th>
+        <th><a id="next-month">&raquo;</a></th>
+      </tr>
+      <tr>
+        {%for title in cal.week_titles%}
+          <th>
+            {{title}}
+          </th>
+        {%endfor%}
+      </tr>
+    </thead>
+    <tbody>
+      {%for line in cal.weeks%}
+        <tr>
+          {%for unit in line%}
+            <td class="cal-day {%if unit.is_today != 'before'%}available{%endif%}" id="{{unit.date.isoformat}}">
+              <p class="day-num">{{unit.date.day}}</p>
+              {%if unit.act_count > 0%}
+              <div class="clear">{{unit.act_count}}活动</div>  
+              {%endif%}
+            </td>
+          {%endfor%}
+        </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+</div>
+
+
+

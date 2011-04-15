@@ -1,8 +1,20 @@
 body {
   font-family:Helvetica,Georgia,Arial,sans-serif,宋体;
 }
+a{
+  cursor:pointer;
+}
+p.sparse{
+  line-height:1.5;
+}
 
 .portrait {width:48px; height:48px; margin:auto;}
+/*index*/
+table#features td, table#features th{
+  line-height:1.5;
+  font-size:14px;
+}
+/*index*/
 /*activity calendar*/
 .cal-portrait {
   padding: 0;
@@ -26,7 +38,8 @@ body {
   border: #E9E9E9 solid 1px;
   padding: 10px 4px;
 }
-#calendar table td{
+.calendar tr:nth-child(2n) td, tbody tr.even td{background:#FFFFFF;}
+.calendar table td{
   width: 88px;
   padding: 0;
   height: 100px;
@@ -34,15 +47,15 @@ body {
   background:#FFFFFF;
   font-size:12px;
 }
-#calendar .today{
+.calendar .today{
   width: 84px;
   border: 2px solid #FF7F24;
   background:#FFC1C1;
 }
-#calendar .today p{
+.calendar .today p{
   width: 80px;
 }
-#calendar td p{
+.calendar td p{
   width:84px;
   height:12px;
   padding: 2px;
@@ -50,7 +63,7 @@ body {
   -moz-border-radius: 2px;
   background:#E5ECF9;
 }
-#calendar td p span{
+.calendar td p span{
   display:block;
   height:12px;
   width:84px;
@@ -58,41 +71,68 @@ body {
   padding:0;
   overflow:hidden;
 }
-#calendar .this-month-True .day-num{
+.calendar .this-month-True .day-num{
   background:#308ABA;
   color:#FFFFFF;
 }
 
-#calendar .day-num{
+.calendar .day-num{
   text-align:right;
 }
 
-#calendar .this-month-False .day-num{
+.calendar .this-month-False .day-num{
   background:#FFFFFF;
   color:#999999;
 }
 
-#calendar .state-P{
+.calendar .state-P{
   color:red;
 }
-#calendar .state-I{
+.calendar .state-I{
   color:#FF7F00;  
 }
-#calendar .state-O{
+.calendar .state-O{
   color:green;
 }
-#calendar .state-C{
+.calendar .state-C{
   color:#888888;
 }
-#calendar td p.button{  
+.calendar td p.button{  
   font-size:13px;
   background: #CDCDCD;
   display:none;
   text-align:center;
 }
 /*activity calendar*/
-
-
+/*date select calendar*/
+#select-cal table th{padding:0.5em 0.4em;}
+#select-cal table td{
+  height: 50px;
+  text-align:center;
+}
+#select-cal table td p, #select-cal table td span{
+  float:right;
+  width: 14px;
+  background:#FFFFFF;
+  color:#999999;
+}
+#select-cal table td.available{
+  background:#C3D9FF;
+  cursor:pointer;
+}
+#select-cal table td.selected{
+  background:#98F5FF;
+}
+#select-cal table td.available p, #select-cal table td.selected p{
+  color:#333333;
+}
+#select-cal .cal-caption{
+  font-size: 120%;
+}
+.select-time input{
+  width: 66px;
+}
+/*date select calendar*/
 
 .tag {margin: 3px 5px; padding: 2px 5px; float:left; border:1px solid lightblue;}
 .act-unit {height: 200px; overflow:hidden}
@@ -135,6 +175,14 @@ body {
 
 form tbody tr:nth-child(even) th, form tbody tr.even th {background:#e5ecf9;}
 form ul {margin:0; list-style:none;padding:0;}
+
+#loginForm{
+  background: #F3F4F5;
+  border: 1px solid #E2E4E7;
+}
+#loginForm input[type=submit]{
+  margin-left:10px;
+}
 /* ------------------------------------------------------------------------------
     L A Y O U T
 --------------------------------------------------------------------------------- */
@@ -147,7 +195,7 @@ form ul {margin:0; list-style:none;padding:0;}
 
 #header-wrap {
   margin: 0 auto;
-  width: 980px;
+  width: 950px;
 }
 #header {
   margin: 0 auto;
@@ -171,7 +219,7 @@ form ul {margin:0; list-style:none;padding:0;}
 #global-search fieldset{float:left;white-space:nowrap;}
 #global-search legend,#global-search legend span,#global-search label{position:absolute;left:-12345px;}
 #global-search select{font-size:11px;font-weight:bold;color:#666;padding:2px;text-align:right;}
-#global-search .search-go{cursor:pointer;border:1px solid #06598B;color:#0076A8;background:#0076A8 url(../images/linkedin.png) -9px -1170px no-repeat;height:22px;width:20px;*width:22px;_width:24px;*margin-left:4px;*font-size:.01em;text-indent:-1234px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;}
+#search-candidate, #global-search .search-go{cursor:pointer;border:1px solid #06598B;color:#0076A8;background:#0076A8 url(../images/linkedin.png) -9px -1170px no-repeat;height:22px;width:20px;*width:22px;_width:24px;*margin-left:4px;*font-size:.01em;text-indent:-1234px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;}
 #global-search .search-go:hover{background-position:-9px -1200px;}
 #main-search-box{background:#fff;border:1px solid #7c7c7c;border-color:#7c7c7c #c3c3c3 #ddd;height:16px;width:211px;line-height:12px;padding:4px 2px 0;font-size:12px;}
 #global-search ol{float:left;}

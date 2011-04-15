@@ -1,0 +1,24 @@
+{%extends "share/base_login.html"%}
+{%block media%}
+{%endblock%}
+{%block title%}发送消息{%endblock%}
+{%block content%}
+  <div class="span-24">
+    <div class="span-4 sidebar">
+      <p><a href="/message/inbox">收件箱</a></p>
+      <p><a href="/message/sended">已发信息</a></p>
+      <p><a href="/message/send">发送信息</a></p>
+    </div>
+    <div class="span-20 last">
+      <form method="post" action="/message/send/">
+        {% csrf_token %}
+        <table>
+          {{form.as_table}}
+        </table>
+        <input type="submit" value="发送"/>
+      </form>
+    </div>
+  </div>
+{%endblock%}
+{%block footer%}
+{%endblock%}

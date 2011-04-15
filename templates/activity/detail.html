@@ -17,7 +17,14 @@
     </div>
     <div class="prepend-1 span-6">       
       <p><label for="id_activity_type">类型:</label> {{activity.activity_type}}</p> 
-      <p><label for="id_start_time">开始时间:</label> {{activity.start_time}}</p>
+      <p>
+        <label for="id_start_time">开始时间:</label>
+        {%if activity.start_time%}
+          {{activity.start_time}}
+        {%else%}
+          <a href="/activity/poll/{{activity.id}}">投票</a>
+        {%endif%}
+      </p>
       <p><label for="id_end_time">结束时间:</label> {{activity.end_time}}</p>
       <p><label for="id_activity_place">活动地点:</label> {{activity.activity_place}}</p>
     </div>

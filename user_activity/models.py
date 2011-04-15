@@ -41,9 +41,9 @@ class Activity(models.Model):
     image = models.ImageField(default='images/default_album.png', upload_to=get_cover_photo_path, null=True, blank=True, verbose_name="活动封面")
     activity_type = models.ForeignKey(ActivityType, verbose_name='类型', null=True)    
     description = models.TextField(verbose_name='活动介绍')
-    start_time = models.DateTimeField(verbose_name='开始时间')
+    start_time = models.DateTimeField(verbose_name='开始时间', null=True, blank=True)
     create_time = models.DateTimeField(verbose_name='创建时间', default=datetime.now)
-    end_time = models.DateTimeField(verbose_name='结束时间')
+    end_time = models.DateTimeField(verbose_name='结束时间', null=True, blank=True)
     #assembling_time = models.DateTimeField(verbose_name='集合时间', blank=True, null=True)
     activity_place = models.CharField(max_length=100, verbose_name='活动地点')
     #assembling_place = models.CharField(max_length=100, verbose_name='集合地点', blank=True, null=True)
@@ -85,6 +85,8 @@ class Invite(models.Model):
     activity = models.ForeignKey(Activity)
     class Meta:
         unique_together = ('user', 'activity')
+    def __unicode__(self):
+        return self.response
     def join(self):
         self.response = 'Y'
         self.save()
@@ -108,6 +110,18 @@ class ActivityPost(models.Model):
     content = models.TextField(verbose_name="内容")
     post_by = models.ForeignKey(User)
     post_date = models.DateTimeField(default=datetime.now) 
+    
+class CandidateTime(models.Model):
+    time = models.DateTimeField()
+    activity = models.ForeignKey(Activity, related_name="times")
+    def __unicode__(self):
+        return str(self.time)[:-3]
+    
+class TimePoll(models.Model):
+    user = models.ForeignKey(User)
+    time = models.ForeignKey(CandidateTime)
+    class Meta:
+        unique_together = ('user', 'time')
     
 class ActivityCalendar():
     def __init__(self, year, month):
@@ -176,6 +190,8 @@ class DateUnit():
             self.is_today = 'after'
         else:
             self.is_today = 'today'
-        self.day = date.day
+        self.date = date
         self.is_this_month = (date.month == month)
         self.activities = []
+    def act_count(self):
+        return len(self.activities)

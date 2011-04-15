@@ -109,12 +109,12 @@ td, th{
 }
 
 /* form elements */
-form {
+/*form {
     padding: 10px;
     background: #F3F4F5;
     border: 1px solid #E2E4E7;
 
-}
+}*/
 form p {
 	border-bottom: 1px solid #E6E6E6;
 	padding: 12px 0 5px 0;	margin: 0;	

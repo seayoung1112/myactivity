@@ -11,8 +11,8 @@ def send(request):
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
-            send_message(from_user=request.user, to_user=form.cleaned_data[''])
-            return redirect()
+            send_message(from_user=request.user, form=form)
+            return redirect('/message/sended')
     else:
         form = MessageForm()
     return render_to_response('message/send.html', {'form': form}, 
@@ -20,4 +20,13 @@ def send(request):
     
 def sended(request):
     messages =  Message.objects.filter(from_user=request.user)
-    return render_to_response('message/sended.html', {'messages': messages})
+    return render_to_response('message/inbox.html', {'messages': messages},
+                              context_instance=RequestContext(request))
+
+def detail(request, message_id):
+    message = Message.objects.get(id=message_id)
+    if message.readed == False:
+        message.readed = True
+        message.save()
+    return render_to_response('message/detail.html', {'message':message},
+                              context_instance=RequestContext(request))

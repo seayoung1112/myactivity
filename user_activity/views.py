@@ -5,14 +5,14 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render_to_response, redirect
 from forms import ActivityCreateForm, InviteReplyForm, ActivityTypeForm
-from models import Activity, Invite, ActivityType, UserActivityPreference, ActivityCalendar
+from models import Activity, Invite, ActivityType, UserActivityPreference, ActivityCalendar, CandidateTime, TimePoll
 from django.http import HttpResponse
-from django.template import RequestContext
+from django.template import RequestContext, Context
+from django.template.loader import get_template
 from helper import send_mail
 from settings import SITE_URL
 import datetime
 from friends.models import FriendInvitation, friend_set_for
-from profile.models import UserTag
 
 @login_required
 def home(request):
@@ -29,16 +29,20 @@ def home(request):
                                                       'activities_participated': activities_participated,
                                                       'activities_applied': activities_applied,
                                                       'activities_wait': activities_wait,
-                                                      'activities_quit': activities_quit,})
+                                                      'activities_quit': activities_quit,},
+                                                      context_instance=RequestContext(request))
 
 @login_required
 def create(request):
     if request.method == 'POST':
         form = ActivityCreateForm(request.POST, files=request.FILES)
         if form.is_valid():       
-            new_activity = form.save(False)
+            new_activity = form.save(False)            
             new_activity.invitor = request.user
             new_activity.save()
+            if not new_activity.start_time:
+                for time in form.candidate_times:
+                    CandidateTime.objects.create(time=time, activity=new_activity)
             return redirect('/activity/detail/' + str(new_activity.id))            
     else:
         try:
@@ -85,7 +89,8 @@ def detail(request, activity_id):
             actions['我要参加'] = '/activity/apply/' + activity_id       
         else:
             return HttpResponse('对不起，您无权查看此私有活动')  
-    return render_to_response('activity/detail.html', {'actions':actions, 'activity': activity})
+    return render_to_response('activity/detail.html', {'actions':actions, 'activity': activity},
+                              context_instance=RequestContext(request))
 
 def info(request, activity_id):
     try:
@@ -235,7 +240,39 @@ def check(request, activity_id):
             
     applications = Invite.objects.filter(activity__id=activity_id, response='C')
     return render_to_response('activity/check.html', {'applications':applications, 'id':activity_id})
-            
+
+class PollModel():
+    def __init__(self, activity, user):
+        candidate_times = CandidateTime.objects.filter(activity=activity).order_by('time')
+        self.candidate_times = []
+        for can_time in candidate_times:
+            can_time.poll_num =  TimePoll.objects.filter(time=can_time).count()
+            can_time.polled = TimePoll.objects.filter(user=user, time=can_time).exists()
+            self.candidate_times.append(can_time)
+        self.activity = activity
+        self.is_creator = user == activity.invitor
+#       self.months = {} 
+#       for can_time in candidate_times:
+#           c 
+                
+@login_required
+def poll(request, activity_id):
+    activity = Activity.objects.get(pk=activity_id)
+    user = request.user
+    if user != activity.invitor and (not activity.invitee.filter(id=user.id).exists()): 
+        return redirect(u'/error?message=对不起，您没有参加这个活动')
+    if request.method == 'POST':     
+        TimePoll.objects.filter(time__activity=activity, user=user).delete()
+        for key in request.POST:
+            if key.startswith('can-'):
+                t_str = key[4:]
+                time = datetime.datetime.strptime(t_str, '%Y-%m-%d %H:%M')
+                can_time = CandidateTime.objects.get(time=time, activity=activity)
+                TimePoll.objects.create(time=can_time, user=user)
+        return redirect('/activity/detail/' + activity_id)
+    poll_model = PollModel(activity, user)
+    return render_to_response('activity/poll.html', {'poll_model': poll_model},
+                              context_instance=RequestContext(request))
     
 @login_required
 def create_type(request):
@@ -300,7 +337,7 @@ def get_friend_candidates(request, activity_id):
     friend_set = (friend_set_for(user) - invitee_set)
     friend_set.discard(activity.invitor)
     friend_list = list(friend_set)
-    paginator = Paginator(friend_list, 1)
+    paginator = Paginator(friend_list, 10)
     try:
         page = int(request.GET.get('page', 1))
     except ValueError:
@@ -325,7 +362,12 @@ def get_potential_candidates(request, activity_id):
 def get_calendar(request):
     year = int(request.GET['year'])
     month = int(request.GET['month'])
+    template = request.GET.get('template', 'activity/calendar.html')
     cal = ActivityCalendar(year, month)
     portrait = request.user.profile.portrait.url
-    return render_to_response('activity/calendar.html', {'cal': cal, 'portrait': portrait})
-    
+    return render_to_response(template, {'cal': cal, 'portrait': portrait})
+
+@login_required
+def select_time(request):
+    cal = ActivityCalendar(datetime.date.today().year, datetime.date.today().month)
+    return render_to_response('activity/select_start_time.html', {'cal': cal})

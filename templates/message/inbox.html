@@ -1,7 +1,7 @@
 {%extends "share/base_login.html"%}
 {%block media%}
 {%endblock%}
-{%block title%}收件箱{%endblock%}
+{%block title%}消息{%endblock%}
 {%block content%}
   <div class="span-24">
     <div class="span-4 sidebar">
@@ -20,10 +20,12 @@
         </tr>
         {%for message in messages%}
           <tr>
-            <td>{{message.title}}</td>
+            
+            <td><a href="/message/detail/{{message.id}}/">{{message.title}}</a></td>
             <td>{{message.from_user.profile.real_name}}</td>
             <td>{{message.send_time}}</td>
             <td>{{message.readed}}</td>
+              
           </tr>
         {%endfor%}
       </table>

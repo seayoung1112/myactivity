@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     (r'^inbox/', inbox),
     (r'^sended/', sended),
     (r'^send/', send),
+    (r'^detail/(?P<message_id>\d+)/$', detail),
 )

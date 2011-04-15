@@ -29,7 +29,7 @@
   <div id="message-bar" class="module">    
     <div class="header">
       {%if messages.count > 0%}
-        <p>{{messages.count}}条未读消息</p>
+        <p><a href="/message/inbox/">{{messages.count}}条未读消息</a></p>
       {%endif%} 
       {%if activity_invitation.count > 0%}
         <p><a id="act-invite-button" href="#">{{activity_invitation.count}}个活动邀请</a></p>
@@ -42,7 +42,7 @@
       {%endif%}
     </div>
     <div class="content hide">
-      <div id="message-detail" class="span-24 last hide">
+      <div id="message-detail" class="span-24 last">
         {%for invite in activity_invitation%}
           <p>
             {{invite.activity.invitor.profile.real_name}}邀请您参加
@@ -57,8 +57,8 @@
   <hr class="space"/>
   {%endif%}
 
-  <div class="span-16" id="calendar">
-    {{calendar_html|safe}}
+  <div class="span-16">
+  {{calendar_html|safe}}
   </div>
   <div class="span-8 last">
     <div class="module common-ui">

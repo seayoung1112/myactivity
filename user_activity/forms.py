@@ -4,6 +4,7 @@ from models import Activity, Invite, UserActivityPreference, ActivityType
 from django import forms
 from django.forms import ModelForm, Form
 from widget import MyDateTimeWidget, MyTimeWidget
+from datetime import datetime
 
 class ActivityCreateForm(ModelForm):
     class Meta:
@@ -11,6 +12,14 @@ class ActivityCreateForm(ModelForm):
         exclude = ('invitor', 'state', 'invitee', 'create_time')
     def __init__(self, data=None, invitor=None, *args, **kwargs): #必须加data，不然传post数据的时候第一个参数变成invitor了
         super(ActivityCreateForm, self).__init__(data, *args, **kwargs)
+        data = data or {}
+        self.candidate_times = []
+        for key in data.keys():
+            if key.startswith('candidate-'):
+                time = datetime.strptime(data[key] + ':00', '%Y-%m-%d %H:%M:%S')
+                self.candidate_times.append(time)
+        if len(self.candidate_times) == 0:
+            self.candidate_times = None
         self.fields['start_time'].widget = MyDateTimeWidget()
         self.fields['end_time'].widget = MyDateTimeWidget()
 

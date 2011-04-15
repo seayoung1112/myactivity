@@ -1,10 +1,10 @@
 <script>
 $(function(){
   $('#pre-month').click(function(){
-    $("#calendar").load('/activity/calendar/?year={{cal.prev.0}}&month={{ cal.prev.1 }}');
+    $("#calendar").parent().load('/activity/calendar/?year={{cal.prev.0}}&month={{ cal.prev.1 }}');
   });
   $('#next-month').click(function(){
-    $("#calendar").load('/activity/calendar/?year={{cal.next.0}}&month={{ cal.next.1 }}');
+    $("#calendar").parent().load('/activity/calendar/?year={{cal.next.0}}&month={{ cal.next.1 }}');
   });
   $('.cal-act').click(function(){
     id = $(this).attr('id');
@@ -20,7 +20,7 @@ $(function(){
 });
   
 </script>
-<div>
+<div class="span-16 calendar" id="calendar">
   <table>
     <thead>
       <tr>
@@ -42,11 +42,11 @@ $(function(){
         <tr>
           {%for unit in line%}
             <td class="this-month-{{unit.is_this_month}} cal-day {%if unit.is_today == 'today'%}today{%endif%}">
-              <p class="day-num">{{unit.day}}</p>
+              <p class="day-num">{{unit.date.day}}</p>
               {%if unit.is_today == 'before'%}
-                <p class="button"> <a href="story/create/?year={{cal.year}}&month={{cal.month}}&day={{unit.day}}">记录故事</a></p>
+                <p class="button"> <a href="story/create/?year={{cal.year}}&month={{cal.month}}&day={{unit.date.day}}">记录故事</a></p>
               {%else%}
-                <p class="button"> <a href="/activity/create/?year={{cal.year}}&month={{cal.month}}&day={{unit.day}}">创建活动</a></p>
+                <p class="button"> <a href="/activity/create/?year={{cal.year}}&month={{cal.month}}&day={{unit.date.day}}">创建活动</a></p>
               {%endif%}
               {%for act in unit.activities%}
                 <p id="{{act.id}}" class="cal-act state-{{act.state}}"><span>{{act.name}}</span></p>

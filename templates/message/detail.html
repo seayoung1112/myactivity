@@ -1,0 +1,29 @@
+{%extends "share/base_login.html"%}
+{%block media%}
+{%endblock%}
+{%block title%}消息{%endblock%}
+{%block content%}
+  <div class="span-24">
+    <div class="span-4 sidebar">
+      <p><a href="/message/inbox">收件箱</a></p>
+      <p><a href="/message/sended">已发信息</a></p>
+      <p><a href="/message/send">发送信息</a></p>
+    </div>
+    <div class="span-20 last">
+      <div class="span-2">
+        {%with message.from_user as person%}
+          {%include "share/portrait.html"%}
+        {%endwith%}
+      </div>
+      <div class="span-18 last">        
+        <p><label>主题:</label>{{message.title}}</p>
+        <hr class="space"/>
+        <div>@{{message.send_time}}</div>
+      </div>
+      <hr />
+      <p>{{message.content}}</p>
+    </div>
+  </div>
+{%endblock%}
+{%block footer%}
+{%endblock%}

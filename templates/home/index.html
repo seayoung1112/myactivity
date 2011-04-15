@@ -1,5 +1,5 @@
 {%extends "share/base.html"%}
-{%block title%}动起来！{%endblock%}
+{%block title%}爱动：爱生活，爱活动{%endblock%}
 
 {%block media%}
 <style type="text/css">
@@ -9,10 +9,7 @@
 {%endblock%}
 
 {%block content%}
-  <div id="sidebar" class="span-6">
-    {% with log_form as form%}
-      {% include "share/login.html" %}
-    {% endwith %}
+  <div id="sidebar" class="span-6">    
     <div class="sidemenu">
       <ul>
         <li><a href="#">K歌..</a></li>
@@ -23,14 +20,44 @@
         <li><a href="#">还有..</a></li>
       </ul>
     </div>
+    {% with log_form as form%}
+      {% include "share/login.html" %}
+    {% endwith %}
   </div>
 
   <div class="prepend-1 span-17 last">
-    <h2>MyActivity是什么？</h2>
-    <p>MyActivity是一个帮助你和你的朋友、亲人、同学、同事一起组织开展各种活动的网站。通过MyActivity你可以方便的发起活动并邀请
+    <h2>爱动是什么？</h2>
+    <p class="sparse">爱动是一个帮助你和你的朋友、亲人、同学、同事一起组织开展各种活动的网站。通过爱动你可以方便的发起活动并邀请
       你的好友参加，或者搜索并申请加入你热衷的活动。你还可以把活动中的照片视频上传，诉说自己的活动心情，并将这些分享给你的好友～</p>
     <p>还在犹豫吗？赶快<a id="register">加入我们</a>吧！</p>
     <hr class="space"/>
+    <table id="features">
+      <thead></thead>
+        <tr>
+          <th>你是否...</th>
+          <th>在爱动你可以...</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>经常负责组织班级、单位的活动，对大量的通知、统计工作不堪其扰？</td>
+          <td>自动通过电子邮件、短信等方式发送邀请和通知，对活动的各项情况了如指掌</td>
+        </tr>
+        <tr>
+          <td>想找几个朋友小聚，却不知道怎么找到大家都有空的档期？</td>
+          <td>挑选几个可选的档期让每个参与者投票选择自己可行的时间</td>
+        </tr>
+        <tr>
+          <td>喜欢唱k、舞会，却苦于找不到合适的同伴？</td>
+          <td>搜索加入你喜欢的活动，认识志同道合的同伴，还能订阅他们发布的活动</td>
+        </tr>
+        <tr>
+          <td>想回忆和朋友共同经历的点滴，却发现那些信息已遗失在某个角落？</td>
+          <td>记录活动中的感想和图片，每一个活动都是一个美好的故事，日后回首，历历在目</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr />
     <h2>最近加入</h2>
     <p>
     {% for person in recent_join %}

@@ -1,4 +1,5 @@
 1 安装django
+安装方法：easy_install django
 
 2 安装south：
 south是一个django的数据库迁徙模块，使用south可以在程序的model发生改变的时候方便的自动对数据库进行修改
@@ -155,7 +156,7 @@ CELERYBEAT_SCHEDULE = {
 
 4 安装djcelery
 djcelery是用于执行定时和周期性任务，比如检查更新活动状态功能。
-可以用easy_install djcelery 命令安装，如果只是建立测试服务器可以不开启，请跳过以下内容，但是必须安装网站才能运行。
+可以用easy_install django-celery 命令安装，如果只是建立测试服务器可以不开启，请跳过以下内容，但是必须安装网站才能运行。
 安装配置rabbitmq
 
 5 安装django-debug-toolbar
@@ -163,7 +164,13 @@ django-debug-toolbar是用于django程序调试的插件
 安装方法：easy_install django-debug-toolbar
 
 6配置数据库
-在根目录下运行 python manage.py syncdb
+在根目录依次下运行 
+python manage.py syncdb
+python manage.py convert_to_south friends
+python manage.py convert_to_south privacy
+python manage.py convert_to_south profile
+python manage.py convert_to_south user_activity
+python manage.py convert_to_south message
 
 
 

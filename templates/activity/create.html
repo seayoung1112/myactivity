@@ -20,6 +20,27 @@
         confirm(msg);
       });
     });
+    var $start_time = $('#id_start_time').parent();
+    $('#select-start-time').dialog({
+      modal: true,
+      autoOpen: false,
+      width: 980,
+      height: 450,
+      title: '选择日期',
+      buttons: {
+        "确定": function(){
+          $start_time.html('');
+          times = getTimes();
+          for (i in times){
+            $start_time.append('<input type="text" readonly="readonly" value="' + times[i] + '"  name="candidate-' + i + '"/>');
+          }
+          $(this).dialog('close');
+        },
+      },
+    }).load('/activity/selectTime/');
+    $('#multi-start-time').click(function(){
+      $('#select-start-time').dialog('open');
+    });
   });
   </script>
 {%endblock%}
@@ -35,21 +56,32 @@
           <th>
             {{ field.label_tag }}:
           </th>
-          <td>
-            {{ field }}
+          <td>            
+            <span>
+
+              {{ field }}
+
+            </span>
+            
             {% if field.label == "类型" %}
               <a href="/activity/createtype">新建</a>
             {% endif %}
+            {%if field.label == '开始时间'%}
+              <a id="multi-start-time">多个可选时间</a>
+            {%endif%}
           </td>      
-          <td>{{ field.errors }}</td>                  
+          {%if field.errors%}
+          <td>{{ field.errors }}</td>
+          {%endif%}                  
         </tr>
         
     {% endfor %}
     </table>
     <input type="submit" value="创建"/>
     <input type="button" value="设为默认" id="set_default"/> 
+    
   </form>
-  <a href="/home">返回</a>
+  <div id="select-start-time"></div>  
 </div>
 {%endblock%}
 {%block footer%}

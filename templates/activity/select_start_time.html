@@ -1,0 +1,60 @@
+<script>
+  function addDate(date){
+    $('#selected-dates').append('<tr><th><p>' + date + '</p></th><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td></tr>');
+    $('#selected-dates tr').last().find('input').each(function(){
+      $(this).timepicker({ 
+        hourGrid: 6,
+        minuteGrid: 15,
+        timeText: "时间",
+        hourText:  "时",
+        minuteText:  "分",
+        secondText:  "秒",
+        currentText:  "现在",
+        closeText:  "完成",      
+      });
+    });
+  }
+  function markSelectedDate(){
+    $('#selected-dates tr').each(function(){
+      date = $(this).find('p').html();
+      $day = $('#' + date);
+      $day.removeClass('available');
+      $day.addClass('selected');
+    })
+  }
+  function getTimes(){
+    times = new Array();
+    $('#selected-dates tr').each(function(){
+      date = $(this).find('p').html();
+      $(this).find('input').each(function(){
+        time = $(this).val();
+        if(time != ''){
+          times.push(date + ' ' + time);
+        }        
+      });
+    })
+    return times;
+  }
+</script>
+<div class="span-22 last">
+  <div class="span-10"  id="select-cal">
+  {%include 'activity/select_calendar.html'%}
+  </div>
+  <div class="span-11 last">
+    <label>选择的日期:</label>
+    <hr class="space"/>
+    <table class="select-time">
+      <thead>
+        <tr>
+          <th></th>
+          <th>时间一</th>
+          <th>时间二</th>
+          <th>时间三</th>
+        </tr>
+      </thead>
+      <tbody id="selected-dates">
+        
+      </tbody>
+    </table>
+  </div>
+</div>
