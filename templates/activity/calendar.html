@@ -9,6 +9,14 @@ $(function(){
   $('.cal-act').click(function(){
     id = $(this).attr('id');
     $('#cal-act-detail').load('/activity/info/' + id + '/');
+    $('#cal-act-detail').dialog('open');
+  });
+  $('#cal-act-detail').dialog({
+      modal: true,
+      autoOpen: false,
+      width: 620,
+      height: 450,
+      title: '详情',
   });
   $('.cal-day').hover(function(){
     $(this).find('.button').show();
@@ -24,7 +32,7 @@ $(function(){
   <table>
     <thead>
       <tr>
-        <th class="cal-portrait"><img src="{{portrait}}"/></th>
+        <th class="cal-portrait"><img src="{{cal.user.profile.portrait.url}}"/></th>
         <th><a href="#" id="pre-month">&laquo;</a></th>
         <th colspan="4" class="cal-caption">{{cal.year}}年{{cal.month}}月</th>
         <th><a href="#" id="next-month">&raquo;</a></th>

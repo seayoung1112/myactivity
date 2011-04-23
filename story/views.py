@@ -8,8 +8,8 @@ from friends.models import friend_set_for
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
-from user_activity.models import get_user_activity, Activity, ActivityPhoto, ActivityPost, Invite
-from models import get_story_invite
+from user_activity.models import Activity, ActivityPhoto, ActivityPost, Invite
+from models import get_story_invite, get_user_stories
 from settings import SITE_URL
 from helper import send_mail
 import datetime
@@ -17,7 +17,7 @@ import datetime
 @login_required
 def home(request):
     user = request.user
-    activities = get_user_activity(user).filter(state='O')
+    activities = get_user_stories(user)
     return render_to_response('story/list.html', {'activities': activities,})
 
 @login_required
@@ -129,13 +129,6 @@ def upload_photo(request, story_id):
             ActivityPhoto.objects.create(activity=story, content=request.FILES['photo'], upload_by=request.user)
         except:
             pass
-        return redirect('/story/detail/' + story_id)
-    
-@login_required
-def post(request, story_id):
-    if request.method == "POST":
-        story = Activity.objects.get(id=story_id)
-        ActivityPost.objects.create(activity=story, content=request.POST['content'], post_by=request.user)
         return redirect('/story/detail/' + story_id)
     
 @login_required

@@ -6,14 +6,11 @@
 {%block content%}
   <div>
     <div class="person-thumb-wrapper">
-    {%with user as person%}
-      {%include "share/portrait.html"%}
-      {%include "friends/invitebox.html"%}
-    {%endwith%}    
-    
+    {%include "share/portrait.html"%}
+    {%include "friends/invitebox.html"%}    
     </div>    
-    {%for tag in user.profile.tags.all%}
-      <a class="tag" href="/profile/removetag/{{tag.id}}">{{tag.name}}</a>
+    {%for tag in person.profile.tags.all%}
+      <span class="tag" >{{tag.name}}</span>
     {%endfor%}
 
   </div>

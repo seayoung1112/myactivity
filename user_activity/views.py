@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render_to_response, redirect
 from forms import ActivityCreateForm, InviteReplyForm, ActivityTypeForm
-from models import Activity, Invite, ActivityType, UserActivityPreference, ActivityCalendar, CandidateTime, TimePoll
+from models import *
 from django.http import HttpResponse
 from django.template import RequestContext, Context
 from django.template.loader import get_template
@@ -13,6 +13,7 @@ from helper import send_mail
 from settings import SITE_URL
 import datetime
 from friends.models import FriendInvitation, friend_set_for
+from django.core.paginator import *
 
 @login_required
 def home(request):
@@ -62,12 +63,17 @@ def detail(request, activity_id):
         activity = Activity.objects.get(pk=activity_id)
     except:
         return redirect(u'/error?message=该活动不存在')
+    if activity.state == 'O':
+        return render_to_response('story/detail.html', {'story': activity,},
+                                                     context_instance=RequestContext(request))
     from manager import UserRole
     role = UserRole(user, activity).get_role()
     actions = {}
+
     if role is 'creator':
         actions['邀请'] = '/activity/invite/' + activity_id
         actions['编辑'] = '/activity/edit/' + activity_id
+        
         applicant = Invite.objects.filter(activity=activity, response='C').count()
         if applicant > 0:
             actions['审核申请(' + str(applicant) + ')'] = '/activity/check/' + activity_id
@@ -88,8 +94,15 @@ def detail(request, activity_id):
         if activity.is_public:     
             actions['我要参加'] = '/activity/apply/' + activity_id       
         else:
-            return HttpResponse('对不起，您无权查看此私有活动')  
-    return render_to_response('activity/detail.html', {'actions':actions, 'activity': activity},
+            return HttpResponse('对不起，您无权查看此私有活动') 
+    show_num = 8 
+    return render_to_response('activity/detail.html', {'actions':actions, 'activity': activity,
+                                                       'person_invited': activity.person_invited()[:show_num],
+                                                       'person_joined': activity.person_joined()[:show_num],
+                                                       'person_declined': activity.person_declined()[:show_num],
+                                                       'person_wait': activity.person_wait()[:show_num],
+                                                       'show_num': show_num,
+                                                       },
                               context_instance=RequestContext(request))
 
 def info(request, activity_id):
@@ -275,6 +288,15 @@ def poll(request, activity_id):
                               context_instance=RequestContext(request))
     
 @login_required
+def post(request, activity_id):
+    if request.method == "POST":
+        story = Activity.objects.get(id=activity_id)
+        if not story.invitee.filter(id=request.user.id).exists():
+            return redirect(u'/error/?message=您还没有参加这个活动')
+        ActivityPost.objects.create(activity=story, content=request.POST['content'], post_by=request.user)
+        return redirect('/activity/detail/' + activity_id)
+    
+@login_required
 def create_type(request):
     if request.method == "POST":
         form = ActivityTypeForm(request.POST)
@@ -327,7 +349,7 @@ def set_type_default(request):
             return HttpResponse('已设为默认')
 
     return HttpResponse('error!')
-from django.core.paginator import *
+
 
 @login_required
 def get_friend_candidates(request, activity_id):
@@ -358,14 +380,37 @@ def get_potential_candidates(request, activity_id):
     users.discard(activity.invitor)
     return render_to_response('share/candidates.html', {'users': users})
 
+def get_persons(request, activity_id, type):
+    activity = Activity.objects.get(pk=activity_id)
+    try:
+        page = int(request.GET.get('page', 1))
+    except ValueError:
+        page = 1
+    person_list = activity.get_invitee(type) 
+    paginator = Paginator(person_list, 20)
+    try:
+        persons = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        persons = paginator.page(paginator.num_pages)
+    if type == 'Y':
+        title = u'已经参加的人'
+    elif type == 'N':
+        title = u'暂时退出的人'
+    elif type == 'H':
+        title = u'还在观望的人'
+    elif type == 'U':
+        title = u'尚未表态的人'
+    return render_to_response('activity/invitee_list.html', {'persons': persons, 'title':title, 'activity': activity})
+
+
 @login_required
 def get_calendar(request):
     year = int(request.GET['year'])
     month = int(request.GET['month'])
     template = request.GET.get('template', 'activity/calendar.html')
-    cal = ActivityCalendar(year, month)
-    portrait = request.user.profile.portrait.url
-    return render_to_response(template, {'cal': cal, 'portrait': portrait})
+    cal = ActivityCalendar(year, month, request.user)
+    
+    return render_to_response(template, {'cal': cal})
 
 @login_required
 def select_time(request):

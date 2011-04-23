@@ -3,15 +3,10 @@
 {%endblock%}
 {%block title%}{{activity.name}}{%endblock%}
 {%block content%}
-  <h1>{{activity}}({{activity.is_public_display}})</h1>
+
   <div class="span-16">
-    <div class="span-16">
-       
-      {%for key, value in actions.items%}
-        <a href="{{value}}" class="more">{{key}}</a>
-      {%endfor%}
-    </div>
-    <hr class="space"/>
+    <h4>{{activity}}({{activity.is_public_display}})</h4>
+    <hr/>
     <div class="span-5">
       <img src="{{activity.image.url}}" class="act-img"/>
     </div>
@@ -35,51 +30,102 @@
         {%include "share/portrait.html"%}
       {%endwith%}
     </div>
-    <hr class="space">
+    <hr />
     <h4>活动介绍</h4>    
     <p>{{activity.description|linebreaks}}</p>
+    <hr/>
+    <form method="post" action="/activity/post/{{activity.id}}/" class="span-15 last discuss-box">
+      {% csrf_token %}
+      <label>讨论：</label>
+      <textarea cols="70" rows="6" name="content" class="span-15 last"></textarea>
+      <div class="float-right"><input type="submit" value="发布"/></div>
+    </form>
+    <hr/>
+    <div class="span-15 last" id="story-info-tabs-1">
+      
+    {%for post in activity.get_posts%}
+
+      <div class="span-15 last"> 
+        <div class="span-2">
+          <div class="person-thumb">
+            <img src="{{post.post_by.profile.portrait.url}}" class="portrait"/>          
+          </div>
+        </div>
+        <div class="span-13 last">
+          <p>
+            <a href="/user/{{post.post_by.id}}/">{{post.post_by.profile.real_name}}</a>:
+            {{post.content}}
+          </p>
+          
+          <div>{{post.post_date}}</div>
+          
+        </div>
+      </div>
+      <hr class="space"/>
+      <hr/>
+    {%endfor%}
 
   </div>
-  <div class="span-8 last">
+  </div>
+  <div class="span-7 last sidebar">
+    <h4>你可以...</h4>
+    <div class="span-7 last">
+    {%for key, value in actions.items%}
+        <a href="{{value}}" class="more">{{key}}</a>
+    {%endfor%}
+    </div>
+    <hr class="space"/>
     <div>
       <h4>已经参加:({{activity.person_joined.count}})</h4>
   
-      {% for person in activity.person_joined.all %}
+      {% for person in person_joined.all %}
         <div class="person-thumb-wrapper">
           {%include "share/portrait.html"%}
           <p>{{invite.get_response_display}}</p>
         </div>
       {%endfor%}
+      {%if activity.person_joined.count > show_num%}
+      <a class="float-right" href="/activity/persons/{{activity.id}}/Y/">查看全部</a>
+      {%endif%}
     </div>
     <hr class="space"/>
     <div>
       <h4>还在观望:({{activity.person_wait.count}})</h4>
-      {% for person in activity.person_wait.all %}
+      {% for person in person_wait.all %}
         <div class="person-thumb-wrapper">
           {%include "share/portrait.html"%}
           <p>{{invite.get_response_display}}</p>
         </div>
       {%endfor%}
+      {%if activity.person_wait.count > show_num%}
+      <a class="float-right" href="/activity/persons/{{activity.id}}/H/">查看全部</a>
+      {%endif%}
     </div>
     <hr class="space"/>
     <div>
       <h4>暂时退出:({{activity.person_declined.count}})</h4>
-      {% for person in activity.person_declined.all %}
+      {% for person in person_declined.all %}
         <div class="person-thumb-wrapper">
           {%include "share/portrait.html"%}
           <p>{{invite.get_response_display}}</p>
         </div>
       {%endfor%}
+      {%if activity.person_declined.count > show_num%}
+      <a class="float-right" href="/activity/persons/{{activity.id}}/N/">查看全部</a>
+      {%endif%}
     </div>
     <hr class="space"/>
     <div>
       <h4>尚未表态:({{activity.person_invited.count}})</h4>
-      {% for person in activity.person_invited.all %}
+      {% for person in person_invited.all %}
         <div class="person-thumb-wrapper">
           {%include "share/portrait.html"%}
           <p>{{invite.get_response_display}}</p>
         </div>
       {%endfor%}
+      {%if activity.person_invited.count > show_num%}
+      <a class="float-right" href="/activity/persons/{{activity.id}}/U/">查看全部</a>
+      {%endif%}
     </div>
     <hr class="space"/>
   </div>

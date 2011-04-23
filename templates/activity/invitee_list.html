@@ -1,0 +1,29 @@
+{%extends "share/base_login.html"%}
+{%block media%}
+{%endblock%}
+{%block title%}{{activity.name}}{%endblock%}
+{%block content%}
+<div>
+  <h1> <a href="/activity/detail/{{activity.id}}">{{activity.name}}</a></h1>
+  <h4>{{title}}</h4>
+  {%with persons.object_list as persons%}
+    {%include "share/user_list.html"%}
+  {%endwith%}
+  <hr/>
+  <div class="pagination">
+    <span class="step-links">
+        {% if persons.has_previous %}
+            <a href="?page={{ persons.previous_page_number }}" id="pre-page">上一页</a>
+        {% endif %}
+
+        <span class="current">
+            第{{ persons.number }}页/共{{ persons.paginator.num_pages }}页
+        </span>
+
+        {% if persons.has_next %}
+            <a href="?page={{ persons.next_page_number }}">下一页</a>
+        {% endif %}
+    </span>
+  </div>
+</div>
+{%endblock%}

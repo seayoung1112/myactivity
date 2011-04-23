@@ -1,5 +1,5 @@
 <div class="span-15 last">
-  <h4>{{activity.name}}</h4>
+  <h4><a href="/{%if activity.state == 'O'%}story{%else%}activity{%endif%}/detail/{{activity.id}}">{{activity.name}}</a></h4>
 </div>
 <div class="span-5">
   <a href="/{%if activity.state == 'O'%}story{%else%}activity{%endif%}/detail/{{activity.id}}"><img src="{{activity.image.url}}" class="act-img"/></a>
@@ -9,6 +9,7 @@
   <p><label for="id_start_time">开始时间:</label> {{activity.start_time}}</p>
   <p><label for="id_end_time">结束时间:</label> {{activity.end_time}}</p>
   <p><label for="id_activity_place">活动地点:</label> {{activity.activity_place}}</p>
+  <p>{{activity.person_joined.count}}人参加 &nbsp {{activity.person_wait.count}}人观望</p>
 </div>
 <div class="span-4 last">
   <label>创建者</label>
@@ -18,7 +19,8 @@
   {%endwith%}
 </div>
 
-<div class="prepend-1 span-13">
+<div class="span-13">
+  <h4>活动介绍：</h4>
   <p>{{activity.description|linebreaks}}</p>
 </div>
 <hr class="space"/>

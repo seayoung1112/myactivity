@@ -15,6 +15,12 @@ table#features td, table#features th{
   font-size:14px;
 }
 /*index*/
+/*sidebar*/
+.sidebar{
+  background:#99CCFF; 
+  padding:10px;
+}
+/*sidebar*/
 /*activity calendar*/
 .cal-portrait {
   padding: 0;
@@ -36,7 +42,7 @@ table#features td, table#features th{
 }
 #cal-act-detail{
   border: #E9E9E9 solid 1px;
-  padding: 10px 4px;
+  padding: 10px;
 }
 .calendar tr:nth-child(2n) td, tbody tr.even td{background:#FFFFFF;}
 .calendar table td{
@@ -163,6 +169,11 @@ table#features td, table#features th{
   border:solid #0000FF;
 }
 .message {width:400px; height:80px;}
+
+.discuss-box textarea{
+  width: 580px;
+  height:40px;
+}
 
 #message-bar p {
   float:left;

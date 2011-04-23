@@ -22,9 +22,9 @@ class Profile(models.Model):
     portrait = models.ImageField(upload_to=get_file_path, null=True, blank=True, verbose_name='头像', default='portraits/default.jpg')
     
     def add_tag(self, tag_name=None, tag_id=None):
-        if tag_id is not None:
+        if tag_id:
             tag = UserTag.objects.get(id=tag_id)
-        elif tag_name is not None:
+        elif tag_name and tag_name != "":
             tag, created = UserTag.objects.get_or_create(name=tag_name)            
         else:
             return

@@ -63,6 +63,8 @@ class Activity(models.Model):
         return self.invitee.filter(invite__response='N')
     def person_wait(self):
         return self.invitee.filter(invite__response='H')
+    def get_invitee(self, response):
+        return self.invitee.filter(invite__response=response)
     def is_public_display(self):
         if self.is_public:
             return '公开活动'
@@ -124,12 +126,13 @@ class TimePoll(models.Model):
         unique_together = ('user', 'time')
     
 class ActivityCalendar():
-    def __init__(self, year, month):
+    def __init__(self, year, month, user):
         self.week_titles = ('周一', '周二', '周三', '周四', '周五', '周六', '周日')
         month_first_date = date(year=year, month=month, day=1)
         weekday = month_first_date.weekday()
         self.year = year
         self.month = month
+        self.user = user
         self.first_date = month_first_date - timedelta(days=weekday)
         self.weeks = []
         self.get_weeks()
@@ -151,7 +154,7 @@ class ActivityCalendar():
 #            print week
             week = (week + 1) % 7
         #find activities in this calendar
-        activities = Activity.objects.filter(start_time__range=(self.first_date, date))
+        activities = Activity.objects.filter(Q(invitee=self.user) | Q(invitor=self.user)).filter(start_time__range=(self.first_date, date)).distinct()
         for act in activities:
             days = (act.start_time.date() - self.first_date).days
             week_num = days / 7

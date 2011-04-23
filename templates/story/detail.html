@@ -30,32 +30,31 @@
     <li><a href="#story-info-tabs-2">图片</a></li>
   </ul>
   <div class="span-15 last" id="story-info-tabs-1">
+    <form method="post" action="/activity/post/{{activity.id}}/" class="span-15 last discuss-box">
+      {% csrf_token %}
+
+      <textarea cols="70" rows="6" name="content" class="span-15 last"></textarea>
+      <div class="float-right"><input type="submit" value="发布"/></div>
+    </form>
     {%for post in story.get_posts%}
 
       <div class="span-15 last"> 
         <div class="span-2">
-        {%with post.post_by as person%}
-          {%include "share/portrait.html"%}
-        {%endwith%}
+          <div class="person-thumb">
+            <img src="{{post.post_by.profile.portrait.url}}" class="portrait"/>          
+          </div>
         </div>
         <div class="span-13 last">
-          <hr class="space"/>
-          <hr class="space"/>
-          <div>说@{{post.post_date}}</div>
+          <p>
+            <a href="/user/{{post.post_by.id}}/">{{post.post_by.profile.real_name}}</a>:
+            {{post.content}}
+          </p>          
+          <div>{{post.post_date}}</div>
         </div>
       </div>
+      <hr class="space"/>
       <hr/>
-      <div class="span-15 last">
-        <p>{{post.content}}</p>
-      </div>
-      <hr/>
-
     {%endfor%}
-    <form method="post" action="/story/post/{{story.id}}/" class="span-15 last">
-      {% csrf_token %}
-      <p><textarea cols="70" rows="6" name="content"></textarea></p>
-      <p><input type="submit" value="发布"/></p>
-    </form>
   </div>
   <div class="album-wrapper span-15 last" id="story-info-tabs-2">
     <ul class="jcarousel-skin-tango" id="carousel">
@@ -100,7 +99,9 @@
   <div>
     <h4>故事里的人</h4>
     <div id="participant-pan">
-      {%include "share/user_list.html"%}
+      {%with story.person_joined as persons%}
+        {%include "share/user_list.html"%}
+      {%endwith%}
     </div>
   </div>
   <hr/>

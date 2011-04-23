@@ -12,5 +12,5 @@ urlpatterns = patterns('',
     (r'^create/$', 'story.views.create'),
     (r'^home/$', home),
     (r'^uploadphoto/(?P<story_id>\d+)/$', 'story.views.upload_photo'),
-    (r'^post/(?P<story_id>\d+)/$', 'story.views.post'),
+    
 )

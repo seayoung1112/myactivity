@@ -7,4 +7,4 @@ def get_user_stories(user):
     return Activity.objects.filter(Q(invitee=user) | Q(invitor=user)).filter(state='O').distinct().order_by('create_time')
     
 def get_story_invite(to_user):
-    return Invite.objects.filter(user=to_user, response='U')
+    return Invite.objects.filter(user=to_user, response='U', activity__state='O')

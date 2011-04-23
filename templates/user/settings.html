@@ -6,7 +6,9 @@
 {%block content%}
   <script>
     $(function(){
-      $( "#settings-tabs" ).tabs();
+      $( "#settings-tabs" ).tabs({
+        selected: {{page}}
+      });
     });
   </script>
   <div id="settings-tabs" class="span-24">

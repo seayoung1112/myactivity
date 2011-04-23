@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     (r'^updates/$', 'home.views.updates'),
     (r'^contact/$', 'home.views.contact'),
     (r'^error/$', 'home.views.error'),
-    (r'^user/(?P<user_id>\d+)/$', 'friends.views.user_info'),
+    (r'^user/(?P<user_id>\d+)/$', 'person.views.user_info'),
 
 
     # Uncomment the admin/doc line below to enable admin documentation:

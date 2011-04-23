@@ -33,14 +33,11 @@ def edit_tags(request):
 
 @login_required
 def add_tag(request, tag_id=None):
-    tag_name = ""
-    if request.method == "POST":
-        tag_name = request.POST.get('tag_name', default=None)
-        tag_id = request.POST.get('tag_id', default=None)
+    tag_name = request.POST.get('tag_name', default=None)
     request.user.profile.add_tag(tag_name=tag_name, tag_id=tag_id)
-    return redirect('/profile/edit')
+    return redirect('/person/settings/?content=tag')
     
 @login_required
 def remove_tag(request, tag_id):
     request.user.profile.remove_tag(tag_id=tag_id)
-    return redirect('/profile/edit')
+    return redirect('/person/settings/?content=tag')

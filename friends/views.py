@@ -6,8 +6,7 @@ from profile.models import Profile, User
 from models import FriendInvitation, Friendship, friend_set_for
 from django.template import RequestContext
 from django.http import HttpResponse
-from story.models import get_user_stories
-from user_activity.models import get_user_activity
+
 
 @login_required
 def list(request):
@@ -45,12 +44,3 @@ def ignore(request, app_id):
         return HttpResponse("you are not permitted to do this!")
     invitation.delete()
     return redirect('/friends/invitation')
-
-
-def user_info(request, user_id):
-    user = User.objects.get(id=user_id)
-    if user == request.user:
-        return redirect('/home')
-    activities = get_user_activity(user)
-    stories = get_user_stories(user)
-    return render_to_response('user/user_info.html', {'user': user, "activities": activities, 'stories': stories,})
